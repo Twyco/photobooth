@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Web\AlbumController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -24,5 +25,15 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
-require __DIR__.'/admin.php';
+Route::middleware(['auth'])
+    ->prefix('album')
+    ->name('album.')
+    ->group(function () {
+
+        Route::get('/', [AlbumController::class, 'index'])->name('index');
+        Route::get('/show/{album:uuid}', [AlbumController::class, 'show'])->name('show');
+
+    });
+
+require __DIR__ . '/auth.php';
+require __DIR__ . '/admin.php';

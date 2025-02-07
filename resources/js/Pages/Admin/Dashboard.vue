@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import {Head} from '@inertiajs/vue3';
+import NavLink from "@/Components/NavLink.vue";
 </script>
 
 <template>
-    <Head title="Admin - Dashboard" />
+    <Head title="Admin - Dashboard"/>
 
     <AuthenticatedLayout>
         <template #header>
@@ -21,7 +22,16 @@ import { Head } from '@inertiajs/vue3';
                     class="overflow-hidden bg-white shadow-sm sm:rounded-lg"
                 >
                     <div class="p-6 text-gray-900">
-                        You're logged in as Admin!
+                        <NavLink
+                            :href="route('admin.album.index')"
+                        >
+                            Alben - Übersicht
+                        </NavLink>
+                        <NavLink
+                            :href="route('admin.album.create')"
+                        >
+                            Album erstellen
+                        </NavLink>
                     </div>
                 </div>
             </div>

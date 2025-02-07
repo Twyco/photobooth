@@ -15,7 +15,7 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!auth()->check() || !auth()->user()->isAdmin()) {
+        if (!auth()->check() || !auth()->user()->is_admin) {
             return redirect()->route('home')->setStatusCode(Response::HTTP_FORBIDDEN);
         }
         return $next($request);

@@ -1,18 +1,25 @@
 <script setup lang="ts">
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
+
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import NavLink from "@/Components/NavLink.vue";
+import {Head} from "@inertiajs/vue3";
+import {PropType} from "vue";
+
+defineProps({
+    album: Object as PropType<any>
+});
+
 </script>
 
 <template>
-    <Head title="Dashboard" />
+    <Head title="Album ansicht"/>
 
     <AuthenticatedLayout>
         <template #header>
             <h2
                 class="text-xl font-semibold leading-tight text-gray-800"
             >
-                Dashboard
+                User - Album - Ansicht
             </h2>
         </template>
 
@@ -23,10 +30,11 @@ import NavLink from "@/Components/NavLink.vue";
                 >
                     <div class="p-6 text-gray-900">
                         <NavLink
-                            :href="route('album.index')"
+                            :href="route('dashboard')"
                         >
-                            Alben - Übersicht
+                            Dashboard
                         </NavLink>
+                        {{ album }}
                     </div>
                 </div>
             </div>
