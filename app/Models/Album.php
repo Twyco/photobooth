@@ -2,13 +2,17 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 
 /*
  * @extends
  */
+
 class Album extends Model
 {
     /** @use HasFactory<\Database\Factories\AlbumFactory> */
@@ -26,16 +30,30 @@ class Album extends Model
         'event_date' => 'date',
     ];
 
+
     protected static function boot()
     {
-      parent::boot();
+        parent::boot();
 
-      static::creating(function ($album) {
-        $album->uuid = (string) Str::uuid();
-      });
+        static::creating(function ($album) {
+            $album->uuid = (string)Str::uuid();
+        });
 
-      static::created(function ($album) {
-        //TODO Create Album AccessCode
-      });
+        static::created(function ($album) {
+            //TODO Create Album AccessCode
+        });
     }
+
+    public function scopeViewableAlbums(Builder $query): Builder
+    {
+        return $query->whereIn('id', Album::getViewableAlbums()->pluck('id'));
+    }
+
+    public static function getViewableAlbums(): Collection
+    {
+        return Album::all()->filter(function (Album $album) {
+            return Gate::allows('view', $album);
+        });
+    }
+
 }

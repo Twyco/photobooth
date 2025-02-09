@@ -2,7 +2,13 @@
 
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import {Head} from "@inertiajs/vue3";
+import {AlbumInterface} from "@/types/album-interface";
 import NavLink from "@/Components/NavLink.vue";
+
+defineProps({
+    albums: Array<AlbumInterface>,
+})
+
 </script>
 
 <template>
@@ -13,7 +19,7 @@ import NavLink from "@/Components/NavLink.vue";
             <h2
                 class="text-xl font-semibold leading-tight text-gray-800"
             >
-                User - Alben - Übersicht
+                Admin - Alben - Übersicht
             </h2>
         </template>
 
@@ -23,11 +29,21 @@ import NavLink from "@/Components/NavLink.vue";
                     class="overflow-hidden bg-white shadow-sm sm:rounded-lg"
                 >
                     <div class="p-6 text-gray-900">
-                        <NavLink
-                            :href="route('dashboard')"
-                        >
-                            Dashboard
-                        </NavLink>
+                        <ul>
+                            <li v-for="(album, index) in albums" :key="index">
+                                <NavLink
+                                    :href="route('album.show', { album: album.uuid })"
+                                >
+                                    Show: {{album.title}}
+                                </NavLink>
+                                <NavLink
+                                    v-if="$page.props.auth.user.is_admin"
+                                    :href="route('admin.album.edit', { album: album.id })"
+                                >
+                                    Edit: {{album.title}}
+                                </NavLink>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
