@@ -6,13 +6,13 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 
-/*
- * @extends
+/**
+ * @property mixed $albumAccessCodes
  */
-
 class Album extends Model
 {
     /** @use HasFactory<\Database\Factories\AlbumFactory> */
@@ -40,7 +40,7 @@ class Album extends Model
         });
 
         static::created(function ($album) {
-            //TODO Create Album AccessCode
+            AlbumAccessCode::create(['album_id' => $album->id]);
         });
     }
 
@@ -54,6 +54,11 @@ class Album extends Model
         return Album::all()->filter(function (Album $album) {
             return Gate::allows('view', $album);
         });
+    }
+
+    public function albumAccessCodes(): HasMany
+    {
+        return $this->hasMany(AlbumAccessCode::class);
     }
 
 }

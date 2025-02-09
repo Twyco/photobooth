@@ -22,7 +22,7 @@ const form = useForm({
     title: props.album.title,
     slug: props.album.slug,
     description: props.album.description,
-    event_date: props.album.event_date.split('T')[0],
+    event_date: props.album.eventDate.split('T')[0],
 })
 
 const storeAlbum = () => {
@@ -31,13 +31,25 @@ const storeAlbum = () => {
             ...(data.title != props.album.title ? {title: data.title} : {}),
             ...(data.slug != props.album.slug ? {slug: data.slug} : {}),
             ...(data.description != props.album.description ? {description: data.description} : {}),
-            ...(data.event_date != props.album.event_date.split('T')[0] ? {event_date: data.event_date} : {})
+            ...(data.event_date != props.album.eventDate.split('T')[0] ? {event_date: data.event_date} : {})
         }))
         .patch(route('admin.album.update', {album: props.album.id}))
 }
 
 const deleteAlbum = () => {
-    router.delete(route('admin.album.destroy', { album: props.album.id }))
+    router.delete(route('admin.album.destroy', {album: props.album.id}))
+}
+
+const deleteAccessCode = (id: number) => {
+    router.delete(route('admin.accessCode.destroy', {albumAccessCode: id}))
+}
+
+const createAccessCode = () => {
+    router.post(route('admin.accessCode.store'), {albumId: props.album.id})
+}
+
+function formatCode(code: string): string {
+    return code.match(/.{1,5}/g)?.join("-") ?? "";
 }
 </script>
 
@@ -49,7 +61,7 @@ const deleteAlbum = () => {
             <h2
                 class="text-xl font-semibold leading-tight text-gray-800"
             >
-                Neues Album erstellen
+                Album bearbeiten
             </h2>
         </template>
 
@@ -63,7 +75,7 @@ const deleteAlbum = () => {
                         class="py-6 px-12 grid grid-cols-6 gap-8 w-full"
                     >
                         <div class="col-span-3">
-                            <InputLabel for="title" value="Titel" />
+                            <InputLabel for="title" value="Titel"/>
                             <TextInput
                                 id="title"
                                 v-model="form.title"
@@ -72,7 +84,7 @@ const deleteAlbum = () => {
                             <InputError class="mt-2" :message="form.errors.title"/>
                         </div>
                         <div class="col-span-3">
-                            <InputLabel for="slug" value="Slug (Ordnername)" />
+                            <InputLabel for="slug" value="Slug (Ordnername)"/>
                             <TextInput
                                 id="slug"
                                 v-model="form.slug"
@@ -81,7 +93,7 @@ const deleteAlbum = () => {
                             <InputError class="mt-2" :message="form.errors.slug"/>
                         </div>
                         <div class="col-span-6">
-                            <InputLabel for="description" value="Beschreibung" />
+                            <InputLabel for="description" value="Beschreibung"/>
                             <TextInput
                                 id="description"
                                 v-model="form.description"
@@ -90,7 +102,7 @@ const deleteAlbum = () => {
                             <InputError class="mt-2" :message="form.errors.description"/>
                         </div>
                         <div class="col-span-3">
-                            <InputLabel for="event_date" value="Veranstaltungsdatum" />
+                            <InputLabel for="event_date" value="Veranstaltungsdatum"/>
                             <TextInput
                                 id="event_date"
                                 v-model="form.event_date"
@@ -98,7 +110,7 @@ const deleteAlbum = () => {
                             />
                             <InputError class="mt-2" :message="form.errors.event_date"/>
                         </div>
-                        <div class="col-span-3 ">
+                        <div class="col-span-3">
                             <div class="h-full place-content-end text-right">
                                 <DangerButton
                                     class="mr-2"
@@ -111,6 +123,39 @@ const deleteAlbum = () => {
                             </div>
                         </div>
                     </form>
+                    <div class="py-6 px-12 grid grid-cols-6 gap-8 w-full">
+                        <div class="col-span-6">
+                            Zugangscodes:
+                            <!--                            Paginated Table:-->
+                            <table>
+                                <thead>
+                                <tr class="bg-gray-100 border-b-2 border-black">
+                                    <th class="px-4">ID</th>
+                                    <th class="px-4">Code</th>
+                                    <th class="px-4">Anzahl der Benutzungen</th>
+                                    <th class="px-4">Anzahl der Speicherungen</th>
+                                    <th class="px-4"><i class="mdi mdi-plus hover:cursor-pointer" @click="createAccessCode()"/></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr v-if="album.accessCodes"
+                                    v-for="accessCode in album.accessCodes"
+                                    class="even:bg-gray-100 odd:bg-white"
+                                >
+                                    <td class="px-4 text-center">{{ accessCode.id }}</td>
+                                    <td class="px-4 text-center">{{ formatCode(accessCode.accessCode) }}</td>
+                                    <td class="px-4 text-center">{{ accessCode.usages }}</td>
+                                    <td class="px-4 text-center">{{ accessCode.saves }}</td>
+                                    <td class="px-4 text-center text-red-500 hover:cursor-pointer"
+                                        @click="deleteAccessCode(accessCode.id)"><i class="mdi mdi-trash-can"/></td>
+                                </tr>
+                                <tr v-else>
+                                    <td :colspan="4" class="px-4 text-center">Es existiert noch kein Zugangscode zu diesem Album!</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

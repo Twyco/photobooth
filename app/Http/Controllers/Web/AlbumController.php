@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAlbumRequest;
 use App\Http\Requests\UpdateAlbumRequest;
+use App\Http\Resources\AdminAlbumResource;
 use App\Models\Album;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class AlbumController extends Controller
@@ -37,13 +39,14 @@ class AlbumController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Album $album)
+    public function edit(Request $request, Album $album)
     {
         if(!Gate::allows('update', $album)){
             return to_route('dashboard')->with('danger', 'You do not have permission to update this album.');
         }
+        $album->load('albumAccessCodes');
         return Inertia::render('Admin/Album/Edit', [
-            'album' => $album,
+            'album' => AdminAlbumResource::make($album)->toArray($request),
         ]);
     }
 

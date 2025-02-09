@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Web\Admin\AdminController;
+use App\Http\Controllers\Web\AlbumAccessCodeController;
 use App\Http\Controllers\Web\AlbumController;
 use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
@@ -18,6 +19,11 @@ Route::middleware(['auth', AdminMiddleware::class])
             Route::post('/store', [AlbumController::class, 'store'])->name('store');
             Route::patch('/update/{album}', [AlbumController::class, 'update'])->name('update');
             Route::delete('/destroy/{album}', [AlbumController::class, 'destroy'])->name('destroy');
+        });
+
+        Route::prefix('accessCode')->name('accessCode.')->group(function () {
+            Route::post('/store', [AlbumAccessCodeController::class, 'store'])->name('store');
+            Route::delete('/destroy/{albumAccessCode}', [AlbumAccessCodeController::class, 'destroy'])->name('destroy');
         });
 
     });
