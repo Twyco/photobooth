@@ -96,7 +96,6 @@ class AlbumController extends Controller
             return to_route('dashboard')->with('danger', 'You do not have permission to delete this album.');
         }
         $album->delete();
-        //TODO Delete actived albums and accesscode
         return to_route('album.index')->with('success', 'Album deleted successfully.');
     }
 }

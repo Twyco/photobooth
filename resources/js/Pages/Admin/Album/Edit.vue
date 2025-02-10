@@ -48,9 +48,6 @@ const createAccessCode = () => {
     router.post(route('admin.accessCode.store'), {albumId: props.album.id})
 }
 
-function formatCode(code: string): string {
-    return code.match(/.{1,5}/g)?.join("-") ?? "";
-}
 </script>
 
 <template>
@@ -126,7 +123,7 @@ function formatCode(code: string): string {
                     <div class="py-6 px-12 grid grid-cols-6 gap-8 w-full">
                         <div class="col-span-6">
                             Zugangscodes:
-                            <!--                            Paginated Table:-->
+                            <!--Paginated Table:-->
                             <table>
                                 <thead>
                                 <tr class="bg-gray-100 border-b-2 border-black">
@@ -143,7 +140,7 @@ function formatCode(code: string): string {
                                     class="even:bg-gray-100 odd:bg-white"
                                 >
                                     <td class="px-4 text-center">{{ accessCode.id }}</td>
-                                    <td class="px-4 text-center">{{ formatCode(accessCode.accessCode) }}</td>
+                                    <td class="px-4 text-center">{{ accessCode.accessCode }}</td>
                                     <td class="px-4 text-center">{{ accessCode.usages }}</td>
                                     <td class="px-4 text-center">{{ accessCode.saves }}</td>
                                     <td class="px-4 text-center text-red-500 hover:cursor-pointer"

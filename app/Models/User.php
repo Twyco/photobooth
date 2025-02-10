@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -49,6 +50,16 @@ class User extends Authenticatable
             'password' => 'hashed',
             'is_admin' => 'boolean',
         ];
+    }
+
+    public function activatedAlbums(): BelongsToMany
+    {
+        return $this->belongsToMany(Album::class, 'activated_albums')->withTimestamps();
+    }
+
+    public function hasAlbumActivated(Album $album): bool
+    {
+        return $this->activatedAlbums()->where('album_id', $album->id)->exists();
     }
 
 }

@@ -21,8 +21,7 @@ class AlbumPolicy
      */
     public function view(User $user, Album $album): bool
     {
-        //TODO check if $user has accescode from album stored
-        return true || $this->viewAny($user);
+        return $user->hasAlbumActivated($album) || $this->viewAny($user);
     }
 
     /**

@@ -1,19 +1,13 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Web\AlbumAccessCodeController;
 use App\Http\Controllers\Web\AlbumController;
-use Illuminate\Foundation\Application;
+use App\Http\Controllers\Web\PageController;
+use App\Http\Controllers\Web\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-})->name('home');
+Route::get('/', [PageController::class, 'home'])->name('home');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -34,6 +28,8 @@ Route::middleware(['auth'])
         Route::get('/show/{album:uuid}', [AlbumController::class, 'show'])->name('show');
 
     });
+
+Route::post('/accessCode', [AlbumAccessCodeController::class, 'use'])->name('accessCode.use');
 
 require __DIR__ . '/auth.php';
 require __DIR__ . '/admin.php';

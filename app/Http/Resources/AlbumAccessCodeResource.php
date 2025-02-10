@@ -21,7 +21,7 @@ class AlbumAccessCodeResource extends JsonResource
         return [
             'id' => $this->id,
             'albumId' => $this->album_id,
-            'accessCode' => $this->access_code,
+            'accessCode' => implode('-', str_split($this->access_code, 5)),
             'usages' => $this->usages,
             'saves' => $this->saves,
         ];
