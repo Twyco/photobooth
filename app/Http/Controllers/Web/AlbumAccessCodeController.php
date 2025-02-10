@@ -8,12 +8,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class AlbumAccessCodeController extends Controller
 {
 
   /**
    * Store a newly created resource in storage.
+   * @throws ValidationException
    */
   public function store(Request $request)
   {
@@ -34,6 +36,9 @@ class AlbumAccessCodeController extends Controller
     $albumAccessCode->delete();
   }
 
+  /**
+   * @throws ValidationException
+   */
   public function use(Request $request)
   {
     $validatedData = Validator::make($request->all(), [
@@ -54,7 +59,7 @@ class AlbumAccessCodeController extends Controller
     $album = $albumAccessCode->album;
     if(auth()->check()){
       $user = $request->user();
-      $user->activatedAlbums()->syncWithoutDetaching([$album->id]);
+      $user->savedAlbums()->syncWithoutDetaching([$album->id]);
       $albumAccessCode->increment('saves');
     }
 

@@ -62,9 +62,9 @@ class Album extends Model
         return $this->hasMany(AlbumAccessCode::class);
     }
 
-    public function activatedUsers(): BelongsToMany
+    public function savedUsers(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'activated_albums')->withTimestamps();
+        return $this->belongsToMany(User::class, 'saved_albums')->withTimestamps();
     }
 
 }

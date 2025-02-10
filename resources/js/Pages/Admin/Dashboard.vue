@@ -23,7 +23,13 @@ import NavLink from "@/Components/NavLink.vue";
                 >
                     <div class="p-6 text-gray-900">
                         <NavLink
-                            :href="route('admin.album.create')"
+                            class="mr-8"
+                            :href="route('admin.albums.index')"
+                        >
+                            Alle Alben anzeigen
+                        </NavLink>
+                        <NavLink
+                            :href="route('admin.albums.create')"
                         >
                             Album erstellen
                         </NavLink>

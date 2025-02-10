@@ -25,7 +25,8 @@ Route::middleware(['auth'])
     ->group(function () {
 
         Route::get('/', [AlbumController::class, 'index'])->name('index');
-        Route::get('/show/{album:uuid}', [AlbumController::class, 'show'])->name('show');
+        Route::get('/{album:uuid}', [AlbumController::class, 'show'])->name('show');
+        Route::post('/{album:uuid}/save', [AlbumController::class, 'save'])->name('save');
 
     });
 

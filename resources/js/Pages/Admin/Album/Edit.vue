@@ -7,12 +7,12 @@ import InputLabel from "@/Components/InputLabel.vue";
 import TextInput from "@/Components/TextInput.vue";
 import InputError from "@/Components/InputError.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import {AlbumInterface} from "@/types/album-interface";
+import {AdminAlbumInterface} from "@/types/album-interface";
 import DangerButton from "@/Components/DangerButton.vue";
 
 const props = defineProps({
     album: {
-        type: Object as PropType<AlbumInterface>,
+        type: Object as PropType<AdminAlbumInterface>,
         required: true,
     },
 });
@@ -33,11 +33,11 @@ const storeAlbum = () => {
             ...(data.description != props.album.description ? {description: data.description} : {}),
             ...(data.event_date != props.album.eventDate.split('T')[0] ? {event_date: data.event_date} : {})
         }))
-        .patch(route('admin.album.update', {album: props.album.id}))
+        .patch(route('admin.albums.update', {album: props.album.id}))
 }
 
 const deleteAlbum = () => {
-    router.delete(route('admin.album.destroy', {album: props.album.id}))
+    router.delete(route('admin.albums.destroy', {album: props.album.id}))
 }
 
 const deleteAccessCode = (id: number) => {

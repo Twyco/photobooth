@@ -1,11 +1,14 @@
 import {AlbumAccessCodeInterface} from "@/types/album-access-code-interface";
 
-export interface AlbumInterface {
-    id: number;
+export interface UserAlbumInterface {
     uuid: string;
     title: string;
-    slug: string;
     description: string;
     eventDate: string;
-    accessCodes?: AlbumAccessCodeInterface[],
+}
+
+export interface AdminAlbumInterface extends UserAlbumInterface {
+    id: number;
+    slug: string;
+    accessCodes: AlbumAccessCodeInterface[],
 }

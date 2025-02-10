@@ -21,7 +21,7 @@ class AlbumPolicy
      */
     public function view(User $user, Album $album): bool
     {
-        return $user->hasAlbumActivated($album) || $this->viewAny($user);
+        return $user->hasAlbumSaved($album);
     }
 
     /**

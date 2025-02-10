@@ -52,14 +52,14 @@ class User extends Authenticatable
         ];
     }
 
-    public function activatedAlbums(): BelongsToMany
+    public function savedAlbums(): BelongsToMany
     {
-        return $this->belongsToMany(Album::class, 'activated_albums')->withTimestamps();
+        return $this->belongsToMany(Album::class, 'saved_albums')->withTimestamps();
     }
 
-    public function hasAlbumActivated(Album $album): bool
+    public function hasAlbumSaved(Album $album): bool
     {
-        return $this->activatedAlbums()->where('album_id', $album->id)->exists();
+        return $this->savedAlbums()->where('album_id', $album->id)->exists();
     }
 
 }

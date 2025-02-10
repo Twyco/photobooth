@@ -19,7 +19,7 @@ defineProps({
             <h2
                 class="text-xl font-semibold leading-tight text-gray-800"
             >
-                User - Alben - Übersicht
+                Admin - Alben - Übersicht
             </h2>
         </template>
 
@@ -32,9 +32,14 @@ defineProps({
                         <ul>
                             <li v-for="(album, index) in albums" :key="index">
                                 <NavLink
-                                    :href="route('album.show', { album: album.uuid })"
+                                    :href="route('admin.albums.show', { album: album.id })"
                                 >
                                     Show: {{album.title}}
+                                </NavLink>
+                                <NavLink
+                                    :href="route('admin.albums.edit', { album: album.id })"
+                                >
+                                    Edit: {{album.title}}
                                 </NavLink>
                             </li>
                         </ul>

@@ -1,22 +1,16 @@
 <script setup lang="ts">
 
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import {Head, router} from "@inertiajs/vue3";
+import {Head} from "@inertiajs/vue3";
 import {PropType} from "vue";
-import {UserAlbumInterface} from "@/types/album-interface";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
+import {AdminAlbumInterface} from "@/types/album-interface";
 
-const props = defineProps({
+defineProps({
     album: {
-        type: Object as PropType<UserAlbumInterface>,
-        required: true
-    },
-    hasAlbumSaved: Boolean
+        type: Object as PropType<AdminAlbumInterface>,
+        required: true,
+    }
 });
-
-const saveAlbum = () =>  {
-    router.post(route('album.save', {album: props.album.uuid}))
-}
 
 </script>
 
@@ -28,7 +22,7 @@ const saveAlbum = () =>  {
             <h2
                 class="text-xl font-semibold leading-tight text-gray-800"
             >
-                User - Album - Ansicht
+                Admin - Album - Ansicht
             </h2>
         </template>
 
@@ -38,13 +32,21 @@ const saveAlbum = () =>  {
                     class="overflow-hidden bg-white shadow-sm sm:rounded-lg"
                 >
                     <div class="p-6 text-gray-900">
-                        <primary-button v-if="!hasAlbumSaved" @click="saveAlbum()">Album Speichern</primary-button>
-                        <ul class="mt-4">
+                        <ul>
+                            <li><b>ID:</b> {{ album.id }}</li>
                             <li><b>Titel:</b> {{ album.title }}</li>
+                            <li><b>Slug:</b> {{ album.slug }}</li>
                             <li><b>Beschreibung:</b> {{ album.description }}</li>
                             <li><b>Veranstaltungsdatum:</b> {{ album.eventDate }}</li>
                             <li><b>UUID:</b> {{ album.uuid }}</li>
-                            <li><b>Hier sind dann die Bilder!</b></li>
+                            <li>
+                                <b>Codes:</b>
+                                <ul class="ml-2">
+                                    <li v-for="accessCode in album.accessCodes">
+                                        <b>Code:</b> {{accessCode.accessCode}} - <b>Usages:</b> {{accessCode.usages}} - <b>Saves:</b> {{ accessCode.saves}}
+                                    </li>
+                                </ul>
+                            </li>
                         </ul>
                     </div>
                 </div>
