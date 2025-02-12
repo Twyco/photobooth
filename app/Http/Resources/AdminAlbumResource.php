@@ -21,7 +21,6 @@ class AdminAlbumResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'slug' => $this->slug,
             'description' => $this->description,
             'eventDate' => $this->event_date,
             'uuid' => $this->uuid,

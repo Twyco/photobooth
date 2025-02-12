@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Storage::disk('public')->deleteDirectory('albums');
+        Storage::disk('public')->deleteDirectory('qrCodes');
         $this->command->info('Generating images...');
         Album::factory(5)->create();
     }

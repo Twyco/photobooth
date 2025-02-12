@@ -9,6 +9,5 @@ export interface UserAlbumInterface {
 
 export interface AdminAlbumInterface extends UserAlbumInterface {
     id: number;
-    slug: string;
     accessCodes: AlbumAccessCodeInterface[],
 }

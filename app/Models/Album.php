@@ -9,7 +9,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 /**
  * @property mixed $albumAccessCodes
@@ -21,7 +23,6 @@ class Album extends Model
 
     protected $fillable = [
         'title',
-        'slug',
         'description',
         'event_date',
     ];
@@ -42,6 +43,7 @@ class Album extends Model
 
         static::created(function ($album) {
             AlbumAccessCode::create(['album_id' => $album->id]);
+            $album->createQrCode(1000);
         });
     }
 
@@ -67,4 +69,16 @@ class Album extends Model
         return $this->belongsToMany(User::class, 'saved_albums')->withTimestamps();
     }
 
+    public function createQrCode(int $size): void
+    {
+        $albumLink = route('album.show', ['album' => $this]);
+        $qrImage = QrCode::format('png')->size($size)->generate($albumLink);
+
+        Storage::disk('public')->put("qrCodes/{$this->uuid}.png", $qrImage);
+    }
+
+    public function getQrCodeUrl(): string
+    {
+        return Storage::url("public/qrCodes/{$this->uuid}.png");
+    }
 }

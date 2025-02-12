@@ -10,7 +10,6 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 const form = useForm({
     _method: "post",
     title: '',
-    slug: '',
     description: '',
     event_date: new Date().toISOString().split('T')[0],
 })
@@ -51,13 +50,13 @@ const storeAlbum = () => {
                             <InputError class="mt-2" :message="form.errors.title"/>
                         </div>
                         <div class="col-span-3">
-                            <InputLabel for="slug" value="Slug (Ordnername)" />
+                            <InputLabel for="event_date" value="Veranstaltungsdatum" />
                             <TextInput
-                                id="slug"
-                                v-model="form.slug"
-                                type="text"
+                                id="event_date"
+                                v-model="form.event_date"
+                                type="date"
                             />
-                            <InputError class="mt-2" :message="form.errors.slug"/>
+                            <InputError class="mt-2" :message="form.errors.event_date"/>
                         </div>
                         <div class="col-span-6">
                             <InputLabel for="description" value="Beschreibung" />
@@ -68,16 +67,7 @@ const storeAlbum = () => {
                             />
                             <InputError class="mt-2" :message="form.errors.description"/>
                         </div>
-                        <div class="col-span-3">
-                            <InputLabel for="event_date" value="Veranstaltungsdatum" />
-                            <TextInput
-                                id="event_date"
-                                v-model="form.event_date"
-                                type="date"
-                            />
-                            <InputError class="mt-2" :message="form.errors.event_date"/>
-                        </div>
-                        <div class="col-span-3 ">
+                        <div class="col-span-6 ">
                             <div class="h-full place-content-end text-right">
                                 <PrimaryButton :disabled="form.processing">Speichern</PrimaryButton>
                             </div>

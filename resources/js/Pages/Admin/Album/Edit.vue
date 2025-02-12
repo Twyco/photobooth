@@ -20,7 +20,6 @@ const props = defineProps({
 const form = useForm({
     _method: "post",
     title: props.album.title,
-    slug: props.album.slug,
     description: props.album.description,
     event_date: props.album.eventDate.split('T')[0],
 })
@@ -29,7 +28,6 @@ const storeAlbum = () => {
     form
         .transform((data) => ({
             ...(data.title != props.album.title ? {title: data.title} : {}),
-            ...(data.slug != props.album.slug ? {slug: data.slug} : {}),
             ...(data.description != props.album.description ? {description: data.description} : {}),
             ...(data.event_date != props.album.eventDate.split('T')[0] ? {event_date: data.event_date} : {})
         }))
@@ -81,13 +79,13 @@ const createAccessCode = () => {
                             <InputError class="mt-2" :message="form.errors.title"/>
                         </div>
                         <div class="col-span-3">
-                            <InputLabel for="slug" value="Slug (Ordnername)"/>
+                            <InputLabel for="event_date" value="Veranstaltungsdatum"/>
                             <TextInput
-                                id="slug"
-                                v-model="form.slug"
-                                type="text"
+                                id="event_date"
+                                v-model="form.event_date"
+                                type="date"
                             />
-                            <InputError class="mt-2" :message="form.errors.slug"/>
+                            <InputError class="mt-2" :message="form.errors.event_date"/>
                         </div>
                         <div class="col-span-6">
                             <InputLabel for="description" value="Beschreibung"/>
@@ -98,16 +96,7 @@ const createAccessCode = () => {
                             />
                             <InputError class="mt-2" :message="form.errors.description"/>
                         </div>
-                        <div class="col-span-3">
-                            <InputLabel for="event_date" value="Veranstaltungsdatum"/>
-                            <TextInput
-                                id="event_date"
-                                v-model="form.event_date"
-                                type="date"
-                            />
-                            <InputError class="mt-2" :message="form.errors.event_date"/>
-                        </div>
-                        <div class="col-span-3">
+                        <div class="col-span-6">
                             <div class="h-full place-content-end text-right">
                                 <DangerButton
                                     class="mr-2"

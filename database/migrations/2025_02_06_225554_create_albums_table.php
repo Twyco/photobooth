@@ -15,7 +15,6 @@ return new class extends Migration
         Schema::create('albums', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('slug');
             $table->text('description')->nullable()->default(null);
             $table->date('event_date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->uuid()->unique();
