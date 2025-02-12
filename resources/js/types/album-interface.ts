@@ -1,4 +1,4 @@
-import {AlbumAccessCodeInterface} from "@/types/album-access-code-interface";
+import { AlbumAccessCodeInterface } from '@/types/album-access-code-interface';
 
 export interface UserAlbumInterface {
     uuid: string;
@@ -9,5 +9,5 @@ export interface UserAlbumInterface {
 
 export interface AdminAlbumInterface extends UserAlbumInterface {
     id: number;
-    accessCodes: AlbumAccessCodeInterface[],
+    accessCodes: AlbumAccessCodeInterface[];
 }

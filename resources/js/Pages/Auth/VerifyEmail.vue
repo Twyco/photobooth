@@ -15,7 +15,7 @@ const submit = () => {
 };
 
 const verificationLinkSent = computed(
-    () => props.status === 'verification-link-sent',
+    () => props.status === 'verification-link-sent'
 );
 </script>
 

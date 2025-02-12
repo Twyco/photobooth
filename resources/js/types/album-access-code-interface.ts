@@ -1,5 +1,5 @@
 export interface AlbumAccessCodeInterface {
-    id: number,
+    id: number;
     albumId: number;
     accessCode: string;
     usages: number;

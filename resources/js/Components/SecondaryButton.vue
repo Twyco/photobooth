@@ -5,7 +5,7 @@ withDefaults(
     }>(),
     {
         type: 'button',
-    },
+    }
 );
 </script>
 
