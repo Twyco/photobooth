@@ -96,11 +96,11 @@ const isoToFormattedDate = (isoString: string) => {
         <input
           placeholder="Suchen"
           v-model="search"
-          @input="fetchPage(data.current_page)"
+          @input="fetchPage(data.currentPage)"
         />
       </div>
       <div v-if="filterOptions">
-        <select v-model="filter" @change="fetchPage(data.current_page)">
+        <select v-model="filter" @change="fetchPage(data.currentPage)">
           <option value="">Kein Filter</option>
           <option v-for="option in filterOptions" :value="option.id">
             {{ option.name }}
@@ -112,16 +112,17 @@ const isoToFormattedDate = (isoString: string) => {
     <table class="table-auto w-full border rounded-lg py-3">
       <thead>
       <tr class="bg-gray-200">
-        <th v-for="header in headers" class="border-b border-black py-3 text-center">
+        <th v-for="header in headers" class="first:pl-2 border-b border-black py-3 text-left">
           {{ header.title }}
         </th>
+        <th class="border-b border-black"/>
       </tr>
       </thead>
       <tbody>
       <tr v-for="item in data.data" :key="item.id">
         <td
           v-for="header in headers"
-          class="border-b border-black py-3 text-center"
+          class="first:pl-2 border-b border-black py-3 text-left"
           :class="showRouteName ? 'cursor-pointer' : ''"
           @click="visitShowPage(item.id)"
         >
@@ -129,7 +130,7 @@ const isoToFormattedDate = (isoString: string) => {
             {{ !header.isDate ? item[header.key] : isoToFormattedDate(item[header.key]) }}
           </span>
           <span v-else-if="header.type === 'object'" v-if="header.objectKey">
-            {{ items[header.key][header.objectKey] }}
+            {{ item[header.key][header.objectKey] }}
           </span>
           <p
             v-else-if="header.type === 'array'"
@@ -159,16 +160,16 @@ const isoToFormattedDate = (isoString: string) => {
     <!-- Pagination Controls-->
     <div class="flex justify-center mt-4">
       <button
-        :disabled="data.current_page > 1"
-        @click="fetchPage(data.current_page - 1)"
+        :disabled="data.currentPage > 1"
+        @click="fetchPage(data.currentPage - 1)"
         class="px-4 py-2 bg-gray-200 border rounded hover:bg-gray-300"
       >
         Previous
       </button>
-      <span class="mx-4">Page {{ data.current_page }} of {{ data.last_page }}</span>
+      <span class="mx-4">Page {{ data.currentPage }} of {{ data.lastPage }}</span>
       <button
-        :disabled="data.current_page < data.last_page"
-        @click="fetchPage(data.current_page + 1)"
+        :disabled="data.currentPage < data.lastPage"
+        @click="fetchPage(data.currentPage + 1)"
         class="px-4 py-2 bg-gray-200 border rounded hover:bg-gray-300"
       >
         Next

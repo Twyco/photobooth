@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAlbumRequest;
 use App\Http\Requests\UpdateAlbumRequest;
 use App\Http\Resources\AdminAlbumResource;
+use App\Http\Resources\GenericPaginationResource;
 use App\Models\Album;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -20,9 +21,9 @@ class AdminAlbumController extends Controller
         if (!Gate::allows('viewAny', Album::class)) {
             abort(403);
         }
-        $albums = Album::all();
+        $albums = Album::query()->paginate(15);
         return Inertia::render('Admin/Album/Index', [
-            'albums' => AdminAlbumResource::collection($albums)->toArray($request)
+            'albums' => GenericPaginationResource::make($albums, AdminAlbumResource::class),
         ]);
     }
 
@@ -33,7 +34,7 @@ class AdminAlbumController extends Controller
         }
         $album->load('albumAccessCodes');
         return Inertia::render('Admin/Album/Show', [
-            'album' => AdminAlbumResource::make($album)->toArray($request),
+            'album' => AdminAlbumResource::make($album),
             'qrCodeUrl' => $album->getQrCodeUrl(),
         ]);
     }

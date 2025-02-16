@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import {computed, ref} from 'vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
@@ -8,6 +8,9 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
 
 const showingNavigationDropdown = ref(false);
+
+const isAdminRoute = computed(() => /^admin\./.test(route().current() ?? ''));
+
 </script>
 
 <template>
@@ -40,7 +43,7 @@ const showingNavigationDropdown = ref(false);
                                 <NavLink
                                     v-if="$page.props.auth.user.is_admin"
                                     :href="route('admin.dashboard')"
-                                    :active="route().current('admin.dashboard')"
+                                    :active="isAdminRoute"
                                 >
                                     Admin - Dashboard
                                 </NavLink>
