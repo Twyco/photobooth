@@ -6,7 +6,7 @@ import {TableHeaderInterface} from "@/types/table-header-interface";
 import {TableFilterInterface} from "@/types/table-filter-interface";
 import {router} from "@inertiajs/vue3";
 import {format, parseISO} from "date-fns";
-import PaginationControll from "@/Components/Util/PaginationControll.vue";
+import PaginationControl from "@/Components/Util/PaginationControll.vue";
 import PaginationInfo from "@/Components/Util/PaginationInfo.vue";
 
 const props = defineProps({
@@ -112,7 +112,7 @@ const isoToFormattedDate = (isoString: string) => {
       </div>
     </div>
     <div class="w-full place-items-end mb-4">
-      <PaginationControll
+      <PaginationControl
         :current-page="data.currentPage"
         :last-page="data.lastPage"
         @click="fetchPage"
@@ -171,7 +171,7 @@ const isoToFormattedDate = (isoString: string) => {
       <PaginationInfo :per-page="data.perPage" :total="data.total"
                       :current-page="data.currentPage"
       />
-      <PaginationControll
+      <PaginationControl
         :current-page="data.currentPage"
         :last-page="data.lastPage"
         @click="fetchPage"
