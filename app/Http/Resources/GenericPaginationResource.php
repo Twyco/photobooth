@@ -24,8 +24,8 @@ class GenericPaginationResource extends JsonResource
       'data' => $this->dataClass::collection($this->items()),
       'lastPage' => $this->lastPage(),
       'currentPage' => $this->currentPage(),
-      'totalItems' => $this->total(),
-      'itemsPerPage' => $this->perPage(),
+      'total' => $this->total(),
+      'perPage' => $this->perPage(),
     ];
   }
 }

@@ -4,13 +4,14 @@ import {PropType} from 'vue';
 import {AdminAlbumInterface} from '@/types/album-interface';
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 
-defineProps({
+const props = defineProps({
   album: {
     type: Object as PropType<AdminAlbumInterface>,
     required: true,
   },
   qrCodeUrl: String,
 });
+console.log(props.album);
 </script>
 
 <template>
@@ -31,10 +32,10 @@ defineProps({
       <li>
         <b>Direktlink: </b>
         <a
-          :href="route('album.show', { album: album.uuid,})"
+          :href="route('album.show', {album: album.uuid})"
           class="text-blue-800 visited:text-blue-800 active:text-blue-800"
         >
-          {{ route('album.show', {album: album.uuid,}) }}
+          {{ route('album.show', {album: album.uuid}) }}
         </a>
       </li>
       <li v-if="qrCodeUrl">

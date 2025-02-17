@@ -21,7 +21,7 @@ class AdminAlbumController extends Controller
         if (!Gate::allows('viewAny', Album::class)) {
             abort(403);
         }
-        $albums = Album::query()->paginate(15);
+        $albums = Album::paginate(10);
         return Inertia::render('Admin/Album/Index', [
             'albums' => GenericPaginationResource::make($albums, AdminAlbumResource::class),
         ]);
@@ -34,7 +34,7 @@ class AdminAlbumController extends Controller
         }
         $album->load('albumAccessCodes');
         return Inertia::render('Admin/Album/Show', [
-            'album' => AdminAlbumResource::make($album),
+            'album' => AdminAlbumResource::make($album)->toArray($request),
             'qrCodeUrl' => $album->getQrCodeUrl(),
         ]);
     }
@@ -74,7 +74,7 @@ class AdminAlbumController extends Controller
         }
         $validatedData = $request->validated();
         Album::create($validatedData);
-        return to_route('album.index')->with('success', 'Album created successfully.');
+        return to_route('admin.albums.index')->with('success', 'Album created successfully.');
     }
 
     /**

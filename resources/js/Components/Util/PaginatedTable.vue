@@ -6,6 +6,8 @@ import {TableHeaderInterface} from "@/types/table-header-interface";
 import {TableFilterInterface} from "@/types/table-filter-interface";
 import {router} from "@inertiajs/vue3";
 import {format, parseISO} from "date-fns";
+import PaginationControll from "@/Components/Util/PaginationControll.vue";
+import PaginationInfo from "@/Components/Util/PaginationInfo.vue";
 
 const props = defineProps({
   data: {
@@ -22,6 +24,7 @@ const props = defineProps({
   filterValue: String,
   searchValue: String,
   canSearch: Boolean,
+  canFilter: Boolean,
   modelName: {
     type: String,
     default: '',
@@ -35,7 +38,7 @@ const fetchPage = (page: number) => {
   if (!props.path) {
     return;
   }
-  if (filter.value !== props.filterValue || search.value !== props.searchValue) {
+  if (props.canSearch && props.canFilter && (filter.value !== props.filterValue || search.value !== props.searchValue)) {
     page = 1;
   }
   router.visit(props.path, {
@@ -99,7 +102,7 @@ const isoToFormattedDate = (isoString: string) => {
           @input="fetchPage(data.currentPage)"
         />
       </div>
-      <div v-if="filterOptions">
+      <div v-if="canFilter">
         <select v-model="filter" @change="fetchPage(data.currentPage)">
           <option value="">Kein Filter</option>
           <option v-for="option in filterOptions" :value="option.id">
@@ -107,6 +110,13 @@ const isoToFormattedDate = (isoString: string) => {
           </option>
         </select>
       </div>
+    </div>
+    <div class="w-full place-items-end mb-4">
+      <PaginationControll
+        :current-page="data.currentPage"
+        :last-page="data.lastPage"
+        @click="fetchPage"
+      />
     </div>
     <!-- Data Table-->
     <table class="table-auto w-full border rounded-lg py-3">
@@ -157,23 +167,17 @@ const isoToFormattedDate = (isoString: string) => {
       Es wurden keine Daten gefunden!
     </div>
 
-    <!-- Pagination Controls-->
-    <div class="flex justify-center mt-4">
-      <button
-        :disabled="data.currentPage > 1"
-        @click="fetchPage(data.currentPage - 1)"
-        class="px-4 py-2 bg-gray-200 border rounded hover:bg-gray-300"
-      >
-        Previous
-      </button>
-      <span class="mx-4">Page {{ data.currentPage }} of {{ data.lastPage }}</span>
-      <button
-        :disabled="data.currentPage < data.lastPage"
-        @click="fetchPage(data.currentPage + 1)"
-        class="px-4 py-2 bg-gray-200 border rounded hover:bg-gray-300"
-      >
-        Next
-      </button>
+    <div class="w-full flex justify-between">
+      <PaginationInfo :per-page="data.perPage" :total="data.total"
+                      :current-page="data.currentPage"
+      />
+      <PaginationControll
+        :current-page="data.currentPage"
+        :last-page="data.lastPage"
+        @click="fetchPage"
+        class="mt-4"
+      />
     </div>
+
   </div>
 </template>
