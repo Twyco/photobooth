@@ -22,7 +22,7 @@ defineProps({
           :href="route('admin.dashboard')"
           :active="route().current('admin.dashboard')"
         >
-          Album erstellen
+          Dashboard
         </NavLink>
         <NavLink
           :href="route('admin.albums.index')"

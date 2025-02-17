@@ -21,10 +21,10 @@ class GenericPaginationResource extends JsonResource
   public function toArray(Request $request): array
   {
     return [
-      'data' => $this->items(),
+      'data' => $this->dataClass::collection($this->items()),
       'lastPage' => $this->lastPage(),
       'currentPage' => $this->currentPage(),
-      'totalPages' => $this->total(),
+      'totalItems' => $this->total(),
       'itemsPerPage' => $this->perPage(),
     ];
   }

@@ -15,7 +15,7 @@ defineProps({
 const tableHeaders: TableHeaderInterface[] = [
   {key: 'id', title: 'Id'},
   {key: 'title', title: 'Albumname'},
-  {key: 'uuid', title: 'UUID'}
+  {key: 'eventDate', title: 'Veranstaltungsdatum', isDate: true},
 ]
 </script>
 

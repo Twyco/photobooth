@@ -78,7 +78,7 @@ const visitShowPage = (id: number) => {
 };
 
 const isoToFormattedDate = (isoString: string) => {
-  return format(parseISO(isoString), "yyyy-MM-dd HH:mm");
+  return format(parseISO(isoString), "dd.MM.yyyy");
 }
 </script>
 
