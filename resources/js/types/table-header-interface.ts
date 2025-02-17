@@ -7,7 +7,4 @@ export interface TableHeaderInterface {
   type?: TableHeaderType;
 }
 
-export type TableHeaderType =
-  | 'object'
-  | 'array'
-  | 'objectArray';
+export type TableHeaderType = 'object' | 'array' | 'objectArray';

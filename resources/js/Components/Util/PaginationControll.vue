@@ -1,13 +1,12 @@
 <script setup lang="ts">
-
-import {computed} from "vue";
+import { computed } from 'vue';
 
 const props = defineProps({
   currentPage: {
     type: Number,
     required: true
   },
-  lastPage:  {
+  lastPage: {
     type: Number,
     required: true
   }
@@ -23,7 +22,7 @@ const pages = computed(() => {
 
   if (currentPage <= 3) {
     start = 1;
-    end = 6
+    end = 6;
   } else if (currentPage >= lastPage - 2) {
     start = lastPage - 5;
     end = lastPage;
@@ -39,9 +38,8 @@ const pages = computed(() => {
 });
 
 const fetchPage = (page: number) => {
-  emits("click", page);
+  emits('click', page);
 };
-
 </script>
 
 <template>
@@ -53,25 +51,32 @@ const fetchPage = (page: number) => {
       @click="fetchPage(currentPage - 1)"
     />
     <div v-if="lastPage > 6">
-      <button v-if="currentPage >= 4"
-              v-text="1" class="mx-1"
-              @click="fetchPage(1)"
+      <button
+        v-if="currentPage >= 4"
+        v-text="1"
+        class="mx-1"
+        @click="fetchPage(1)"
       />
       <span v-if="currentPage > 4" class="mx-1">...</span>
     </div>
 
     <!-- Zeige Seiten um die aktuelle Seite herum -->
-    <button v-for="page in pages" :key="page"
-            class="mx-1 text-black disabled:opacity-35"
-            v-text="page" @click="fetchPage(page)"
-            :disabled="page == currentPage"
+    <button
+      v-for="page in pages"
+      :key="page"
+      class="mx-1 text-black disabled:opacity-35"
+      v-text="page"
+      @click="fetchPage(page)"
+      :disabled="page == currentPage"
     />
 
     <div v-if="lastPage > 6">
       <span v-if="currentPage < lastPage - 3" class="mx-1">...</span>
-      <button v-if="currentPage <= lastPage - 3"
-              v-text="lastPage" class="mx-1"
-              @click="fetchPage(lastPage)"
+      <button
+        v-if="currentPage <= lastPage - 3"
+        v-text="lastPage"
+        class="mx-1"
+        @click="fetchPage(lastPage)"
       />
     </div>
     <button

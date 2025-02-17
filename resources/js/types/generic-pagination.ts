@@ -1,7 +1,7 @@
 export interface GenericPagination {
-  data: Array<any>,
-  lastPage: number,
-  currentPage: number,
-  total: number,
-  perPage: number,
+  data: Array<any>;
+  lastPage: number;
+  currentPage: number;
+  total: number;
+  perPage: number;
 }

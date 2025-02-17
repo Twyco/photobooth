@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import {computed} from "vue";
+import { computed } from 'vue';
 
 const props = defineProps({
   currentPage: {
     type: Number,
     required: true
   },
-  total:  {
+  total: {
     type: Number,
     required: true
   },
-  perPage:  {
+  perPage: {
     type: Number,
     required: true
   }
