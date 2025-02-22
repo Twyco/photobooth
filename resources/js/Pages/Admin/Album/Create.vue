@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { Head, useForm } from '@inertiajs/vue3';
+import { useForm } from '@inertiajs/vue3';
 import TextInput from '@/Components/TextInput.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import AdminLayout from '@/Layouts/AdminLayout.vue';
+import AppLayout from '@/Layouts/AppLayout.vue';
 
 const form = useForm({
   _method: 'post',
@@ -19,13 +19,8 @@ const storeAlbum = () => {
 </script>
 
 <template>
-  <Head title="Album bearbeiten" />
-
-  <AdminLayout>
-    <form
-      @submit.prevent="storeAlbum()"
-      class="py-6 px-12 grid grid-cols-6 gap-8 w-full"
-    >
+  <AppLayout title="Album bearbeiten">
+    <form @submit.prevent="storeAlbum()" class="grid grid-cols-6 gap-8 w-full">
       <div class="col-span-3">
         <InputLabel for="title" value="Titel" />
         <TextInput id="title" v-model="form.title" type="text" />
@@ -47,5 +42,5 @@ const storeAlbum = () => {
         </div>
       </div>
     </form>
-  </AdminLayout>
+  </AppLayout>
 </template>

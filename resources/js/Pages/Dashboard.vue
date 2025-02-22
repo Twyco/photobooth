@@ -1,13 +1,10 @@
 <script setup lang="ts">
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
 import NavLink from '@/Components/NavLink.vue';
+import AppLayout from '@/Layouts/AppLayout.vue';
 </script>
 
 <template>
-  <Head title="Dashboard" />
-
-  <AuthenticatedLayout>
+  <AppLayout title="Dashboard">
     <template #header>
       <h2 class="text-xl font-semibold leading-tight text-gray-800">
         Dashboard
@@ -23,5 +20,5 @@ import NavLink from '@/Components/NavLink.vue';
         </div>
       </div>
     </div>
-  </AuthenticatedLayout>
+  </AppLayout>
 </template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head, router, useForm } from '@inertiajs/vue3';
+import { router, useForm } from '@inertiajs/vue3';
 import { PropType } from 'vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
@@ -7,7 +7,7 @@ import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { AdminAlbumInterface } from '@/types/album-interface';
 import DangerButton from '@/Components/DangerButton.vue';
-import AdminLayout from '@/Layouts/AdminLayout.vue';
+import AppLayout from '@/Layouts/AppLayout.vue';
 
 const props = defineProps({
   album: {
@@ -51,9 +51,7 @@ const createAccessCode = () => {
 </script>
 
 <template>
-  <Head title="Album bearbeiten" />
-
-  <AdminLayout>
+  <AppLayout title="Album bearbeiten">
     <form
       @submit.prevent="storeAlbum()"
       class="py-6 px-12 grid grid-cols-6 gap-8 w-full"
@@ -139,5 +137,5 @@ const createAccessCode = () => {
         </table>
       </div>
     </div>
-  </AdminLayout>
+  </AppLayout>
 </template>

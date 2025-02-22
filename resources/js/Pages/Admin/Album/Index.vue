@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import AdminLayout from '@/Layouts/AdminLayout.vue';
 import PaginatedTable from '@/Components/Util/PaginatedTable.vue';
 import { PropType } from 'vue';
 import { GenericPagination } from '@/types/generic-pagination';
 import { TableHeaderInterface } from '@/types/table-header-interface';
+import AppLayout from '@/Layouts/AppLayout.vue';
 
 defineProps({
   albums: {
@@ -20,7 +20,7 @@ const tableHeaders: TableHeaderInterface[] = [
 </script>
 
 <template>
-  <AdminLayout header="Alben">
+  <AppLayout header="Alben">
     <PaginatedTable
       :data="albums"
       :path="route('admin.albums.index')"
@@ -31,5 +31,5 @@ const tableHeaders: TableHeaderInterface[] = [
       show-route-name="admin.albums.show"
       model-name="album"
     />
-  </AdminLayout>
+  </AppLayout>
 </template>

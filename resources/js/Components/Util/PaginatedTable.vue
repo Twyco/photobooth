@@ -91,7 +91,7 @@ const isoToFormattedDate = (isoString: string) => {
 <template>
   <div>
     <div class="flex justify-between">
-      <h1 class="text-2xk font-bold mb-4">{{ title }}</h1>
+      <h1 class="text-2xl font-bold mb-4">{{ title }}</h1>
       <span v-if="createRouteName">
         <i class="mdi mdi-plus" @click="visitCreatePage" />
       </span>
@@ -193,7 +193,7 @@ const isoToFormattedDate = (isoString: string) => {
         :current-page="data.currentPage"
         :last-page="data.lastPage"
         @click="fetchPage"
-        class="mt-4"
+        class="mt-4 text-nowrap"
       />
     </div>
   </div>

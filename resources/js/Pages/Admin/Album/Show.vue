@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { Head } from '@inertiajs/vue3';
 import { PropType } from 'vue';
 import { AdminAlbumInterface } from '@/types/album-interface';
-import AdminLayout from '@/Layouts/AdminLayout.vue';
+import AppLayout from '@/Layouts/AppLayout.vue';
 
 const props = defineProps({
   album: {
@@ -15,9 +14,7 @@ console.log(props.album);
 </script>
 
 <template>
-  <Head title="Album ansicht" />
-
-  <AdminLayout>
+  <AppLayout title="Album ansicht">
     <ul>
       <li><b>ID:</b> {{ album.id }}</li>
       <li><b>Titel:</b> {{ album.title }}</li>
@@ -51,5 +48,5 @@ console.log(props.album);
         </ul>
       </li>
     </ul>
-  </AdminLayout>
+  </AppLayout>
 </template>

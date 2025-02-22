@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, router } from '@inertiajs/vue3';
+import { router } from '@inertiajs/vue3';
 import { PropType } from 'vue';
 import { UserAlbumInterface } from '@/types/album-interface';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
+import AppLayout from '@/Layouts/AppLayout.vue';
 
 const props = defineProps({
   album: {
@@ -19,9 +19,7 @@ const saveAlbum = () => {
 </script>
 
 <template>
-  <Head title="Album ansicht" />
-
-  <AuthenticatedLayout>
+  <AppLayout title="Album ansicht">
     <template #header>
       <h2 class="text-xl font-semibold leading-tight text-gray-800">
         User - Album - Ansicht
@@ -49,5 +47,5 @@ const saveAlbum = () => {
         </div>
       </div>
     </div>
-  </AuthenticatedLayout>
+  </AppLayout>
 </template>
