@@ -6,8 +6,8 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link, usePage } from '@inertiajs/vue3';
-import { PageProps } from '@/types';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import {PageProps} from "@/Types";
 
 const showingNavigationDropdown = ref(false);
 const pageProps = usePage<PageProps>().props;

@@ -14,7 +14,7 @@ use Illuminate\Support\Str;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 /**
- * @property mixed $albumAccessCodes
+ * @property string $albumAccessCodes
  */
 class Album extends Model
 {
@@ -39,6 +39,7 @@ class Album extends Model
 
         static::creating(function ($album) {
             $album->uuid = (string)Str::uuid();
+            Storage::disk('public')->makeDirectory('album/' . $album->uuid);
         });
 
         static::created(function ($album) {
@@ -81,4 +82,13 @@ class Album extends Model
     {
         return Storage::url("public/qrCodes/{$this->uuid}.png");
     }
+
+    public function getImagesAttribute(): array
+    {
+        $path = 'albums/' . $this->uuid;
+        $files = Storage::disk('public')->files($path);
+
+        return array_map(fn($file) => Storage::url($file), $files);
+    }
+
 }

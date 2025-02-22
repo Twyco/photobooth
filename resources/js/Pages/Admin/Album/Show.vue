@@ -1,16 +1,14 @@
 <script setup lang="ts">
 import { PropType } from 'vue';
-import { AdminAlbumInterface } from '@/types/album-interface';
+import { AdminAlbumInterface } from '@/Types/album-interface';
 import AppLayout from '@/Layouts/AppLayout.vue';
 
-const props = defineProps({
+defineProps({
   album: {
     type: Object as PropType<AdminAlbumInterface>,
     required: true
   },
-  qrCodeUrl: String
 });
-console.log(props.album);
 </script>
 
 <template>
@@ -33,9 +31,9 @@ console.log(props.album);
           {{ route('album.show', { album: album.uuid }) }}
         </a>
       </li>
-      <li v-if="qrCodeUrl">
+      <li v-if="album.qrCode">
         <b>Qrcode:</b>
-        <img :src="qrCodeUrl" alt="Qrcode" width="200" class="ml-2" />
+        <img :src="album.qrCode" alt="Qrcode" width="200" class="ml-2" />
       </li>
       <li>
         <b>Codes:</b>

@@ -14,23 +14,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => bcrypt('test'),
-        ]);
-
-        User::factory()->create([
-            'name' => 'Test Admin',
-            'email' => 'admin@example.com',
-            'password' => bcrypt('test'),
-            'is_admin' => true,
-        ]);
-
-        Storage::disk('public')->deleteDirectory('albums');
-        Storage::disk('public')->deleteDirectory('qrCodes');
-        $this->command->info('Generating images...');
-        Album::factory(5)->create();
+        app(AccountSeeder::class)->run();
+        app(AlbumSeeder::class)->run();
     }
 }

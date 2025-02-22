@@ -24,7 +24,8 @@ class AdminAlbumResource extends JsonResource
             'description' => $this->description,
             'eventDate' => $this->event_date,
             'uuid' => $this->uuid,
-            'accessCodes' => AlbumAccessCodeResource::collection($this->albumAccessCodes)->toArray($request)
+            'accessCodes' => AlbumAccessCodeResource::collection($this->albumAccessCodes)->toArray($request),
+            'qrCode' => $this->getQrCodeUrl(),
         ];
     }
 }

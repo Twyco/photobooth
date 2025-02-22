@@ -29,7 +29,7 @@ class AlbumController extends Controller
         $user = $request->user();
         return Inertia::render('Album/Show', [
             'album' => UserAlbumResource::make($album)->toArray($request),
-            'hasAlbumSaved' => $user->hasAlbumSaved($album),
+            'hasAlbumSaved' => $user ? $user->hasAlbumSaved($album) : true,
         ]);
     }
 

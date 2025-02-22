@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Head, usePage } from '@inertiajs/vue3';
-import { PageProps } from '@/types';
+import { PageProps } from '@/Types';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 
