@@ -85,8 +85,10 @@ class Album extends Model
 
     public function getImagesAttribute(): array
     {
-        $path = 'albums/' . $this->uuid;
-        $files = Storage::disk('public')->files($path);
+        $path = 'album/' . $this->uuid;
+        $files = collect(Storage::disk('public')->files($path))
+            ->filter(fn($file) => preg_match('/\.(png|jpg|jpeg)$/i', $file))
+            ->values()->toArray();
 
         return array_map(fn($file) => Storage::url($file), $files);
     }
