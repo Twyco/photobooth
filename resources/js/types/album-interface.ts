@@ -1,4 +1,4 @@
-import { AlbumAccessCodeInterface } from '@/Types/album-access-code-interface';
+import { AlbumAccessCodeInterface } from '@/types/album-access-code-interface';
 
 export interface UserAlbumInterface {
   uuid: string;

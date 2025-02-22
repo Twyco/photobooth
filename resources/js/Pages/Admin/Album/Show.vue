@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { PropType } from 'vue';
-import { AdminAlbumInterface } from '@/Types/album-interface';
+import { AdminAlbumInterface } from '@/types/album-interface';
 import AppLayout from '@/Layouts/AppLayout.vue';
 
 defineProps({

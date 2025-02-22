@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import PaginatedTable from '@/Components/Util/PaginatedTable.vue';
 import { PropType } from 'vue';
-import { GenericPagination } from '@/Types/generic-pagination';
-import { TableHeaderInterface } from '@/Types/table-header-interface';
+import { GenericPagination } from '@/types/generic-pagination';
+import { TableHeaderInterface } from '@/types/table-header-interface';
 import AppLayout from '@/Layouts/AppLayout.vue';
 
 defineProps({

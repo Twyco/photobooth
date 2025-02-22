@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { router } from '@inertiajs/vue3';
 import { PropType } from 'vue';
-import { UserAlbumInterface } from '@/Types/album-interface';
+import { UserAlbumInterface } from '@/types/album-interface';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 

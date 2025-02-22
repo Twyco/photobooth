@@ -5,7 +5,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import { AdminAlbumInterface } from '@/Types/album-interface';
+import { AdminAlbumInterface } from '@/types/album-interface';
 import DangerButton from '@/Components/DangerButton.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 

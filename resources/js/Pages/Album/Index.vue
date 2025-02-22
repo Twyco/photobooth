@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AdminAlbumInterface } from '@/Types/album-interface';
+import { AdminAlbumInterface } from '@/types/album-interface';
 import NavLink from '@/Components/NavLink.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 

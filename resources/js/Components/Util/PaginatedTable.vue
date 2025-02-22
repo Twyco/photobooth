@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { PropType, ref } from 'vue';
-import { GenericPagination } from '@/Types/generic-pagination';
-import { TableHeaderInterface } from '@/Types/table-header-interface';
-import { TableFilterInterface } from '@/Types/table-filter-interface';
+import { GenericPagination } from '@/types/generic-pagination';
+import { TableHeaderInterface } from '@/types/table-header-interface';
+import { TableFilterInterface } from '@/types/table-filter-interface';
 import { router } from '@inertiajs/vue3';
 import { format, parseISO } from 'date-fns';
 import PaginationControl from '@/Components/Util/PaginationControll.vue';
