@@ -209,7 +209,7 @@ const isAdminRoute = computed(() => /^admin\./.test(route().current() ?? ''));
         </AdminLayout>
 
         <div class="py-12" v-else>
-          <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+          <div class="mx-auto max-w-7xl sm:w-full md:w-3/4 sm:px-6 lg:px-8">
             <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
               <div class="px-4 sm:px-12 py-6 text-gray-900">
                 <slot name="default" />
