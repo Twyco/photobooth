@@ -2,16 +2,15 @@
 
 namespace App\Http\Resources;
 
-use App\Models\User;
+use App\Helpers\NavMenuItem;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @mixin User
+ * @mixin NavMenuItem
  */
-class UserResource extends JsonResource
+class NavMenuItemResource extends JsonResource
 {
-
     /**
      * Transform the resource into an array.
      *
@@ -20,9 +19,10 @@ class UserResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'name' => $this->name,
-            'email' => $this->email,
-            'is_admin' => $this->is_admin,
+            'route' => $this->route,
+            'label' => $this->label,
+            'active' => $this->isActive,
+            'button' => $this->isButton,
         ];
     }
 }

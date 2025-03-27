@@ -3,6 +3,12 @@ export interface User {
   email: string;
   is_admin: boolean;
 }
+export interface NavMenuItem {
+  route: string;
+  label: string;
+  active: boolean;
+  button: boolean;
+}
 
 export type PageProps<
   T extends Record<string, unknown> = Record<string, unknown>
@@ -10,4 +16,7 @@ export type PageProps<
   auth: {
     user: User;
   };
+  menu: {
+    items: NavMenuItem[];
+  }
 };

@@ -1,13 +1,17 @@
 <?php
 
-use App\Http\Controllers\Web\AlbumAccessCodeController;
-use App\Http\Controllers\Web\AlbumController;
-use App\Http\Controllers\Web\PageController;
-use App\Http\Controllers\Web\ProfileController;
+use App\Http\Controllers\Web\customer\AlbumAccessCodeController;
+use App\Http\Controllers\Web\customer\AlbumController;
+use App\Http\Controllers\Web\customer\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', [PageController::class, 'home'])->name('home');
+Route::get('/', fn () => Inertia::render('Customer/Home/Index'))->name('home');
+Route::get('/alben', [AlbumController::class, 'index'])->name('album.index');
+
+
+
+
 Route::get('album/{album:uuid}', [AlbumController::class, 'show'])->name('album.show');
 
 Route::middleware('auth')->group(function () {
