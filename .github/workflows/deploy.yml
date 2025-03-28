@@ -20,4 +20,4 @@ jobs:
 
       - name: Test SSH Connection
         run: |
-          ssh -o StrictHostKeyChecking=no twycot@www106.your-server.de "echo 'SSH connection successful'"
+          ssh -o StrictHostKeyChecking=no twycot@www106.your-server.de -p 222 "echo 'SSH connection successful'"
