@@ -19,10 +19,25 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Update repository
+      - name: Checkout and update staging branch
         run: |
           ssh -o StrictHostKeyChecking=no twycot@www106.your-server.de -p 222 << 'EOF'
             cd /usr/home/twycot/public_html/photobooth/ || exit 1
             git checkout staging || exit 1
             git pull origin staging || exit 1
+          EOF
+
+      - name: Install Composer dependencies
+        run: |
+          ssh -o StrictHostKeyChecking=no twycot@www106.your-server.de -p 222 << 'EOF'
+            cd /usr/home/twycot/public_html/photobooth/ || exit 1
+            composer install --no-dev --optimize-autoloader || exit 1
+          EOF
+
+      - name: Install npm dependencies and build Vite frontend
+        run: |
+          ssh -o StrictHostKeyChecking=no twycot@www106.your-server.de -p 222 << 'EOF'
+            cd /usr/home/twycot/public_html/photobooth/ || exit 1
+            npm install --production || exit 1
+            npm run build || exit 1
           EOF
