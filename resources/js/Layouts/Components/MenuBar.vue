@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 import {NavMenuItem} from "@/types";
 import {Link, usePage} from '@inertiajs/vue3'
 
@@ -43,13 +42,13 @@ const page = usePage();
         <template v-if="!page.props.auth?.user" >
           <Link
             :href="route('login')"
-            class="mr-3 hidden whitespace-nowrap rounded-lg border-white bg-dark-background px-4 py-2 text-primary md:inline-flex"
+            class="mr-3 hidden whitespace-nowrap rounded-lg bg-dark-background px-4 py-2 text-primary md:inline-flex"
           >
             Anmelden
           </Link>
           <Link
             :href="route('register')"
-            class="mr-6 hidden whitespace-nowrap rounded-lg border-white bg-secondary px-4 py-2 text-primary md:inline-flex"
+            class="mr-6 hidden whitespace-nowrap rounded-lg bg-secondary px-4 py-2 text-primary md:inline-flex"
           >
             Registrieren
           </Link>
@@ -74,13 +73,13 @@ const page = usePage();
           <Link
             :href="route('logout')"
             method="post"
-            class="mr-3 hidden whitespace-nowrap rounded-lg border-white bg-dark-background px-4 py-2 text-primary md:inline-flex"
+            class="mr-3 hidden whitespace-nowrap rounded-lg bg-dark-background px-4 py-2 text-primary md:inline-flex"
           >
             Ausloggen
           </Link>
           <Link
             :href="route('profile.edit')"
-            class="mr-6 hidden whitespace-nowrap rounded-lg border-white bg-secondary px-4 py-2 text-primary md:inline-flex"
+            class="mr-6 hidden whitespace-nowrap rounded-lg bg-secondary px-4 py-2 text-primary md:inline-flex"
           >
             Mein Account
           </Link>

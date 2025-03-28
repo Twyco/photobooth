@@ -21,7 +21,7 @@ const navMenuItems = page.props.menu.items
   <div class="min-h-screen flex flex-col">
     <header>
       <menu-bar :menu-items="navMenuItems" @update:show-menu="showMenu = !showMenu"/>
-      <mobile-menu v-show="showMenu" @update:show-menu="showMenu = !showMenu"/>
+      <mobile-menu v-show="showMenu" :menu-items="navMenuItems" @update:show-menu="showMenu = !showMenu"/>
     </header>
 
     <main class="flex-1 mt-20 bg-dark-background">
