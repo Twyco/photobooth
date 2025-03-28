@@ -10,9 +10,9 @@ Route::middleware(['auth', AdminMiddleware::class])
   ->name('admin.')
   ->group(function () {
 
-    Route::get('/', fn () => to_route('admin.albums.index'))->name('dashboard');
+    Route::get('/', fn () => to_route('admin.album.index'))->name('dashboard');
 
-    Route::resource('albums', AdminAlbumController::class);
+    Route::resource('album', AdminAlbumController::class);
 
     Route::prefix('accessCode')->name('accessCode.')->group(function () {
       Route::post('/store', [AlbumAccessCodeController::class, 'store'])->name('store');

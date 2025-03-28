@@ -10,7 +10,7 @@ import {createPinia} from "pinia";
 const appName = import.meta.env.VITE_APP_NAME || 'Fotobox';
 
 createInertiaApp({
-  title: (title) => title ? `${title} - ${appName}`: appName,
+  title: (title) => title ? `${appName}: ${title}`: appName,
   resolve: (name) =>
     resolvePageComponent(
       `./Pages/${name}.vue`,

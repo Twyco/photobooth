@@ -38,22 +38,39 @@ class HandleInertiaRequests extends Middleware
         $menu = [];
         $navMenuItems = [];
 
-        $navMenuItems[] = new NavMenuItem(
-            route('home'),
-            'Home',
-            $request->routeIs('home')
-        );
+        if(Auth::check() && Auth::user()->is_admin && $request->routeIs('admin.*')) {
+            $navMenuItems[] = new NavMenuItem(
+                route('admin.dashboard'),
+                'Dashboard',
+                $request->routeIs('admin.dashboard')
+            );
 
-        $navMenuItems[] = new NavMenuItem(
-            route('album.index'),
-            'Meine Fotoalben',
-            $request->routeIs('album.index')
-        );
+            $navMenuItems[] = new NavMenuItem(
+                route('admin.album.index'),
+                'Fotoalben',
+                $request->routeIs('admin.album.*')
+            );
+
+            $menu['isAdminPage'] = true;
+        }else {
+            $navMenuItems[] = new NavMenuItem(
+                route('home'),
+                'Home',
+                $request->routeIs('home')
+            );
+
+            $navMenuItems[] = new NavMenuItem(
+                route('album.index'),
+                'Meine Fotoalben',
+                $request->routeIs('album.index')
+            );
+
+            if(Auth::check() && Auth::user()->is_admin) {
+                $menu['isAdminPage'] = false;
+            }
+        }
 
         $menu['items'] = NavMenuItemResource::collection($navMenuItems)->toArray($request);
-        if(Auth::check() && Auth::user()->is_admin) {
-            $menu['isAdminPage'] = $request->routeIs('admin.*');
-        }
 
         return [
             ...parent::share($request),
