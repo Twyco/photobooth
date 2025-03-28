@@ -59,14 +59,14 @@ const page = usePage();
             <Link
               v-if="page.props.menu.isAdminPage"
               :href="route('home')"
-              class="text-sm bg-gray-700 px-2 py-1 rounded-lg"
+              class="hidden text-sm bg-gray-700 px-2 py-1 rounded-lg md:inline-flex"
               >
                 User
             </Link>
             <Link
               v-else
               :href="route('admin.dashboard')"
-              class="text-sm bg-red-700 px-2 py-1 rounded-lg"
+              class="hidden text-sm bg-red-700 px-2 py-1 rounded-lg md:inline-flex"
               >
                 Admin
             </Link>
