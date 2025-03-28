@@ -23,6 +23,6 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no twycot@www106.your-server.de -p 222 << 'EOF'
             cd /usr/home/twycot/public_html/photobooth/ || exit 1
-            git pull checkout staging || exit 1
+            git checkout staging || exit 1
             git pull origin staging || exit 1
           EOF
