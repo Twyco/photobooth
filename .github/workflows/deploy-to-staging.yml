@@ -40,7 +40,7 @@ jobs:
             cd /usr/home/twycot/public_html/photobooth/ || exit 1
             export PATH=$HOME/.nvm/versions/node/v22.14.0/bin:$PATH
             npm install --omit=dev || exit 1
-            npx vite build || exit 1
+            npm run build || exit 1
           EOF
 
       - name: Run migrations
