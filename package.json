@@ -3,6 +3,7 @@
     "type": "module",
     "scripts": {
         "build": "vue-tsc && vite build",
+        "deploy": "vite build",
         "dev": "vite",
         "format": "prettier --write \"resources/js/**/*.{ts,vue,php}\""
     },
