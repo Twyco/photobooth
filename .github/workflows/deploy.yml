@@ -41,3 +41,10 @@ jobs:
             npm install --production || exit 1
             npm run build || exit 1
           EOF
+
+      - name: Run migration
+        run: |
+          ssh -o StrictHostKeyChecking=no twycot@www106.your-server.de -p 222 << 'EOF'
+            cd /usr/home/twycot/public_html/photobooth/ || exit 1
+            php artisan migrate || exit 1
+          EOF
