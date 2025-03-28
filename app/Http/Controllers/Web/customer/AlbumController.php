@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Web;
+namespace App\Http\Controllers\Web\customer;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserAlbumResource;
-use Illuminate\Http\Request;
 use App\Models\Album;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class AlbumController extends Controller

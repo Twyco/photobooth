@@ -3,5 +3,5 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 </script>
 
 <template>
-  <AppLayout header="Home"> Hallo </AppLayout>
+  <AppLayout title="Home"> Hallo </AppLayout>
 </template>

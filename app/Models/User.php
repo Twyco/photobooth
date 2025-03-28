@@ -9,7 +9,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 /**
- * @property mixed $is_admin
+ * @property string $name
+ * @property string $email
+ * @property bool $is_admin
  */
 class User extends Authenticatable
 {
