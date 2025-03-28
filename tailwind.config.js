@@ -17,7 +17,8 @@ export default {
             colors: {
                 primary: "#e5e7eb",
                 secondary: "#2563eb",
-                'dark-background': "#131314"
+                'dark-background': "#131314",
+                'footer': "#262626"
             },
             keyframes: {
                 shake: {

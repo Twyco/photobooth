@@ -1,17 +1,13 @@
 <script setup lang="ts">
 
 import {Head, usePage} from "@inertiajs/vue3";
-import {useDisplay} from "vuetify";
 import {ref} from "vue";
-import MobileMenuBar from "@/Layouts/Components/MobileMenuBar.vue";
 import MenuBar from "@/Layouts/Components/MenuBar.vue";
-import MobileNavDrawer from "@/Layouts/Components/MobileNavDrawer.vue";
 
 defineProps({
   title: String
 })
 
-const {xs, sm} = useDisplay();
 const page = usePage();
 
 const showMobileMenu = ref<boolean>(false);
@@ -25,22 +21,30 @@ const navMenuItems = page.props.menu.items
 
 <template>
   <Head :title="title"></Head>
-  <v-app class="overflow-hidden h-screen">
-    <mobile-menu-bar
-      v-if="xs || sm"
-      :model-value="showMobileMenu"
-      :menu-items="navMenuItems"
-      @update:showMobileMenu="toggleMobileMenu"
-    />
-    <menu-bar v-else :menu-items="navMenuItems"/>
-    <mobile-nav-drawer
-      v-if="(xs || sm) && showMobileMenu"
-      @update:showMobileMenu="toggleMobileMenu"
-    />
-    <v-main class="overflow-y-auto h-full">
-      <v-container>
-        <slot/>
-      </v-container>
-    </v-main>
-  </v-app>
+  <div class="min-h-screen flex flex-col">
+    <header>
+     <menu-bar :menu-items="navMenuItems" />
+    </header>
+
+    <main class="flex-1 mt-20 bg-dark-background">
+      <slot/>
+    </main>
+
+    <footer class="bg-footer text-primary py text-center py-1">
+      <p>&copy; 2025 Nico Schröder. Alle Rechte vorbehalten.</p>
+    </footer>
+  </div>
 </template>
+
+
+<!--      <mobile-menu-bar-->
+<!--        v-if="xs || sm"-->
+<!--        :model-value="showMobileMenu"-->
+<!--        :menu-items="navMenuItems"-->
+<!--        @update:showMobileMenu="toggleMobileMenu"-->
+<!--      />-->
+<!--      <menu-bar v-else :menu-items="navMenuItems"/>-->
+<!--      <mobile-nav-drawer-->
+<!--        v-if="(xs || sm) && showMobileMenu"-->
+<!--        @update:showMobileMenu="toggleMobileMenu"-->
+<!--      />-->
