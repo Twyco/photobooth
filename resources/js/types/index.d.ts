@@ -17,6 +17,6 @@ export type PageProps<
   };
   menu: {
     items: NavMenuItem[];
-    isAdminPage: boolean|undefined;
-  }
+    isAdminPage: boolean | undefined;
+  };
 };
