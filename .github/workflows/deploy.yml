@@ -6,18 +6,23 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  deploy:
 
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Set up SSH key for server connection
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Test SSH Connection
+      - name: Update repository
         run: |
-          ssh -o StrictHostKeyChecking=no twycot@www106.your-server.de -p 222 "echo 'SSH connection successful'"
+          ssh -o "StrictHostKeyChecking=no" -i ~/.ssh/id_rsa twycot@www106.your-server.de -p 222 << 'EOF'
+            cd cd /usr/home/twycot/public_html/photobooth/ || exit 1
+            git pull checkout staging || exit 1
+            git pull origin staging || exit 1
+          EOF
