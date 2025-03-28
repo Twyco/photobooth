@@ -1,4 +1,4 @@
-name: Deploy on twyco-staging (Hetzner)
+name: Deploy to twyco-staging (Hetzner)
 
 on:
   push:
