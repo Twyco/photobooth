@@ -22,7 +22,6 @@ Route::middleware('auth')->group(function () {
   Route::prefix('album')
     ->name('album.')
     ->group(function () {
-      Route::get('/', [AlbumController::class, 'index'])->name('index');
       Route::post('/{album:uuid}/save', [AlbumController::class, 'save'])->name('save');
       Route::post('/accessCode', [AlbumAccessCodeController::class, 'use'])->name('accessCode.use');
     });

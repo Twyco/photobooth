@@ -25,37 +25,66 @@ const page = usePage();
       </div>
 
       <div class="col-span-2 flex items-center justify-end pr-6 md:hidden">
-        <i class="mdi mdi-menu text-4xl" />
+        <i class="mdi mdi-menu text-4xl" @click="emits('update:showMenu')" />
       </div>
 
       <div class="mx-auto hidden items-center md:col-span-5 md:flex h-full">
-        <template v-for="(item, index) in menuItems" :key="index">
-          <Link
-            v-if="!item.button"
-            :href="item.route"
-            class="mx-2 px-4 w-full whitespace-nowrap text-primary h-full pt-5"
-            :class="item.active ? 'border-secondary border-b-4 text-secondary font-bold' : ''"
-          >
-            {{ item.label }}
-          </Link>
-        </template>
+        <Link
+          v-for="(item, index) in menuItems" :key="index"
+          :href="item.route"
+          class="mx-2 px-4 w-full whitespace-nowrap text-primary h-full pt-5"
+          :class="item.active ? 'border-secondary border-b-4 text-secondary font-bold' : ''"
+        >
+          {{ item.label }}
+        </Link>
       </div>
 
       <div class="flex items-center justify-end text-right md:col-span-2">
-        <Link
-          v-if="!page.props.auth?.user"
-          :href="route('login')"
-          class="mr-3 hidden rounded-lg border-white bg-dark-background px-4 py-2 text-primary md:inline-flex"
-        >
-          Anmelden
-        </Link>
-        <Link
-          v-if="!page.props.auth?.user"
-          :href="route('register')"
-          class="mr-6 hidden rounded-lg border-white bg-secondary px-4 py-2 text-primary md:inline-flex "
-        >
-          Registrieren
-        </Link>
+        <template v-if="!page.props.auth?.user" >
+          <Link
+            :href="route('login')"
+            class="mr-3 hidden whitespace-nowrap rounded-lg border-white bg-dark-background px-4 py-2 text-primary md:inline-flex"
+          >
+            Anmelden
+          </Link>
+          <Link
+            :href="route('register')"
+            class="mr-6 hidden whitespace-nowrap rounded-lg border-white bg-secondary px-4 py-2 text-primary md:inline-flex"
+          >
+            Registrieren
+          </Link>
+        </template>
+        <template v-else>
+          <template v-if="page.props.auth.user.is_admin">
+            <Link
+              v-if="page.props.menu.isAdminPage"
+              :href="route('home')"
+              class="text-sm bg-gray-700 px-2 py-1 rounded-lg"
+              >
+                User
+            </Link>
+            <Link
+              v-else
+              :href="route('admin.dashboard')"
+              class="text-sm bg-red-700 px-2 py-1 rounded-lg"
+              >
+                Admin
+            </Link>
+          </template>
+          <Link
+            :href="route('logout')"
+            method="post"
+            class="mr-3 hidden whitespace-nowrap rounded-lg border-white bg-dark-background px-4 py-2 text-primary md:inline-flex"
+          >
+            Ausloggen
+          </Link>
+          <Link
+            :href="route('profile.edit')"
+            class="mr-6 hidden whitespace-nowrap rounded-lg border-white bg-secondary px-4 py-2 text-primary md:inline-flex"
+          >
+            Mein Account
+          </Link>
+        </template>
       </div>
     </nav>
   </div>

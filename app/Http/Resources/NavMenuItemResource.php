@@ -22,7 +22,6 @@ class NavMenuItemResource extends JsonResource
             'route' => $this->route,
             'label' => $this->label,
             'active' => $this->isActive,
-            'button' => $this->isButton,
         ];
     }
 }

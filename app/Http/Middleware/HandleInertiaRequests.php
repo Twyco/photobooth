@@ -35,6 +35,7 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $menu = [];
         $navMenuItems = [];
 
         $navMenuItems[] = new NavMenuItem(
@@ -49,20 +50,9 @@ class HandleInertiaRequests extends Middleware
             $request->routeIs('album.index')
         );
 
-        if (Auth::check() && Auth::user()->is_admin) {
-            if ($request->routeIs('admin.*')) {
-                $navMenuItems[] = new NavMenuItem(
-                    route('home'),
-                    'User',
-                    isButton: true
-                );
-            } else {
-                $navMenuItems[] = new NavMenuItem(
-                    route('admin.dashboard'),
-                    'Admin',
-                    isButton: true
-                );
-            }
+        $menu['items'] = NavMenuItemResource::collection($navMenuItems)->toArray($request);
+        if(Auth::check() && Auth::user()->is_admin) {
+            $menu['isAdminPage'] = $request->routeIs('admin.*');
         }
 
         return [
@@ -70,9 +60,7 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user() ? UserResource::make($request->user())->toArray($request) : null,
             ],
-            'menu' => [
-                'items' => NavMenuItemResource::collection($navMenuItems)->toArray($request),
-            ]
+            'menu' => $menu,
         ];
     }
 }

@@ -3,6 +3,7 @@
 import {Head, usePage} from "@inertiajs/vue3";
 import {ref} from "vue";
 import MenuBar from "@/Layouts/Components/MenuBar.vue";
+import MobileMenu from "@/Layouts/Components/MobileMenu.vue";
 
 defineProps({
   title: String
@@ -10,11 +11,7 @@ defineProps({
 
 const page = usePage();
 
-const showMobileMenu = ref<boolean>(false);
-
-const toggleMobileMenu = () => {
-  showMobileMenu.value = !showMobileMenu.value;
-}
+const showMenu = ref<boolean>(false);
 
 const navMenuItems = page.props.menu.items
 </script>
@@ -23,7 +20,8 @@ const navMenuItems = page.props.menu.items
   <Head :title="title"></Head>
   <div class="min-h-screen flex flex-col">
     <header>
-     <menu-bar :menu-items="navMenuItems" />
+      <menu-bar :menu-items="navMenuItems" @update:show-menu="showMenu = !showMenu"/>
+      <mobile-menu v-show="showMenu" @update:show-menu="showMenu = !showMenu"/>
     </header>
 
     <main class="flex-1 mt-20 bg-dark-background">
@@ -35,16 +33,3 @@ const navMenuItems = page.props.menu.items
     </footer>
   </div>
 </template>
-
-
-<!--      <mobile-menu-bar-->
-<!--        v-if="xs || sm"-->
-<!--        :model-value="showMobileMenu"-->
-<!--        :menu-items="navMenuItems"-->
-<!--        @update:showMobileMenu="toggleMobileMenu"-->
-<!--      />-->
-<!--      <menu-bar v-else :menu-items="navMenuItems"/>-->
-<!--      <mobile-nav-drawer-->
-<!--        v-if="(xs || sm) && showMobileMenu"-->
-<!--        @update:showMobileMenu="toggleMobileMenu"-->
-<!--      />-->

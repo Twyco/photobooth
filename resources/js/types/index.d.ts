@@ -7,7 +7,6 @@ export interface NavMenuItem {
   route: string;
   label: string;
   active: boolean;
-  button: boolean;
 }
 
 export type PageProps<
@@ -18,5 +17,6 @@ export type PageProps<
   };
   menu: {
     items: NavMenuItem[];
+    isAdminPage: boolean|undefined;
   }
 };
