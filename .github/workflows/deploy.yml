@@ -39,7 +39,7 @@ jobs:
           ssh -o StrictHostKeyChecking=no twycot@www106.your-server.de -p 222 << 'EOF'
             cd /usr/home/twycot/public_html/photobooth/ || exit 1
             export PATH=$HOME/.nvm/versions/node/v22.14.0/bin:$PATH
-            npm install --production || exit 1
+            npm install --omit=dev || exit 1
             npm run deploy || exit 1
           EOF
 
