@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import AppLayout from '@/Layouts/AppLayout.vue';
 
 const form = useForm({
   name: '',
@@ -23,7 +23,7 @@ const submit = () => {
 </script>
 
 <template>
-  <GuestLayout>
+  <AppLayout>
     <Head title="Register" />
 
     <form @submit.prevent="submit">
@@ -105,5 +105,5 @@ const submit = () => {
         </PrimaryButton>
       </div>
     </form>
-  </GuestLayout>
+  </AppLayout>
 </template>
