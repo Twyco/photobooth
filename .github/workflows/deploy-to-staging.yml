@@ -1,0 +1,52 @@
+name: Deploy to twyco-staging (Hetzner)
+
+on:
+  push:
+    branches: [ "staging" ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up SSH key for server connection
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Checkout and update staging branch
+        run: |
+          ssh -o StrictHostKeyChecking=no twycot@www106.your-server.de -p 222 << 'EOF'
+            cd /usr/home/twycot/public_html/photobooth/ || exit 1
+            git checkout staging || exit 1
+            git fetch origin || exit 1
+            git reset --hard origin/staging || exit 1
+          EOF
+
+      - name: Install Composer dependencies
+        run: |
+          ssh -o StrictHostKeyChecking=no twycot@www106.your-server.de -p 222 << 'EOF'
+            cd /usr/home/twycot/public_html/photobooth/ || exit 1
+            composer install --no-dev --optimize-autoloader || exit 1
+          EOF
+
+      - name: Install npm dependencies and build Vite frontend
+        run: |
+          ssh -o StrictHostKeyChecking=no twycot@www106.your-server.de -p 222 << 'EOF'
+            cd /usr/home/twycot/public_html/photobooth/ || exit 1
+            export PATH=$HOME/.nvm/versions/node/v22.14.0/bin:$PATH
+            npm install --omit=dev || exit 1
+            npm run deploy || exit 1
+          EOF
+
+      - name: Run migrations
+        run: |
+          ssh -o StrictHostKeyChecking=no twycot@www106.your-server.de -p 222 << 'EOF'
+            cd /usr/home/twycot/public_html/photobooth/ || exit 1
+            php artisan migrate || exit 1
+          EOF
