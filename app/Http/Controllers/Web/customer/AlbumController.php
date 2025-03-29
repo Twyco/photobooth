@@ -16,7 +16,7 @@ class AlbumController extends Controller
     public function index(Request $request)
     {
         $albums = Album::viewableAlbums()->get();
-        return Inertia::render('Album/Index', [
+        return Inertia::render('Customer/Album/Index', [
             'albums' => UserAlbumResource::collection($albums)->toArray($request)
         ]);
     }

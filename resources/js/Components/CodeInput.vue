@@ -25,7 +25,7 @@ const useCode = () => {
 <template>
   <div class="rounded-lg border-secondary border-2 px-8 py-6 flex flex-col items-center justify-center shadow-xl">
     <span class="text-3xl mb-4 text-secondary font-bold">
-      Hier geht's zum Album
+      Code eingeben
     </span>
     <form class="w-full flex flex-col items-center justify-center" @submit.prevent="useCode">
       <CodeTextInput
