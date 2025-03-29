@@ -2,7 +2,7 @@
 import AppLayout from '@/Layouts/AppLayout.vue';
 import TitleSeparator from '@/Components/TitleSeparator.vue';
 import Timeline from '@/Components/Timeline.vue';
-import CodeInput from "@/Components/CodeInput.vue";
+import CodeInput from '@/Components/CodeInput.vue';
 
 const instructions = [
   {
@@ -35,7 +35,7 @@ const instructions = [
         <div class="container-small mb-6">
           <Timeline :events="instructions" />
           <div class="max-w-xl mx-auto mt-12">
-            <CodeInput/>
+            <CodeInput />
           </div>
         </div>
       </div>

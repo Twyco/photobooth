@@ -13,7 +13,7 @@ export type PageProps<
   T extends Record<string, unknown> = Record<string, unknown>
 > = T & {
   auth: {
-    user: User|null;
+    user: User | null;
   };
   menu: {
     items: NavMenuItem[];

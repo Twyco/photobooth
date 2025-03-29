@@ -1,13 +1,11 @@
 <script setup lang="ts">
-
-import {useForm} from "@inertiajs/vue3";
-import CodeTextInput from "@/Components/CodeTextInput.vue";
-import {ref} from "vue";
-
+import { useForm } from '@inertiajs/vue3';
+import CodeTextInput from '@/Components/CodeTextInput.vue';
+import { ref } from 'vue';
 
 const form = useForm({
-  accessCode: '',
-})
+  accessCode: ''
+});
 
 const hasError = ref<boolean>(false);
 const useCode = () => {
@@ -17,17 +15,19 @@ const useCode = () => {
       hasError.value = true;
       setTimeout(() => (hasError.value = false), 1000);
     }
-  })
-}
-
+  });
+};
 </script>
 
 <template>
-  <div class="rounded-lg border-secondary border-2 px-8 py-6 flex flex-col items-center justify-center shadow-xl">
-    <span class="text-3xl mb-4 text-secondary font-bold">
-      Code eingeben
-    </span>
-    <form class="w-full flex flex-col items-center justify-center" @submit.prevent="useCode">
+  <div
+    class="rounded-lg border-secondary border-2 px-8 py-6 flex flex-col items-center justify-center shadow-xl"
+  >
+    <span class="text-3xl mb-4 text-secondary font-bold"> Code eingeben </span>
+    <form
+      class="w-full flex flex-col items-center justify-center"
+      @submit.prevent="useCode"
+    >
       <CodeTextInput
         v-model="form.accessCode"
         :error="form.errors.accessCode"
