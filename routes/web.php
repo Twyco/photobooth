@@ -8,6 +8,7 @@ use Inertia\Inertia;
 
 Route::get('/', fn () => Inertia::render('Customer/Home/Index'))->name('home');
 Route::get('/alben', [AlbumController::class, 'index'])->name('album.index');
+Route::post('/accessCode', [AlbumAccessCodeController::class, 'use'])->name('accessCode.use');
 
 
 
@@ -23,7 +24,6 @@ Route::middleware('auth')->group(function () {
     ->name('album.')
     ->group(function () {
       Route::post('/{album:uuid}/save', [AlbumController::class, 'save'])->name('save');
-      Route::post('/accessCode', [AlbumAccessCodeController::class, 'use'])->name('accessCode.use');
     });
 });
 
