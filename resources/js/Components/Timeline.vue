@@ -17,7 +17,7 @@ defineProps({
       class="relative flex items-start"
     >
       <div
-        class="absolute -left-5 w-10 h-10 flex items-center justify-center bg-secondary text-primary rounded-full"
+        class="absolute -left-5 w-10 h-10 flex items-center justify-center bg-secondary text-primary rounded-full select-none"
       >
         {{ index + 1 }}
       </div>
