@@ -34,10 +34,10 @@ const instructions = [
         <TitleSeparator title="Wie funktioniert es?" />
         <div class="container-small mb-6">
           <Timeline :events="instructions" />
+        </div>
           <div class="max-w-xl mx-auto mt-12">
             <CodeInput />
           </div>
-        </div>
       </div>
     </div>
   </AppLayout>
