@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web\customer;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserAlbumIndexResource;
 use App\Http\Resources\UserAlbumResource;
 use App\Models\Album;
 use Illuminate\Http\Request;
@@ -17,7 +18,7 @@ class AlbumController extends Controller
     {
         $albums = Album::viewableAlbums()->get();
         return Inertia::render('Customer/Album/Index', [
-            'albums' => UserAlbumResource::collection($albums)->toArray($request)
+            'albums' => UserAlbumIndexResource::collection($albums)->toArray($request)
         ]);
     }
 
@@ -27,7 +28,7 @@ class AlbumController extends Controller
     public function show(Request $request, Album $album)
     {
         $user = $request->user();
-        return Inertia::render('Album/Show', [
+        return Inertia::render('Customer/Album/Show', [
             'album' => UserAlbumResource::make($album)->toArray($request),
             'hasAlbumSaved' => $user ? $user->hasAlbumSaved($album) : true,
         ]);

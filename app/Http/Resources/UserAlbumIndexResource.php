@@ -9,7 +9,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /**
  * @mixin Album
  */
-class UserAlbumResource extends JsonResource
+class UserAlbumIndexResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -24,7 +24,6 @@ class UserAlbumResource extends JsonResource
             'eventDate' => $this->event_date,
             'uuid' => $this->uuid,
             'cover' => $this->cover,
-            'images' => $this->images,
         ];
     }
 }

@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { router } from '@inertiajs/vue3';
 import { PropType } from 'vue';
-import { UserAlbumInterface } from '@/types/album-interface';
+import { UserAlbumWithImages } from '@/types/album-interface';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 
 const props = defineProps({
   album: {
-    type: Object as PropType<UserAlbumInterface>,
+    type: Object as PropType<UserAlbumWithImages>,
     required: true
   },
   hasAlbumSaved: Boolean
