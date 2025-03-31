@@ -1,14 +1,17 @@
 import { AlbumAccessCodeInterface } from '@/types/album-access-code-interface';
 
-export interface UserAlbumInterface {
+export interface UserAlbum {
   uuid: string;
   title: string;
-  images: string[];
   description: string;
+  cover: string;
   eventDate: string;
 }
+export interface UserAlbumWithImages extends UserAlbum {
+  images: string[];
+}
 
-export interface AdminAlbumInterface extends UserAlbumInterface {
+export interface AdminAlbumInterface extends UserAlbumWithImages {
   id: number;
   accessCodes: AlbumAccessCodeInterface[];
   qrCode: string;

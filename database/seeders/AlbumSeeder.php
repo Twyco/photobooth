@@ -15,6 +15,7 @@ class AlbumSeeder extends Seeder
     {
         Storage::disk('public')->deleteDirectory('album');
         Storage::disk('public')->deleteDirectory('qrCodes');
+        Storage::disk('public')->deleteDirectory('cover');
         Album::factory(5)->create();
     }
 }

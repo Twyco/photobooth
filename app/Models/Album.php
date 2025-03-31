@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,7 +15,13 @@ use Illuminate\Support\Str;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 /**
+ * @property string $title
+ * @property string $description
+ * @property string $uuid
+ * @property Carbon $event_date
  * @property string $albumAccessCodes
+ * @property array $images
+ * @property string $cover
  */
 class Album extends Model
 {
@@ -91,6 +98,11 @@ class Album extends Model
             ->values()->toArray();
 
         return array_map(fn($file) => Storage::url($file), $files);
+    }
+
+    public function getCoverAttribute(): string
+    {
+        return Storage::url('cover/' . $this->uuid . '.jpg');
     }
 
 }
