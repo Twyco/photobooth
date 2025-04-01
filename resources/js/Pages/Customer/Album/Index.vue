@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import {UserAlbum} from '@/types/album-interface';
+import { UserAlbum } from '@/types/album-interface';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import TitleSeparator from '@/Components/TitleSeparator.vue';
 import CodeInput from '@/Components/CodeInput.vue';
 import { usePage } from '@inertiajs/vue3';
-import {computed, onMounted, ref} from "vue";
-import ListAlbumView from "@/Pages/Customer/Album/Components/ListAlbumView.vue";
-import GridAlbumView from "@/Pages/Customer/Album/Components/GridAlbumView.vue";
-import CompactAlbumView from "@/Pages/Customer/Album/Components/CompactAlbumView.vue";
+import { computed, onMounted, ref } from 'vue';
+import ListAlbumView from '@/Pages/Customer/Album/Components/ListAlbumView.vue';
+import GridAlbumView from '@/Pages/Customer/Album/Components/GridAlbumView.vue';
+import CompactAlbumView from '@/Pages/Customer/Album/Components/CompactAlbumView.vue';
 
 const viewModes = ['compact', 'list', 'grid'] as const;
 type ViewMode = (typeof viewModes)[number];
 
 defineProps({
-  albums: {type: Array<UserAlbum>, required: true},
+  albums: { type: Array<UserAlbum>, required: true }
 });
 
 const pageProps = usePage().props;
@@ -21,7 +21,7 @@ const pageProps = usePage().props;
 const albumListViewMode = ref<ViewMode>('grid');
 
 onMounted(() => {
-  if(pageProps.auth.user === null) {
+  if (pageProps.auth.user === null) {
     return;
   }
   const savedViewMode = localStorage.getItem('albumViewMode') as ViewMode;
@@ -34,7 +34,7 @@ onMounted(() => {
 });
 
 const switchViewMode = () => {
-  if(pageProps.auth.user === null) {
+  if (pageProps.auth.user === null) {
     return;
   }
   const currentIndex = viewModes.indexOf(albumListViewMode.value);
@@ -43,7 +43,6 @@ const switchViewMode = () => {
 
   localStorage.setItem('albumViewMode', albumListViewMode.value);
 };
-
 
 const viewModeIcon = computed(() => {
   switch (albumListViewMode.value) {
@@ -54,7 +53,7 @@ const viewModeIcon = computed(() => {
     case 'grid':
       return 'view-grid-outline';
   }
-})
+});
 </script>
 
 <template>
@@ -70,10 +69,7 @@ const viewModeIcon = computed(() => {
           :icon="viewModeIcon"
           @click:icon="switchViewMode"
         />
-        <TitleSeparator
-          v-else
-          title="Meine Alben"
-        />
+        <TitleSeparator v-else title="Meine Alben" />
 
         <div
           v-if="pageProps.auth.user === null"
@@ -85,10 +81,7 @@ const viewModeIcon = computed(() => {
           >
         </div>
         <div v-else class="w-full mb-6 mx-auto md:px-12">
-          <ListAlbumView
-            v-if="albumListViewMode === 'list'"
-            :albums="albums"
-          />
+          <ListAlbumView v-if="albumListViewMode === 'list'" :albums="albums" />
           <CompactAlbumView
             v-else-if="albumListViewMode === 'compact'"
             :albums="albums"
