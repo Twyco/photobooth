@@ -7,6 +7,7 @@ use App\Http\Resources\UserAlbumIndexResource;
 use App\Http\Resources\UserAlbumResource;
 use App\Models\Album;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class AlbumController extends Controller
@@ -17,6 +18,9 @@ class AlbumController extends Controller
     public function index(Request $request)
     {
         $albums = Album::viewableAlbums()->get();
+        if(!Auth::check()) {
+            session(['intended' => 'album.index']);
+        }
         return Inertia::render('Customer/Album/Index', [
             'albums' => UserAlbumIndexResource::collection($albums)->toArray($request)
         ]);
