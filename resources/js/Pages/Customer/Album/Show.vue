@@ -2,7 +2,6 @@
 import {UserAlbumWithImages} from '@/types/album-interface';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import {computed, PropType} from 'vue';
-import TitleSeparator from "@/Components/TitleSeparator.vue";
 import {format} from "date-fns";
 
 const props = defineProps({
@@ -23,7 +22,7 @@ const formatedDate = computed(() =>
   <AppLayout title="Mein Alben">
     <div class="md:container md:mx-auto my-12 px-6 md:px-2">
       <div class="w-full flex flex-col md:flex-row">
-        <div class="flex flex-col-reverse md:flex-col px-4 py-0 mr-0 md:px-4 md:py-2 md:mr-8 md:whitespace-nowrap">
+        <div class="flex flex-col-reverse md:flex-col px-4 py-0 mr-0 md:py-2 md:mr-8 md:whitespace-nowrap">
           <h1 class="font-bold text-secondary text-3xl md:text-5xl mb-0 md:mb-2">{{ album.title }}</h1>
           <h2 class="font-bold text-primary text-lg md:text-3xl mb-1 md:mb-0">{{ formatedDate }}</h2>
         </div>
@@ -33,7 +32,14 @@ const formatedDate = computed(() =>
           </p>
         </div>
       </div>
-      <div>
+      <div class="mt-4 md:mt-16 px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <img
+          v-for="(image, index) in album.images"
+          :src="image"
+          class="w-full h-full object-cover rounded-lg"
+          :key="index"
+          loading="lazy"
+        />
       </div>
     </div>
   </AppLayout>
