@@ -27,6 +27,7 @@ const formatedDate = computed(() =>
         <Link
           :href="route('album.save', {album: album.uuid})"
           class="md:ml-4 px-4 py-2 rounded-lg bg-footer whitespace-nowrap"
+          method="post"
         >
           In meine Fotoalben speichern
         </Link>

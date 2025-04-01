@@ -5,7 +5,7 @@ export interface UserAlbum {
   description: string;
   eventDate: string;
   uuid: string;
-  cover: string;
+  cover: string|null;
 }
 export interface UserAlbumWithImages extends UserAlbum {
   images: string[];
