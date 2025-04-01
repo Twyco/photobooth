@@ -1,16 +1,54 @@
 <script setup lang="ts">
-import { AdminAlbumInterface } from '@/types/album-interface';
+import {UserAlbum} from '@/types/album-interface';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import TitleSeparator from '@/Components/TitleSeparator.vue';
 import CodeInput from '@/Components/CodeInput.vue';
 import { usePage } from '@inertiajs/vue3';
-import { Link } from '@inertiajs/vue3';
+import {computed, onMounted, ref} from "vue";
+import ListAlbumView from "@/Pages/Customer/Album/Components/ListAlbumView.vue";
+import GridAlbumView from "@/Pages/Customer/Album/Components/GridAlbumView.vue";
+import CompactAlbumView from "@/Pages/Customer/Album/Components/CompactAlbumView.vue";
+
+const viewModes = ['compact', 'list', 'grid'] as const;
+type ViewMode = (typeof viewModes)[number];
 
 defineProps({
-  albums: Array<AdminAlbumInterface>
+  albums: {type: Array<UserAlbum>, required: true},
 });
 
 const pageProps = usePage().props;
+
+const albumListViewMode = ref<ViewMode>('grid');
+
+onMounted(() => {
+  const savedViewMode = localStorage.getItem('albumViewMode') as ViewMode;
+  if (viewModes.includes(savedViewMode)) {
+    albumListViewMode.value = savedViewMode;
+    return;
+  }
+  albumListViewMode.value = 'grid';
+  localStorage.setItem('albumViewMode', albumListViewMode.value);
+});
+
+const switchViewMode = () => {
+  const currentIndex = viewModes.indexOf(albumListViewMode.value);
+  const nextIndex = (currentIndex + 1) % viewModes.length;
+  albumListViewMode.value = viewModes[nextIndex];
+
+  localStorage.setItem('albumViewMode', albumListViewMode.value);
+};
+
+
+const viewModeIcon = computed(() => {
+  switch (albumListViewMode.value) {
+    case 'compact':
+      return 'view-headline';
+    case 'list':
+      return 'format-list-bulleted';
+    case 'grid':
+      return 'view-grid-outline';
+  }
+})
 </script>
 
 <template>
@@ -20,7 +58,11 @@ const pageProps = usePage().props;
         <div class="max-w-xl mx-auto mb-12">
           <CodeInput />
         </div>
-        <TitleSeparator title="Meine Alben" />
+        <TitleSeparator
+          title="Meine Alben"
+          :icon="viewModeIcon"
+          @click:icon="switchViewMode"
+        />
 
         <div
           v-if="pageProps.auth.user === null"
@@ -31,14 +73,19 @@ const pageProps = usePage().props;
             sehen zu können!</span
           >
         </div>
-        <div v-else class="container-small mb-6">
-          <ul>
-            <li v-for="(album, index) in albums" :key="index">
-              <Link :href="route('album.show', { album: album.uuid })">
-                {{ album.title }}
-              </Link>
-            </li>
-          </ul>
+        <div v-else class="w-full mb-6 mx-auto md:px-12">
+          <ListAlbumView
+            v-if="albumListViewMode === 'list'"
+            :albums="albums"
+          />
+          <CompactAlbumView
+            v-else-if="albumListViewMode === 'compact'"
+            :albums="albums"
+          />
+          <GridAlbumView
+            v-else-if="albumListViewMode === 'grid'"
+            :albums="albums"
+          />
         </div>
       </div>
     </div>
