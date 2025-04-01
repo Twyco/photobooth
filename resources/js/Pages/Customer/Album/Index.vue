@@ -21,6 +21,9 @@ const pageProps = usePage().props;
 const albumListViewMode = ref<ViewMode>('grid');
 
 onMounted(() => {
+  if(pageProps.auth.user === null) {
+    return;
+  }
   const savedViewMode = localStorage.getItem('albumViewMode') as ViewMode;
   if (viewModes.includes(savedViewMode)) {
     albumListViewMode.value = savedViewMode;
@@ -31,6 +34,9 @@ onMounted(() => {
 });
 
 const switchViewMode = () => {
+  if(pageProps.auth.user === null) {
+    return;
+  }
   const currentIndex = viewModes.indexOf(albumListViewMode.value);
   const nextIndex = (currentIndex + 1) % viewModes.length;
   albumListViewMode.value = viewModes[nextIndex];
@@ -59,9 +65,14 @@ const viewModeIcon = computed(() => {
           <CodeInput />
         </div>
         <TitleSeparator
+          v-if="pageProps.auth.user !== null"
           title="Meine Alben"
           :icon="viewModeIcon"
           @click:icon="switchViewMode"
+        />
+        <TitleSeparator
+          v-else
+          title="Meine Alben"
         />
 
         <div
