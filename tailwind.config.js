@@ -18,7 +18,8 @@ export default {
                 primary: "#e5e7eb",
                 secondary: "#2563eb",
                 'dark-background': "#131314",
-                'footer': "#262626"
+                'footer': "#262626",
+                'gray-highlight': "#9ca3af"
             },
             keyframes: {
                 shake: {
@@ -30,6 +31,9 @@ export default {
             animation: {
                 shake: 'shake 0.2s ease-in-out',
             },
+            borderWidth: {
+                '1': '1px',
+            }
         },
     },
 
