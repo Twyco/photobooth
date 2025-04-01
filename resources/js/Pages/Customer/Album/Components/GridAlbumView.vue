@@ -9,7 +9,9 @@ defineProps({
 </script>
 
 <template>
-  <div class="w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1 sm:gap-2 py-2">
+  <div
+    class="w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1 sm:gap-2 py-2"
+  >
     <template v-for="album in albums" :key="album.uuid">
       <Link
         :href="route('album.show', { album: album.uuid })"
