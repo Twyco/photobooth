@@ -11,7 +11,7 @@ defineProps({
 
 <template>
   <div class="w-full flex flex-col justify-between py-2">
-    <div class="w-full flex justify-between px-4 py-1 font-semibold border-footer border-b-2 mb-2">
+    <div class="w-full flex justify-between px-0 md:px-4 py-1 font-semibold border-footer border-b-2 mb-2">
       <span class="font-bold">Titel</span>
       <span class="font-bold">Event Datum</span>
     </div>
@@ -22,9 +22,9 @@ defineProps({
     >
       <Link
         :href="route('album.show', {album: album.uuid})"
-        class="w-full flex items-center justify-between gap-x-4 px-4 py-1 md:py-4 rounded-lg hover:bg-gray-highlight hover:bg-opacity-25"
+        class="w-full flex items-center justify-between gap-x-4 p-0 md:p-4 rounded-lg hover:bg-gray-highlight hover:bg-opacity-25"
       >
-        <img :src="album.cover" :alt="album.title" class="max-w-16 sm:max-w-28 md:max-w-60"/>
+        <img :src="album.cover" :alt="album.title" class="max-w-16 sm:max-w-28 md:max-w-60 aspect-square"/>
         <div class="flex flex-1 flex-col">
           <span class="text-base font-bold sm:text-lg md:text-2xl">{{ album.title }}</span>
           <span v-if="album.description" class="hidden md:inline-flex text-gray-500">

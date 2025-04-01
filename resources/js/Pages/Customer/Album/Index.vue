@@ -59,7 +59,7 @@ const viewModeIcon = computed(() => {
 
 <template>
   <AppLayout title="Meine Fotoalben">
-    <div class="md:container md:mx-auto my-12 px-6 md:px-0">
+    <div class="md:container md:mx-auto my-12 px-6 md:px-2">
       <div class="max-w-5xl md:mx-auto">
         <div class="max-w-xl mx-auto mb-12">
           <CodeInput />
