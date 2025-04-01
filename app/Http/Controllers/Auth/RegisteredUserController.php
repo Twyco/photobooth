@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Helpers\IntendedRouteHelper;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
@@ -46,9 +47,8 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        $redirectUrl = session('intended', 'home');
-        session()->forget('intended');
+        $redirectUrl = IntendedRouteHelper::intendedRouteAndClear();
 
-        return redirect()->intended(route($redirectUrl, absolute: false));
+        return redirect()->intended($redirectUrl);
     }
 }

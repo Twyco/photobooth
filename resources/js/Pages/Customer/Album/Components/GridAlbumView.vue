@@ -18,7 +18,7 @@ defineProps({
         class="flex flex-col items-center justify-between px w-full p-2 rounded-lg bg-footer hover:bg-gray-highlight hover:bg-opacity-25"
       >
         <img
-          :src="album.cover"
+          :src="album.cover ?? '/images/no_cover_fallback.webp'"
           :alt="album.title"
           class="w-full aspect-square object-cover rounded-lg"
         />

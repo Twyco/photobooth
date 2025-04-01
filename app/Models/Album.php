@@ -100,9 +100,10 @@ class Album extends Model
         return array_map(fn($file) => Storage::url($file), $files);
     }
 
-    public function getCoverAttribute(): string
+    public function getCoverAttribute(): string|null
     {
-        return Storage::url('cover/' . $this->uuid . '.jpg');
+        $coverExists = Storage::disk('public')->exists('cover/' . $this->uuid . '.jpg');
+        return $coverExists ? Storage::url('cover/' . $this->uuid . '.jpg') : null;
     }
 
 }
