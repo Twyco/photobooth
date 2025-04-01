@@ -32,7 +32,7 @@ const formatedDate = computed(() =>
           </p>
         </div>
       </div>
-      <div class="mt-4 md:mt-16 px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      <div class="mt-4 md:mt-16 md:px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         <img
           v-for="(image, index) in album.images"
           :src="image"
