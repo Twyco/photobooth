@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Helpers\IntendedRouteHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\RedirectResponse;
@@ -33,10 +34,9 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        $redirectUrl = session('intended', 'home');
-        session()->forget('intended');
+        $redirectUrl = IntendedRouteHelper::intendedRouteAndClear();
 
-        return redirect()->intended(route($redirectUrl, absolute: false));
+        return redirect()->intended($redirectUrl);
     }
 
     /**

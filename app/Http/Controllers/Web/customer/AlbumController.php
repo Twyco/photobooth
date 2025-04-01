@@ -19,7 +19,7 @@ class AlbumController extends Controller
     {
         $albums = Album::viewableAlbums()->get();
         if(!Auth::check()) {
-            session(['intended' => 'album.index']);
+            session(['intended_route' => 'album.index']);
         }
         return Inertia::render('Customer/Album/Index', [
             'albums' => UserAlbumIndexResource::collection($albums)->toArray($request)
@@ -32,6 +32,9 @@ class AlbumController extends Controller
     public function show(Request $request, Album $album)
     {
         $user = $request->user();
+        if(!Auth::check()) {
+            session(['intended_route' => 'album.show', 'intended_route_data' => $album->uuid]);
+        }
         return Inertia::render('Customer/Album/Show', [
             'album' => UserAlbumResource::make($album)->toArray($request),
             'hasAlbumSaved' => $user ? $user->hasAlbumSaved($album) : true,
@@ -42,7 +45,7 @@ class AlbumController extends Controller
     {
         $user = $request->user();
         $user->savedAlbums()->syncWithoutDetaching([$album->id]);
-        return back()->with(['success' => 'Album saved successfully.']);
+        return to_route('album.show', $album)->with(['success' => 'Album saved successfully.']);
     }
 
 }

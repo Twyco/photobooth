@@ -2,6 +2,7 @@
 import { UserAlbumWithImages } from '@/types/album-interface';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { computed, PropType } from 'vue';
+import {Link, usePage} from '@inertiajs/vue3';
 import { format } from 'date-fns';
 
 const props = defineProps({
@@ -12,6 +13,8 @@ const props = defineProps({
   hasAlbumSaved: { type: Boolean, default: false }
 });
 
+const pageProps = usePage().props;
+
 const formatedDate = computed(() =>
   format(new Date(props.album.eventDate), 'dd.MM.yyyy')
 );
@@ -19,7 +22,15 @@ const formatedDate = computed(() =>
 
 <template>
   <AppLayout title="Mein Alben">
-    <div class="md:container md:mx-auto my-12 px-6 md:px-2">
+    <div :class="`md:container md:mx-auto ${hasAlbumSaved ? 'my-12' : 'mb-12'} px-6 md:px-2`">
+      <div v-if="!!pageProps.auth?.user && album && !hasAlbumSaved" class="w-full py-2 md:pb-0  flex justify-center md:justify-start">
+        <Link
+          :href="route('album.save', {album: album.uuid})"
+          class="md:ml-4 px-4 py-2 rounded-lg bg-footer whitespace-nowrap"
+        >
+          In meine Fotoalben speichern
+        </Link>
+      </div>
       <div class="w-full flex flex-col md:flex-row">
         <div
           class="flex flex-col-reverse md:flex-col px-4 py-0 mr-0 md:py-2 md:mr-8 md:whitespace-nowrap"
