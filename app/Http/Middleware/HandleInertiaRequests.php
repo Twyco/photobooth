@@ -62,7 +62,7 @@ class HandleInertiaRequests extends Middleware
             $navMenuItems[] = new NavMenuItem(
                 route('album.index'),
                 'Meine Fotoalben',
-                $request->routeIs('album.index')
+                $request->routeIs('album.*')
             );
 
             if(Auth::check() && Auth::user()->is_admin) {
