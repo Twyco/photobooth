@@ -5,10 +5,10 @@ export interface UserAlbum {
   description: string;
   eventDate: string;
   uuid: string;
-  cover: string|null;
+  cover: string | null;
 }
 export interface UserAlbumWithImages extends UserAlbum {
-  images: { original: string, compressed: string }[];
+  images: { original: string; compressed: string }[];
 }
 
 export interface AdminAlbumInterface extends UserAlbumWithImages {
