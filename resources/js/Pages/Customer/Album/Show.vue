@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { UserAlbumWithImages } from '@/types/album-interface';
 import AppLayout from '@/Layouts/AppLayout.vue';
-import { computed, PropType } from 'vue';
-import {Link, usePage} from '@inertiajs/vue3';
+import { computed, onMounted, PropType, ref } from 'vue';
+import { Link, usePage } from '@inertiajs/vue3';
 import { format } from 'date-fns';
 
 const props = defineProps({
@@ -18,14 +18,42 @@ const pageProps = usePage().props;
 const formatedDate = computed(() =>
   format(new Date(props.album.eventDate), 'dd.MM.yyyy')
 );
+
+const images = ref(
+  props.album.images.map((img) => ({
+    compressed: img.compressed,
+    original: img.original,
+    showOriginal: false
+  }))
+);
+
+const loadedCount = ref(0);
+
+const markImageAsLoaded = (index: number) => {
+  loadedCount.value++;
+  if (loadedCount.value === images.value.length) {
+    setTimeout(() => {
+      images.value.forEach((img) => (img.showOriginal = true));
+    }, 100);
+  }
+};
+
+onMounted(() => {
+  loadedCount.value = 0;
+});
 </script>
 
 <template>
   <AppLayout title="Mein Alben">
-    <div :class="`md:container md:mx-auto ${hasAlbumSaved ? 'my-12' : 'mb-12'} px-6 md:px-2`">
-      <div v-if="!!pageProps.auth?.user && album && !hasAlbumSaved" class="w-full py-2 md:pb-0  flex justify-center md:justify-start">
+    <div
+      :class="`md:container md:mx-auto ${hasAlbumSaved ? 'my-12' : 'mb-12'} px-6 md:px-2`"
+    >
+      <div
+        v-if="!!pageProps.auth?.user && album && !hasAlbumSaved"
+        class="w-full py-2 md:pb-0 flex justify-center md:justify-start"
+      >
         <Link
-          :href="route('album.save', {album: album.uuid})"
+          :href="route('album.save', { album: album.uuid })"
           class="md:ml-4 px-4 py-2 rounded-lg bg-footer whitespace-nowrap"
           method="post"
         >
@@ -54,15 +82,30 @@ const formatedDate = computed(() =>
           </p>
         </div>
       </div>
+      <p>
+        Debug: {{ Math.min(loadedCount, images.length) }}/{{
+          images.length
+        }}
+        Bilder in low Quality geladen
+        {{ loadedCount >= images.length ? '&#9989;' : '&#10060;' }}
+      </p>
+      <p>
+        Debug:
+        {{
+          Math.min(Math.max(loadedCount - images.length, 0), images.length)
+        }}/{{ images.length }} Bilder in height Quality geladen
+        {{ loadedCount >= images.length * 2 ? '&#9989;' : '&#10060;' }}
+      </p>
       <div
         class="mt-4 md:mt-16 md:px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
       >
         <img
-          v-for="(image, index) in album.compressed_images"
-          :src="image"
-          class="w-full h-full object-cover rounded-lg"
+          v-for="(image, index) in images"
           :key="index"
+          :src="image.showOriginal ? image.original : image.compressed"
+          class="w-full h-full object-cover rounded-lg transition-opacity duration-500"
           loading="lazy"
+          @load="markImageAsLoaded(index)"
         />
       </div>
     </div>

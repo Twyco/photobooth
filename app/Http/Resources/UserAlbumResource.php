@@ -24,7 +24,6 @@ class UserAlbumResource extends JsonResource
             'eventDate' => $this->event_date,
             'uuid' => $this->uuid,
             'cover' => $this->cover,
-            'compressed_images' => $this->compressedImages,
             'images' => $this->images,
         ];
     }
