@@ -24,7 +24,6 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
  * @property Carbon $event_date
  * @property string $albumAccessCodes
  * @property array $images
- * @property array $compressedImages
  * @property string $cover
  */
 class Album extends Model
@@ -97,36 +96,30 @@ class Album extends Model
 
     public function getImagesAttribute(): array
     {
-        $path = 'album/' . $this->uuid;
-        $files = Storage::disk('public')->files($path);
-        $imageFiles = array_filter($files, fn($file) => preg_match('/\.(png|jpe?g)$/i', $file));
-
-        return array_map(fn($file) => Storage::url($file), $imageFiles);
-    }
-
-    public function getCompressedImagesAttribute(): array
-    {
         $originalPath = 'album/' . $this->uuid;
         $compressedPath = 'album/' . $this->uuid . '_compressed';
 
-        if (!Storage::disk('public')->exists($compressedPath)){
+        if (!Storage::disk('public')->exists($compressedPath)) {
             Storage::disk('public')->makeDirectory($compressedPath);
         }
 
         $originalFiles = Storage::disk('public')->files($originalPath);
         $imageFiles = array_filter($originalFiles, fn($file) => preg_match('/\.(png|jpe?g)$/i', $file));
 
-        return array_map(function ($file) use ($originalPath, $compressedPath) {
+        return array_values(array_map(function ($file) use ($originalPath, $compressedPath) {
             $compressedFile = preg_replace('/\.(png|jpe?g)$/i', '.webp', str_replace($originalPath, $compressedPath, $file));
 
             if (!Storage::disk('public')->exists($compressedFile)) {
                 $this->convertToWebP(Storage::disk('public')->path($file), Storage::disk('public')->path($compressedFile));
             }
-            return Storage::disk('public')->exists($compressedFile)
-                ? Storage::url($compressedFile)
-                : Storage::url($file);
-        }, $imageFiles);
+
+            return [
+                'original' => Storage::url($file),
+                'compressed' => Storage::disk('public')->exists($compressedFile) ? Storage::url($compressedFile) : null,
+            ];
+        }, $imageFiles));
     }
+
 
     /**
      * Erstellt eine WebP-Version des Bildes mit Imagick (80% Qualität).
@@ -139,9 +132,13 @@ class Album extends Model
             $image = new Imagick();
             $image->readImage($sourcePath);
             $image->setImageFormat('webp');
-            $image->setImageCompressionQuality(80);
+            $image->setImageCompressionQuality(10);
+            $image->setOption('webp:method', '6');
+            $image->setOption('webp:lossless', 'false');
 
-            Storage::disk('public')->put($relativeDestPath, $image);
+            Storage::disk('public')->put($relativeDestPath, $image->getImageBlob());
+            $image->clear();
+            $image->destroy();
         } catch (Exception $e) {
             Log::error("Fehler beim Konvertieren zu WebP: " . $e->getMessage());
         }
