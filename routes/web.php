@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\Web\customer\AlbumAccessCodeController;
-use App\Http\Controllers\Web\customer\AlbumController;
-use App\Http\Controllers\Web\customer\ProfileController;
+use App\Http\Controllers\Web\Customer\AlbumAccessCodeController;
+use App\Http\Controllers\Web\Customer\AlbumController;
+use App\Http\Controllers\Web\Customer\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
