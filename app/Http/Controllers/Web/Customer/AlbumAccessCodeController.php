@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Web\customer;
+namespace App\Http\Controllers\Web\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Models\AlbumAccessCode;

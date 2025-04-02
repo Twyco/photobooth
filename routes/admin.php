@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Web\Admin\AdminAlbumController;
-use App\Http\Controllers\Web\customer\AlbumAccessCodeController;
+use App\Http\Controllers\Web\Customer\AlbumAccessCodeController;
 use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
 

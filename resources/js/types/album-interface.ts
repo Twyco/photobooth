@@ -8,6 +8,7 @@ export interface UserAlbum {
   cover: string|null;
 }
 export interface UserAlbumWithImages extends UserAlbum {
+  compressed_images: string[];
   images: string[];
 }
 

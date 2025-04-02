@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Web\customer;
+namespace App\Http\Controllers\Web\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserAlbumIndexResource;
@@ -31,13 +31,15 @@ class AlbumController extends Controller
      */
     public function show(Request $request, Album $album)
     {
-        $user = $request->user();
         if(!Auth::check()) {
-            session(['intended_route' => 'album.show', 'intended_route_data' => $album->uuid]);
+            session([
+                'intended_route' => 'album.show',
+                'intended_route_data' => $album->uuid
+            ]);
         }
         return Inertia::render('Customer/Album/Show', [
             'album' => UserAlbumResource::make($album)->toArray($request),
-            'hasAlbumSaved' => $user ? $user->hasAlbumSaved($album) : true,
+            'hasAlbumSaved' => optional($request->user())->hasAlbumSaved($album) ?? true,
         ]);
     }
 
