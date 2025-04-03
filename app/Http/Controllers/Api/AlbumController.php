@@ -16,6 +16,7 @@ class AlbumController extends Controller
     {
         $request->validated();
 
+        //TODO replace album with current active Album
         $album = Album::first();
         $image = $request->file('image');
 
