@@ -4,6 +4,7 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import { computed, onMounted, PropType, ref } from 'vue';
 import { Link, usePage } from '@inertiajs/vue3';
 import { format } from 'date-fns';
+import ProgressiveImage from "@/Components/ProgressiveImage.vue";
 
 const props = defineProps({
   album: {
@@ -19,28 +20,24 @@ const formatedDate = computed(() =>
   format(new Date(props.album.eventDate), 'dd.MM.yyyy')
 );
 
-const images = ref(
-  props.album.images.map((img) => ({
-    compressed: img.compressed,
-    original: img.original,
-    showOriginal: false
-  }))
-);
-
-const loadedCount = ref(0);
-
-const markImageAsLoaded = (index: number) => {
-  loadedCount.value++;
-  if (loadedCount.value === images.value.length) {
-    setTimeout(() => {
-      images.value.forEach((img) => (img.showOriginal = true));
-    }, 100);
-  }
-};
+const compressedLoadedCount = ref(0);
+const originalLoadedCount = ref(0);
 
 onMounted(() => {
-  loadedCount.value = 0;
+  compressedLoadedCount.value = 0;
+  originalLoadedCount.value = 0;
 });
+const progressiveImgRefs = ref<InstanceType<typeof ProgressiveImage>[]>([]);
+
+const startLoadOriginalImg = () => {
+  compressedLoadedCount.value += 1;
+  if(compressedLoadedCount.value >= progressiveImgRefs.value.length){
+    progressiveImgRefs.value.forEach((img) => {
+      img.startLoadOriginalImg();
+    });
+  }
+}
+
 </script>
 
 <template>
@@ -83,29 +80,28 @@ onMounted(() => {
         </div>
       </div>
       <p>
-        Debug: {{ Math.min(loadedCount, images.length) }}/{{
-          images.length
-        }}
+        Debug:
+        {{compressedLoadedCount}}/{{ progressiveImgRefs.length }} Bilder in height Quality geladen
         Bilder in low Quality geladen
-        {{ loadedCount >= images.length ? '&#9989;' : '&#10060;' }}
+        {{ compressedLoadedCount >= progressiveImgRefs.length ? '&#9989;' : '&#10060;' }}
       </p>
       <p>
         Debug:
-        {{
-          Math.min(Math.max(loadedCount - images.length, 0), images.length)
-        }}/{{ images.length }} Bilder in height Quality geladen
-        {{ loadedCount >= images.length * 2 ? '&#9989;' : '&#10060;' }}
+        {{originalLoadedCount}}/{{ progressiveImgRefs.length }} Bilder in height Quality geladen
+        {{ originalLoadedCount >= progressiveImgRefs.length ? '&#9989;' : '&#10060;' }}
       </p>
       <div
         class="mt-4 md:mt-16 md:px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
       >
-        <img
-          v-for="(image, index) in images"
+        <ProgressiveImage
+          v-for="(image, index) in album.images"
+          ref="progressiveImgRefs"
+          :compressed-src="image.compressed"
+          :original-src="image.original"
+          img-class="w-full h-full object-cover rounded-lg transition-opacity duration-500"
           :key="index"
-          :src="image.showOriginal ? image.original : image.compressed"
-          class="w-full h-full object-cover rounded-lg transition-opacity duration-500"
-          loading="lazy"
-          @load="markImageAsLoaded(index)"
+          @loaded-compressed-img="startLoadOriginalImg"
+          @loaded-original-img="originalLoadedCount +=1"
         />
       </div>
     </div>
