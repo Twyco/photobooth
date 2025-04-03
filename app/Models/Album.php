@@ -18,6 +18,7 @@ use Imagick;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 /**
+ * @property int $id
  * @property string $title
  * @property string $description
  * @property string $uuid

@@ -59,7 +59,7 @@ const startLoadOriginalImg = () => {
       </div>
       <div class="w-full flex flex-col md:flex-row">
         <div
-          class="flex flex-col-reverse md:flex-col px-4 py-0 mr-0 md:py-2 md:mr-8 md:whitespace-nowrap"
+          class="flex flex-col-reverse md:flex-col md:px-4 py-0 mr-0 md:py-2 md:mr-8 md:whitespace-nowrap"
         >
           <h1
             class="font-bold text-secondary text-3xl md:text-5xl mb-0 md:mb-2"
@@ -79,13 +79,13 @@ const startLoadOriginalImg = () => {
           </p>
         </div>
       </div>
-      <p>
+      <p class="md:px-4">
         Debug:
         {{compressedLoadedCount}}/{{ progressiveImgRefs.length }} Bilder in height Quality geladen
         Bilder in low Quality geladen
         {{ compressedLoadedCount >= progressiveImgRefs.length ? '&#9989;' : '&#10060;' }}
       </p>
-      <p>
+      <p class="md:px-4">
         Debug:
         {{originalLoadedCount}}/{{ progressiveImgRefs.length }} Bilder in height Quality geladen
         {{ originalLoadedCount >= progressiveImgRefs.length ? '&#9989;' : '&#10060;' }}

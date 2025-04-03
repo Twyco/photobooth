@@ -13,7 +13,7 @@ const viewModes = ['compact', 'list', 'grid'] as const;
 type ViewMode = (typeof viewModes)[number];
 
 defineProps({
-  albums: { type: Array<UserAlbum>, required: true }
+  albums: { type: Array<UserAlbum>, default: [] }
 });
 
 const pageProps = usePage().props;
