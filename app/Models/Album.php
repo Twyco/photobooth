@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\ConvertToWebP;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
@@ -119,7 +120,7 @@ class Album extends Model
             $compressedFile = preg_replace('/\.(png|jpe?g)$/i', '.webp', str_replace($originalPath, $compressedPath, $file));
 
             if (!Storage::disk('public')->exists($compressedFile)) {
-                $this->convertToWebP(Storage::disk('public')->path($file), Storage::disk('public')->path($compressedFile));
+                ConvertToWebP::convertAndSave(Storage::disk('public')->path($file), Storage::disk('public')->path($compressedFile));
             }
 
             return [
@@ -128,30 +129,6 @@ class Album extends Model
             ];
         }, $imageFiles));
     }
-
-    /**
-     * Erstellt eine WebP-Version des Bildes mit Imagick (80% Qualität).
-     */
-    private function convertToWebP(string $sourcePath, string $destinationPath)
-    {
-        $relativeDestPath = Str::replaceFirst(Storage::disk('public')->path(''), '', $destinationPath);
-
-        try {
-            $image = new Imagick();
-            $image->readImage($sourcePath);
-            $image->setImageFormat('webp');
-            $image->setImageCompressionQuality(10);
-            $image->setOption('webp:method', '6');
-            $image->setOption('webp:lossless', 'false');
-
-            Storage::disk('public')->put($relativeDestPath, $image->getImageBlob());
-            $image->clear();
-            $image->destroy();
-        } catch (Exception $e) {
-            Log::error("Fehler beim Konvertieren zu WebP: " . $e->getMessage());
-        }
-    }
-
 
     public function getCoverAttribute(): string|null
     {
