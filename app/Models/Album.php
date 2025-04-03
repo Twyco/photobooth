@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -57,6 +58,13 @@ class Album extends Model
         static::created(function ($album) {
             AlbumAccessCode::create(['album_id' => $album->id]);
             $album->createQrCode(1000);
+        });
+
+        static::deleting(function ($album) {
+            Cache::forget('user_album_details_' . $album->uuid);
+            foreach (User::all() as $user) {
+                Cache::forget($user->id . '_viewable_albums');
+            }
         });
     }
 
@@ -120,7 +128,6 @@ class Album extends Model
             ];
         }, $imageFiles));
     }
-
 
     /**
      * Erstellt eine WebP-Version des Bildes mit Imagick (80% Qualität).

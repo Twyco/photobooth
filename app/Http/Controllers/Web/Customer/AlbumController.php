@@ -43,7 +43,7 @@ class AlbumController extends Controller
                 'intended_route_data' => $album->uuid
             ]);
         }
-        $userAlbum = Cache::rememberForever('user_album_' . $album->uuid, function () use ($request, $album) {
+        $userAlbum = Cache::rememberForever('user_album_details_' . $album->uuid, function () use ($request, $album) {
             return UserAlbumResource::make($album)->toArray($request);
         });
         return Inertia::render('Customer/Album/Show', [
