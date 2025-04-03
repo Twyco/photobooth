@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\ConvertToWebP;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\StoreImageToAlbumRequest;
 use App\Models\Album;
@@ -23,14 +24,16 @@ class AlbumController extends Controller
         $originalName = $image->getClientOriginalName();
         $destPath = 'album/' . $album->uuid . '/';
 
-        $filename = $originalName;
-        $counter = 1;
-        while (Storage::disk('public')->exists($destPath . $filename)) {
-            $filename = pathinfo($originalName, PATHINFO_FILENAME) . '(' . $counter . ').' . $image->getClientOriginalExtension();
-            $counter++;
-        }
+        $time = time();
+
+        $filename = pathinfo($originalName, PATHINFO_FILENAME) . '_' . $time . '.' . $image->getClientOriginalExtension();
+        $compressedFilename = pathinfo($originalName, PATHINFO_FILENAME) . '_' . $time . '.webp';
+
 
         Storage::disk('public')->put($destPath . $filename, file_get_contents($image));
+
+        ConvertToWebP::convertAndSave(Storage::disk('public')->path($destPath . $filename),
+            Storage::disk('public')->path('album/' . $album->uuid . '_compressed/' . $compressedFilename));
         Cache::forget('user_album_details_' . $album->uuid);
 
         return response()->json(['message' => 'Image uploaded successfully.'], ResponseAlias::HTTP_OK);
