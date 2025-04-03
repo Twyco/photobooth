@@ -16,8 +16,15 @@ defineExpose({ focus: () => input.value?.focus() });
 
 <template>
   <input
-    class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 w-full"
+    class="rounded-md border-highlight shadow-sm focus:border-secondary focus:ring-secondary w-full text-primary bg-footer"
     v-model="model"
     ref="input"
   />
 </template>
+
+<style>
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px theme('colors.footer') inset !important;
+  -webkit-text-fill-color: theme('colors.primary') !important;
+}
+</style>

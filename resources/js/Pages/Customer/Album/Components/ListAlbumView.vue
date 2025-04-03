@@ -20,7 +20,7 @@ defineProps({
     <template v-for="album in albums" :key="album.uuid">
       <Link
         :href="route('album.show', { album: album.uuid })"
-        class="w-full flex items-center justify-between gap-x-4 px-4 py-1 md:py-4 rounded-lg hover:bg-gray-highlight hover:bg-opacity-25"
+        class="w-full flex items-center justify-between gap-x-4 px-4 py-1 md:py-4 rounded-lg hover:bg-highlight hover:bg-opacity-25"
       >
         <img
           :src="album.cover ?? '/images/no_cover_fallback.webp'"
