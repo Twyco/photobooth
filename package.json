@@ -4,6 +4,7 @@
     "scripts": {
         "build": "vue-tsc && vite build",
         "deploy": "vite build",
+        "check": "prettier --check \"resources/js/**/*.{ts,vue,php}\" && vue-tsc",
         "dev": "vite",
         "format": "prettier --write \"resources/js/**/*.{ts,vue,php}\""
     },
@@ -26,6 +27,7 @@
         "@mdi/js": "^7.4.47",
         "date-fns": "^4.1.0",
         "laravel-vite-plugin": "^1.2.0",
-        "vite": "6.2.3"
+        "vite": "6.2.3",
+        "pinia": "^3.0.1"
     }
 }

@@ -2,19 +2,31 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Imagick;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 /**
+ * @property int $id
+ * @property string $title
+ * @property string $description
+ * @property string $uuid
+ * @property Carbon $event_date
  * @property string $albumAccessCodes
+ * @property array $images
+ * @property string $cover
  */
 class Album extends Model
 {
@@ -40,11 +52,19 @@ class Album extends Model
         static::creating(function ($album) {
             $album->uuid = (string)Str::uuid();
             Storage::disk('public')->makeDirectory('album/' . $album->uuid);
+            Storage::disk('public')->makeDirectory('album/' . $album->uuid . '_compressed');
         });
 
         static::created(function ($album) {
             AlbumAccessCode::create(['album_id' => $album->id]);
             $album->createQrCode(1000);
+        });
+
+        static::deleting(function ($album) {
+            Cache::forget('user_album_details_' . $album->uuid);
+            foreach (User::all() as $user) {
+                Cache::forget($user->id . '_viewable_albums');
+            }
         });
     }
 
@@ -85,12 +105,58 @@ class Album extends Model
 
     public function getImagesAttribute(): array
     {
-        $path = 'album/' . $this->uuid;
-        $files = collect(Storage::disk('public')->files($path))
-            ->filter(fn($file) => preg_match('/\.(png|jpg|jpeg)$/i', $file))
-            ->values()->toArray();
+        $originalPath = 'album/' . $this->uuid;
+        $compressedPath = 'album/' . $this->uuid . '_compressed';
 
-        return array_map(fn($file) => Storage::url($file), $files);
+        if (!Storage::disk('public')->exists($compressedPath)) {
+            Storage::disk('public')->makeDirectory($compressedPath);
+        }
+
+        $originalFiles = Storage::disk('public')->files($originalPath);
+        $imageFiles = array_filter($originalFiles, fn($file) => preg_match('/\.(png|jpe?g)$/i', $file));
+
+        return array_values(array_map(function ($file) use ($originalPath, $compressedPath) {
+            $compressedFile = preg_replace('/\.(png|jpe?g)$/i', '.webp', str_replace($originalPath, $compressedPath, $file));
+
+            if (!Storage::disk('public')->exists($compressedFile)) {
+                $this->convertToWebP(Storage::disk('public')->path($file), Storage::disk('public')->path($compressedFile));
+            }
+
+            return [
+                'original' => Storage::url($file),
+                'compressed' => Storage::disk('public')->exists($compressedFile) ? Storage::url($compressedFile) : null,
+            ];
+        }, $imageFiles));
+    }
+
+    /**
+     * Erstellt eine WebP-Version des Bildes mit Imagick (80% Qualität).
+     */
+    private function convertToWebP(string $sourcePath, string $destinationPath)
+    {
+        $relativeDestPath = Str::replaceFirst(Storage::disk('public')->path(''), '', $destinationPath);
+
+        try {
+            $image = new Imagick();
+            $image->readImage($sourcePath);
+            $image->setImageFormat('webp');
+            $image->setImageCompressionQuality(10);
+            $image->setOption('webp:method', '6');
+            $image->setOption('webp:lossless', 'false');
+
+            Storage::disk('public')->put($relativeDestPath, $image->getImageBlob());
+            $image->clear();
+            $image->destroy();
+        } catch (Exception $e) {
+            Log::error("Fehler beim Konvertieren zu WebP: " . $e->getMessage());
+        }
+    }
+
+
+    public function getCoverAttribute(): string|null
+    {
+        $coverExists = Storage::disk('public')->exists('cover/' . $this->uuid . '.jpg');
+        return $coverExists ? Storage::url('cover/' . $this->uuid . '.jpg') : null;
     }
 
 }

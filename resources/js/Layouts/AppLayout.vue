@@ -1,23 +1,41 @@
 <script setup lang="ts">
 import { Head, usePage } from '@inertiajs/vue3';
-import { PageProps } from '@/types';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import GuestLayout from '@/Layouts/GuestLayout.vue';
+import { ref } from 'vue';
+import MenuBar from '@/Layouts/Components/MenuBar.vue';
+import MobileMenu from '@/Layouts/Components/MobileMenu.vue';
 
 defineProps({
-  header: String
+  title: String
 });
 
-const pageProps = usePage<PageProps>().props;
-const isAuthenticated = !!pageProps.auth.user;
+const page = usePage();
+
+const showMenu = ref<boolean>(false);
+
+const navMenuItems = page.props.menu.items;
 </script>
 
 <template>
-  <Head :title="header" />
-  <AuthenticatedLayout v-if="isAuthenticated">
-    <slot name="default" />
-  </AuthenticatedLayout>
-  <GuestLayout v-else>
-    <slot name="default" />
-  </GuestLayout>
+  <Head :title="title"></Head>
+  <div class="min-h-screen flex flex-col">
+    <header>
+      <menu-bar
+        :menu-items="navMenuItems"
+        @update:show-menu="showMenu = !showMenu"
+      />
+      <mobile-menu
+        v-show="showMenu"
+        :menu-items="navMenuItems"
+        @update:show-menu="showMenu = !showMenu"
+      />
+    </header>
+
+    <main class="flex-1 mt-20 bg-dark-background">
+      <slot />
+    </main>
+
+    <footer class="bg-footer text-primary py text-center py-1">
+      <p>&copy; 2025 Nico Schröder. Alle Rechte vorbehalten.</p>
+    </footer>
+  </div>
 </template>

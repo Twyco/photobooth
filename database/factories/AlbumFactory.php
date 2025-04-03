@@ -40,6 +40,12 @@ class AlbumFactory extends Factory
                     Storage::disk('public')->put('album/' . $uuid . '/' . $this->faker->slug(4) . '.jpg', $response->body());
                 }
             }
+
+
+            $coverUrl = 'https://picsum.photos/1024/1024';
+            Storage::disk('public')->makeDirectory('cover/');
+            $response = Http::get($coverUrl);
+            Storage::disk('public')->put('cover/' . $uuid . '.jpg', $response->body());
         });
     }
 }

@@ -20,15 +20,15 @@ const tableHeaders: TableHeaderInterface[] = [
 </script>
 
 <template>
-  <AppLayout header="Alben">
+  <AppLayout title="Alben">
     <PaginatedTable
       :data="albums"
-      :path="route('admin.albums.index')"
+      :path="route('admin.album.index')"
       :headers="tableHeaders"
-      create-route-name="admin.albums.create"
+      create-route-name="admin.album.create"
       title="Alle Alben"
-      edit-route-name="admin.albums.edit"
-      show-route-name="admin.albums.show"
+      edit-route-name="admin.album.edit"
+      show-route-name="admin.album.show"
       model-name="album"
     />
   </AppLayout>

@@ -2,9 +2,13 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Album;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @mixin Album
+ */
 class UserAlbumResource extends JsonResource
 {
     /**
@@ -19,7 +23,8 @@ class UserAlbumResource extends JsonResource
             'description' => $this->description,
             'eventDate' => $this->event_date,
             'uuid' => $this->uuid,
-            'images' => $this->getImagesAttribute(),
+            'cover' => $this->cover,
+            'images' => $this->images,
         ];
     }
 }

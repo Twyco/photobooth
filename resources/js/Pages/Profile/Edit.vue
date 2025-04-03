@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import DeleteUserForm from './Partials/DeleteUserForm.vue';
 import UpdatePasswordForm from './Partials/UpdatePasswordForm.vue';
-import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm.vue';
-import { Head } from '@inertiajs/vue3';
+import AppLayout from '@/Layouts/AppLayout.vue';
+// import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm.vue';
 
 defineProps<{
   mustVerifyEmail?: boolean;
@@ -12,18 +11,12 @@ defineProps<{
 </script>
 
 <template>
-  <Head title="Profile" />
-
-  <AuthenticatedLayout>
-    <template #header>
-      <h2 class="text-xl font-semibold leading-tight text-gray-800">Profile</h2>
-    </template>
-
-    <UpdateProfileInformationForm
-      :must-verify-email="mustVerifyEmail"
-      :status="status"
-      class="max-w-xl"
-    />
+  <AppLayout title="Account">
+    <!--    <UpdateProfileInformationForm-->
+    <!--      :must-verify-email="mustVerifyEmail"-->
+    <!--      :status="status"-->
+    <!--      class="max-w-xl"-->
+    <!--    />-->
 
     <div class="bg-white p-4 shadow sm:rounded-lg sm:p-8">
       <UpdatePasswordForm class="max-w-xl" />
@@ -32,5 +25,5 @@ defineProps<{
     <div class="bg-white p-4 shadow sm:rounded-lg sm:p-8">
       <DeleteUserForm class="max-w-xl" />
     </div>
-  </AuthenticatedLayout>
+  </AppLayout>
 </template>

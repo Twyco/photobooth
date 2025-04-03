@@ -74,7 +74,7 @@ class AdminAlbumController extends Controller
         }
         $validatedData = $request->validated();
         Album::create($validatedData);
-        return to_route('admin.albums.index')->with('success', 'Album created successfully.');
+        return to_route('admin.album.index')->with('success', 'Album created successfully.');
     }
 
     /**

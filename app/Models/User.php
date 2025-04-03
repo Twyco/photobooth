@@ -7,9 +7,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Cache;
 
 /**
- * @property mixed $is_admin
+ * @property int $id
+ * @property string $name
+ * @property string $email
+ * @property bool $is_admin
  */
 class User extends Authenticatable
 {
@@ -50,6 +54,15 @@ class User extends Authenticatable
             'password' => 'hashed',
             'is_admin' => 'boolean',
         ];
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function (User $user) {
+            Cache::forget($user->id . '_viewable_albums');
+        });
     }
 
     public function savedAlbums(): BelongsToMany
