@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\StoreImageToAlbumRequest;
 use App\Models\Album;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
@@ -29,6 +30,7 @@ class AlbumController extends Controller
         }
 
         Storage::disk('public')->put($destPath . $filename, file_get_contents($image));
+        Cache::forget('user_album_details_' . $album->uuid);
 
         return response()->json(['message' => 'Image uploaded successfully.'], ResponseAlias::HTTP_OK);
     }
