@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import {ref} from 'vue';
+import { ref } from 'vue';
 
 const props = defineProps({
-  compressedSrc: {type: String, required: true},
-  originalSrc: {type: String, required: true},
-  imgClass: {type: String, required: true},
+  compressedSrc: { type: String, required: true },
+  originalSrc: { type: String, required: true },
+  imgClass: { type: String, required: true }
 });
 const emit = defineEmits(['loadedCompressedImg', 'loadedOriginalImg']);
 
@@ -14,7 +14,7 @@ const showEffect = ref(false);
 
 const startLoadOriginalImg = () => {
   originalSrc.value = props.originalSrc;
-}
+};
 
 const onOriginalLoad = () => {
   emit('loadedOriginalImg');
@@ -23,31 +23,32 @@ const onOriginalLoad = () => {
   setTimeout(() => {
     showEffect.value = false;
   }, 1000);
-}
+};
 
 const onCompressedLoad = () => {
   emit('loadedCompressedImg');
-}
+};
 
 defineExpose({ startLoadOriginalImg });
 </script>
 
-<template><div class="relative overflow-hidden">
-  <img
-    v-show="!showOriginal"
-    :src="compressedSrc"
-    :class="imgClass"
-    loading="lazy"
-    @load="onCompressedLoad"
-  />
-  <img
-    v-show="showOriginal"
-    :src="originalSrc"
-    :class="[imgClass, showEffect ? 'shine-effect' : '']"
-    @load="onOriginalLoad"
-  />
-  <div v-if="showEffect" class="shine-overlay"></div>
-</div>
+<template>
+  <div class="relative overflow-hidden">
+    <img
+      v-show="!showOriginal"
+      :src="compressedSrc"
+      :class="imgClass"
+      loading="lazy"
+      @load="onCompressedLoad"
+    />
+    <img
+      v-show="showOriginal"
+      :src="originalSrc"
+      :class="[imgClass, showEffect ? 'shine-effect' : '']"
+      @load="onOriginalLoad"
+    />
+    <div v-if="showEffect" class="shine-overlay"></div>
+  </div>
 </template>
 
 <style scoped>

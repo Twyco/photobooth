@@ -4,7 +4,7 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import { computed, onMounted, PropType, ref } from 'vue';
 import { Link, usePage } from '@inertiajs/vue3';
 import { format } from 'date-fns';
-import ProgressiveImage from "@/Components/ProgressiveImage.vue";
+import ProgressiveImage from '@/Components/ProgressiveImage.vue';
 
 const props = defineProps({
   album: {
@@ -31,13 +31,12 @@ const progressiveImgRefs = ref<InstanceType<typeof ProgressiveImage>[]>([]);
 
 const startLoadOriginalImg = () => {
   compressedLoadedCount.value += 1;
-  if(compressedLoadedCount.value >= progressiveImgRefs.value.length){
+  if (compressedLoadedCount.value >= progressiveImgRefs.value.length) {
     progressiveImgRefs.value.forEach((img) => {
       img.startLoadOriginalImg();
     });
   }
-}
-
+};
 </script>
 
 <template>
@@ -59,7 +58,7 @@ const startLoadOriginalImg = () => {
       </div>
       <div class="w-full flex flex-col md:flex-row">
         <div
-          class="flex flex-col-reverse md:flex-col px-4 py-0 mr-0 md:py-2 md:mr-8 md:whitespace-nowrap"
+          class="flex flex-col-reverse md:flex-col md:px-4 py-0 mr-0 md:py-2 md:mr-8 md:whitespace-nowrap"
         >
           <h1
             class="font-bold text-secondary text-3xl md:text-5xl mb-0 md:mb-2"
@@ -79,16 +78,25 @@ const startLoadOriginalImg = () => {
           </p>
         </div>
       </div>
-      <p>
+      <p class="md:px-4">
         Debug:
-        {{compressedLoadedCount}}/{{ progressiveImgRefs.length }} Bilder in height Quality geladen
-        Bilder in low Quality geladen
-        {{ compressedLoadedCount >= progressiveImgRefs.length ? '&#9989;' : '&#10060;' }}
+        {{ compressedLoadedCount }}/{{ progressiveImgRefs.length }} Bilder in
+        height Quality geladen Bilder in low Quality geladen
+        {{
+          compressedLoadedCount >= progressiveImgRefs.length
+            ? '&#9989;'
+            : '&#10060;'
+        }}
       </p>
-      <p>
+      <p class="md:px-4">
         Debug:
-        {{originalLoadedCount}}/{{ progressiveImgRefs.length }} Bilder in height Quality geladen
-        {{ originalLoadedCount >= progressiveImgRefs.length ? '&#9989;' : '&#10060;' }}
+        {{ originalLoadedCount }}/{{ progressiveImgRefs.length }} Bilder in
+        height Quality geladen
+        {{
+          originalLoadedCount >= progressiveImgRefs.length
+            ? '&#9989;'
+            : '&#10060;'
+        }}
       </p>
       <div
         class="mt-4 md:mt-16 md:px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
@@ -101,7 +109,7 @@ const startLoadOriginalImg = () => {
           img-class="w-full h-full object-cover rounded-lg transition-opacity duration-500"
           :key="index"
           @loaded-compressed-img="startLoadOriginalImg"
-          @loaded-original-img="originalLoadedCount +=1"
+          @loaded-original-img="originalLoadedCount += 1"
         />
       </div>
     </div>

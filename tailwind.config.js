@@ -19,7 +19,7 @@ export default {
                 secondary: "#2563eb",
                 'dark-background': "#131314",
                 'footer': "#262626",
-                'gray-highlight': "#9ca3af"
+                'highlight': "#9ca3af"
             },
             keyframes: {
                 shake: {
