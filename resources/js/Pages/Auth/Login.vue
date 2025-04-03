@@ -6,7 +6,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Link, useForm } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
-import TitleSeparator from "@/Components/TitleSeparator.vue";
+import TitleSeparator from '@/Components/TitleSeparator.vue';
 
 defineProps<{
   canResetPassword?: boolean;
