@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import {PropType} from 'vue';
-import {AdminAlbumInterface} from '@/types/album-interface';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import TitleSeparator from "@/Components/TitleSeparator.vue";
 import {format} from "date-fns";
 import {Link} from "@inertiajs/vue3";
+import {AdminAlbumInterface} from "@/types/album-interface";
 
 defineProps({
   album: {
@@ -55,7 +55,7 @@ defineProps({
           <div class="flex flex-col flex-1 bg-footer px-4 py-2 rounded-lg gap-y-2">
             <div class="flex gap-2">
               <span class="font-bold shrink-0">Beschreibung:</span>
-              <p class="text-justify">{{ album.description }}</p>
+              <p class="text-justify">{{ album.description ?? '-' }}</p>
             </div>
             <div class="flex gap-2">
               <span class="font-bold shrink-0">Direktzugang:</span>
@@ -67,37 +67,57 @@ defineProps({
             </div>
           </div>
         </div>
+
         <!--Mobile View-->
-        <div class="grid grid-cols-[auto_1fr] lg:hidden bg-footer gap-y-2 gap-x-2 rounded-lg p-2 text-primary mb-2">
-          <span class="font-bold">ID:</span>
-          <p>{{ album.id }}</p>
+        <div class="grid grid-cols-3 md:grid-cols-4 lg:hidden bg-footer gap-y-2 gap-x-2 rounded-lg p-2 text-primary mb-2">
+          <span class="font-bold md:col-span-2">ID:</span>
+          <p class="col-span-2">{{ album.id }}</p>
 
-          <span class="font-bold">Titel:</span>
-          <p>{{ album.title }}</p>
+          <span class="font-bold md:col-span-2">Titel:</span>
+          <p class="col-span-2">{{ album.title }}</p>
 
-          <span class="font-bold">Datum der Veranstaltung:</span>
-          <p>{{ format(new Date(album.eventDate), 'dd.MM.yyyy') }}</p>
+          <span class="font-bold md:col-span-2">Datum der Veranstaltung:</span>
+          <p class="col-span-2">{{ format(new Date(album.eventDate), 'dd.MM.yyyy') }}</p>
 
-          <span class="font-bold">Beschreibung:</span>
-          <p>{{ album.description }}</p>
+          <span class="font-bold md:col-span-2">Beschreibung:</span>
+          <p class="col-span-2">{{ album.description }}</p>
 
-          <span>UUID:</span>
-          <p>{{ album.uuid }}</p>
+          <span class="font-bold md:col-span-2">UUID:</span>
+          <p class="col-span-2 md:col-span-2">{{ album.uuid }}</p>
 
-          <span class="font-bold">Direktzugang:</span>
+          <span class="font-bold md:col-span-2">Direktzugang:</span>
           <img
-            class="aspect-square w-full"
+            class="aspect-square w-full col-span-2"
             :src="album.qrCode"
             alt="QrCode"
           />
 
-          <span class="font-bold">Cover:</span>
+          <span class="font-bold md:col-span-2">Cover:</span>
           <img
-            class="aspect-square w-full"
+            class="aspect-square w-full col-span-2"
             :src="album.cover  ?? '/images/no_cover_fallback.webp'"
             alt="Albumcover"
           />
+        </div>
 
+        <div class="lg:px-8">
+          <div class="text-primary w-full bg-footer px-4 py-2 rounded-lg">
+            <div class="grid grid-cols-12 border-b-2 border-highlight text-secondary px-1 mb-1">
+              <div class="col-span-8 font-bold">Code</div>
+              <div class="col-span-2 font-bold text-right">Usages</div>
+              <div class="col-span-2 font-bold text-right">Saves</div>
+            </div>
+            <div class="grid grid-cols-12 px-1 text-primary">
+              <template
+                v-for="code in album.accessCodes"
+                :key="code.id"
+              >
+                <div class="col-span-8">{{ code.accessCode }}</div>
+                <div class="col-span-2 text-right">{{ code.usages }}</div>
+                <div class="col-span-2 text-right">{{ code.saves }}</div>
+              </template>
+            </div>
+          </div>
         </div>
       </div>
     </div>

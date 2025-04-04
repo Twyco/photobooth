@@ -11,7 +11,7 @@ export interface UserAlbumWithImages extends UserAlbum {
   images: { original: string; compressed: string }[];
 }
 
-export interface AdminAlbumInterface extends UserAlbumWithImages {
+export interface AdminAlbumInterface extends UserAlbum {
   id: number;
   accessCodes: AlbumAccessCodeInterface[];
   qrCode: string;

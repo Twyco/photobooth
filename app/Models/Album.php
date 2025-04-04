@@ -25,6 +25,7 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
  * @property string $albumAccessCodes
  * @property array $images
  * @property string $cover
+ * @property string $qrCode
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Photobooth newModelQuery()
@@ -110,7 +111,7 @@ class Album extends Model
         Storage::disk('public')->put("qrCodes/{$this->uuid}.png", $qrImage);
     }
 
-    public function getQrCodeUrl(): string
+    public function getQrCodeAttribute(): string
     {
         return Storage::url("public/qrCodes/{$this->uuid}.png");
     }
