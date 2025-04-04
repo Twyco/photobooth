@@ -27,7 +27,6 @@
         "@mdi/js": "^7.4.47",
         "date-fns": "^4.1.0",
         "laravel-vite-plugin": "^1.2.0",
-        "vite": "6.2.3",
-        "pinia": "^3.0.1"
+        "vite": "6.2.3"
     }
 }
