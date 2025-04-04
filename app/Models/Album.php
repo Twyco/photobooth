@@ -69,6 +69,11 @@ class Album extends Model
         });
     }
 
+    public function photobooths(): HasMany
+    {
+        return $this->hasMany(Photobooth::class);
+    }
+
     public function scopeViewableAlbums(Builder $query): Builder
     {
         return $query->whereIn('id', Album::getViewableAlbums()->pluck('id'));
