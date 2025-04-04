@@ -48,6 +48,15 @@ defineProps({
               <p class="text-justify">{{ album.uuid }}</p>
             </div>
             <div class="flex gap-2">
+              <span class="font-bold shrink-0">Link zum Album:</span>
+              <Link
+                class="text-justify text-blue-500"
+                :href="route('album.show', {album: album.uuid})"
+              >
+                {{ route('album.show', {album: album.uuid}) }}
+              </Link>
+            </div>
+            <div class="flex gap-2">
               <span class="font-bold shrink-0">Cover:</span>
               <img
                 class="aspect-square w-1/2"
@@ -94,6 +103,14 @@ defineProps({
 
           <span class="font-bold md:col-span-2">UUID:</span>
           <p class="col-span-2 md:col-span-2">{{ album.uuid }}</p>
+
+          <span class="font-bold md:col-span-2">Link zum Album:</span>
+          <Link
+            class="col-span-2 md:col-span-2 text-blue-500"
+            :href="route('album.show', {album: album.uuid})"
+          >
+            {{ route('album.show', {album: album.uuid}) }}
+          </Link>
 
           <span class="font-bold md:col-span-2">Direktzugang:</span>
           <img
