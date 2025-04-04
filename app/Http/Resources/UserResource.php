@@ -7,10 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @property User $resource
- * @property mixed $is_admin
- * @property mixed $email
- * @property mixed $name
+ * @mixin User
  */
 class UserResource extends JsonResource
 {

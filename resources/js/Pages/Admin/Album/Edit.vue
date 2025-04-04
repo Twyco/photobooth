@@ -34,11 +34,11 @@ const storeAlbum = () => {
         ? { event_date: data.event_date }
         : {})
     }))
-    .patch(route('admin.albums.update', { album: props.album.id }));
+    .patch(route('admin.album.update', { album: props.album.id }));
 };
 
 const deleteAlbum = () => {
-  router.delete(route('admin.albums.destroy', { album: props.album.id }));
+  router.delete(route('admin.album.destroy', { album: props.album.id }));
 };
 
 const deleteAccessCode = (id: number) => {

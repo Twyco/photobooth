@@ -4,6 +4,7 @@
     "scripts": {
         "build": "vue-tsc && vite build",
         "deploy": "vite build",
+        "check": "prettier --check \"resources/js/**/*.{ts,vue,php}\" && vue-tsc",
         "dev": "vite",
         "format": "prettier --write \"resources/js/**/*.{ts,vue,php}\""
     },

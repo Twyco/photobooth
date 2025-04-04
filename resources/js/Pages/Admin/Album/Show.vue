@@ -7,7 +7,7 @@ defineProps({
   album: {
     type: Object as PropType<AdminAlbumInterface>,
     required: true
-  },
+  }
 });
 </script>
 

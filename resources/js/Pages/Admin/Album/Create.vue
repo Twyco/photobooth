@@ -14,7 +14,7 @@ const form = useForm({
 });
 
 const storeAlbum = () => {
-  form.post(route('admin.albums.store'));
+  form.post(route('admin.album.store'));
 };
 </script>
 
