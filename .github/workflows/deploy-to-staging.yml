@@ -32,6 +32,7 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no twycot@www106.your-server.de -p 222 << 'EOF'
             cd /usr/home/twycot/public_html/photobooth/ || exit 1
+            composer update || exit 1
             composer install --no-dev --optimize-autoloader || exit 1
           EOF
 
