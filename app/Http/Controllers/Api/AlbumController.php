@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Helpers\ConvertToWebP;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\StoreImageToAlbumRequest;
-use App\Models\Album;
+use App\Models\Photobooth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
@@ -17,8 +17,10 @@ class AlbumController extends Controller
     {
         $request->validated();
 
-        //TODO replace album with current active Album
-        $album = Album::first();
+        /** @var Photobooth $photobooth */
+        $photobooth = $request->get('photobooth');
+
+        $album = $photobooth->album;
         $image = $request->file('image');
 
         $originalName = $image->getClientOriginalName();

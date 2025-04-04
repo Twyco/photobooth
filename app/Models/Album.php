@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Helpers\ConvertToWebP;
 use Carbon\Carbon;
-use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,10 +12,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Imagick;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 /**
@@ -28,7 +25,16 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
  * @property string $albumAccessCodes
  * @property array $images
  * @property string $cover
- */
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Photobooth newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Photobooth newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Photobooth query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Photobooth whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Photobooth whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Photobooth whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Photobooth whereUuid($value)
+ **/
 class Album extends Model
 {
     /** @use HasFactory<\Database\Factories\AlbumFactory> */

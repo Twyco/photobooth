@@ -16,5 +16,6 @@ class DatabaseSeeder extends Seeder
     {
         app(AccountSeeder::class)->run();
         app(AlbumSeeder::class)->run();
+        app(PhotoboothSeeder::class)->run();
     }
 }

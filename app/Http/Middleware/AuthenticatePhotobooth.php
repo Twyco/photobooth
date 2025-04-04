@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Photobooth;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,10 +18,17 @@ class AuthenticatePhotobooth
     public function handle(Request $request, Closure $next): Response
     {
         $authKey = $request->header('x-photobooth-auth-key');
+
         if (!$authKey) {
             return response()->json(['error' => 'Unauthorized'], ResponseAlias::HTTP_UNAUTHORIZED);
         }
-        $photobooth = Photobooth::whereAuthKey('auth_key', $authKey)->first();
+
+        $photobooth = Photobooth::whereAuthKey($authKey)->first();
+        if(!$photobooth) {
+            return response()->json(['error' => 'Unauthorized'], ResponseAlias::HTTP_UNAUTHORIZED);
+        }
+
+        $request->attributes->add(['photobooth' => $photobooth]);
         return $next($request);
     }
 }
