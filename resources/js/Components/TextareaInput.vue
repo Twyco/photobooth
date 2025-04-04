@@ -2,8 +2,8 @@
 import { onMounted, ref } from 'vue';
 
 defineProps({
-  rows: {type: Number, default: 5},
-  resize: {type: Boolean, default: false},
+  rows: { type: Number, default: 5 },
+  resize: { type: Boolean, default: false }
 });
 
 const model = defineModel<string>({ required: true });

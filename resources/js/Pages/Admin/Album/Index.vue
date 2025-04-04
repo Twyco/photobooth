@@ -4,8 +4,8 @@ import { PropType } from 'vue';
 import { GenericPagination } from '@/types/generic-pagination';
 import { TableHeaderInterface } from '@/types/table-header-interface';
 import AppLayout from '@/Layouts/AppLayout.vue';
-import TitleSeparator from "@/Components/TitleSeparator.vue";
-import { Link } from "@inertiajs/vue3";
+import TitleSeparator from '@/Components/TitleSeparator.vue';
+import { Link } from '@inertiajs/vue3';
 
 defineProps({
   albums: {

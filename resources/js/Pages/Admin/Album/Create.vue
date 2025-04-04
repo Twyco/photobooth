@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import {Link, useForm} from '@inertiajs/vue3';
+import { Link, useForm } from '@inertiajs/vue3';
 import TextInput from '@/Components/TextInput.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
-import TitleSeparator from "@/Components/TitleSeparator.vue";
-import TextareaInput from "@/Components/TextareaInput.vue";
+import TitleSeparator from '@/Components/TitleSeparator.vue';
+import TextareaInput from '@/Components/TextareaInput.vue';
 
 const form = useForm({
   _method: 'post',
@@ -31,8 +31,13 @@ const storeAlbum = () => {
           <i class="mdi mdi-arrow-left" /> Zurück zur Übersicht
         </Link>
         <TitleSeparator title="Alle Alben" />
-        <div class="container-small mb-6 !pr-0 !pl-0 md:pr-[unset] md:pl-[unset]">
-          <form @submit.prevent="storeAlbum()" class="flex flex-col gap-x-2 gap-y-4 md:gap-8 w-full">
+        <div
+          class="container-small mb-6 !pr-0 !pl-0 md:pr-[unset] md:pl-[unset]"
+        >
+          <form
+            @submit.prevent="storeAlbum()"
+            class="flex flex-col gap-x-2 gap-y-4 md:gap-8 w-full"
+          >
             <div class="flex flex-col md:flex-row w-full gap-x-2 gap-y-4">
               <div class="flex-1">
                 <InputLabel for="title" value="Titel" />
@@ -41,18 +46,28 @@ const storeAlbum = () => {
               </div>
               <div class="flex-1">
                 <InputLabel for="event_date" value="Veranstaltungsdatum" />
-                <TextInput id="event_date" v-model="form.event_date" type="date" />
+                <TextInput
+                  id="event_date"
+                  v-model="form.event_date"
+                  type="date"
+                />
                 <InputError class="mt-2" :message="form.errors.event_date" />
               </div>
             </div>
             <div class="col-span-6">
               <InputLabel for="description" value="Beschreibung" />
-              <TextareaInput id="description" v-model="form.description" type="textarea" />
+              <TextareaInput
+                id="description"
+                v-model="form.description"
+                type="textarea"
+              />
               <InputError class="mt-2" :message="form.errors.description" />
             </div>
             <div class="col-span-6">
               <div class="h-full place-content-end text-right">
-                <PrimaryButton :disabled="form.processing">Speichern </PrimaryButton>
+                <PrimaryButton :disabled="form.processing"
+                  >Speichern
+                </PrimaryButton>
               </div>
             </div>
           </form>
