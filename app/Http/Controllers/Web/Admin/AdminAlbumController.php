@@ -34,8 +34,7 @@ class AdminAlbumController extends Controller
         }
         $album->load('albumAccessCodes');
         return Inertia::render('Admin/Album/Show', [
-            'album' => AdminAlbumResource::make($album)->toArray($request),
-            'qrCodeUrl' => $album->getQrCodeUrl(),
+            'album' => AdminAlbumResource::make($album)->toArray($request)
         ]);
     }
 

@@ -89,15 +89,15 @@ const isoToFormattedDate = (isoString: string) => {
 </script>
 
 <template>
-  <div>
+  <div class="w-full">
     <div class="flex justify-between">
-      <h1 class="text-2xl font-bold mb-4">{{ title }}</h1>
+      <h1 v-if="title" class="text-2xl font-bold mb-4">{{ title }}</h1>
       <span v-if="createRouteName">
         <i class="mdi mdi-plus" @click="visitCreatePage" />
       </span>
     </div>
     <!-- Search / Filter Options -->
-    <div class="flex justify-between mb-5">
+    <div v-if="canSearch || canFilter" class="flex justify-between mb-5">
       <div v-if="canSearch">
         <input
           placeholder="Suchen"

@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use App\Helpers\ConvertToWebP;
 use Carbon\Carbon;
-use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,10 +12,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Imagick;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 /**
@@ -27,7 +25,17 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
  * @property string $albumAccessCodes
  * @property array $images
  * @property string $cover
- */
+ * @property string $qrCode
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Photobooth newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Photobooth newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Photobooth query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Photobooth whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Photobooth whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Photobooth whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Photobooth whereUuid($value)
+ **/
 class Album extends Model
 {
     /** @use HasFactory<\Database\Factories\AlbumFactory> */
@@ -68,6 +76,11 @@ class Album extends Model
         });
     }
 
+    public function photobooths(): HasMany
+    {
+        return $this->hasMany(Photobooth::class);
+    }
+
     public function scopeViewableAlbums(Builder $query): Builder
     {
         return $query->whereIn('id', Album::getViewableAlbums()->pluck('id'));
@@ -98,7 +111,7 @@ class Album extends Model
         Storage::disk('public')->put("qrCodes/{$this->uuid}.png", $qrImage);
     }
 
-    public function getQrCodeUrl(): string
+    public function getQrCodeAttribute(): string
     {
         return Storage::url("public/qrCodes/{$this->uuid}.png");
     }
@@ -119,7 +132,7 @@ class Album extends Model
             $compressedFile = preg_replace('/\.(png|jpe?g)$/i', '.webp', str_replace($originalPath, $compressedPath, $file));
 
             if (!Storage::disk('public')->exists($compressedFile)) {
-                $this->convertToWebP(Storage::disk('public')->path($file), Storage::disk('public')->path($compressedFile));
+                ConvertToWebP::convertAndSave(Storage::disk('public')->path($file), Storage::disk('public')->path($compressedFile));
             }
 
             return [
@@ -128,30 +141,6 @@ class Album extends Model
             ];
         }, $imageFiles));
     }
-
-    /**
-     * Erstellt eine WebP-Version des Bildes mit Imagick (80% Qualität).
-     */
-    private function convertToWebP(string $sourcePath, string $destinationPath)
-    {
-        $relativeDestPath = Str::replaceFirst(Storage::disk('public')->path(''), '', $destinationPath);
-
-        try {
-            $image = new Imagick();
-            $image->readImage($sourcePath);
-            $image->setImageFormat('webp');
-            $image->setImageCompressionQuality(10);
-            $image->setOption('webp:method', '6');
-            $image->setOption('webp:lossless', 'false');
-
-            Storage::disk('public')->put($relativeDestPath, $image->getImageBlob());
-            $image->clear();
-            $image->destroy();
-        } catch (Exception $e) {
-            Log::error("Fehler beim Konvertieren zu WebP: " . $e->getMessage());
-        }
-    }
-
 
     public function getCoverAttribute(): string|null
     {
