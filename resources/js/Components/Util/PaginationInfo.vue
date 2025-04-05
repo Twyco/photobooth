@@ -25,7 +25,7 @@ const tableInfo = computed(() => {
 </script>
 
 <template>
-  <div class="flex justify-center mt-4 w-fit">
+  <div class="flex justify-center mt-4 w-fit text-primary">
     {{ tableInfo }}
   </div>
 </template>

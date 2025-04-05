@@ -15,9 +15,9 @@ defineProps({
 });
 
 const tableHeaders: TableHeaderInterface[] = [
-  { key: 'id', title: 'Id' },
-  { key: 'title', title: 'Albumname' },
-  { key: 'eventDate', title: 'Veranstaltungsdatum', isDate: true }
+  { key: 'id', title: 'ID' },
+  { key: 'title', title: 'Titel' },
+  { key: 'eventDate', title: 'Datum', isDate: true }
 ];
 </script>
 
