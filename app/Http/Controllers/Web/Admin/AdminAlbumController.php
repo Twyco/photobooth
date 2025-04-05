@@ -21,7 +21,7 @@ class AdminAlbumController extends Controller
         if (!Gate::allows('viewAny', Album::class)) {
             abort(403);
         }
-        $albums = Album::paginate(10);
+        $albums = Album::paginate(2);
         return Inertia::render('Admin/Album/Index', [
             'albums' => GenericPaginationResource::make($albums, AdminAlbumResource::class),
         ]);
