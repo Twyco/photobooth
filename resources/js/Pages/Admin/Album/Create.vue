@@ -26,7 +26,7 @@ const storeAlbum = () => {
       <div class="max-w-5xl md:mx-auto">
         <Link
           :href="route('admin.album.index')"
-          class="text-primary inline-flex ml-2 py-1 rounded-lg mb-1"
+          class="text-primary inline-flex ml-1 md:ml-4 py-1 rounded-lg mb-1"
         >
           <i class="mdi mdi-arrow-left" /> Zurück zur Übersicht
         </Link>
@@ -66,7 +66,7 @@ const storeAlbum = () => {
             <div class="col-span-6">
               <div class="h-full place-content-end text-right">
                 <PrimaryButton :disabled="form.processing"
-                  >Speichern
+                  >Erstellen
                 </PrimaryButton>
               </div>
             </div>

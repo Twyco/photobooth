@@ -22,7 +22,7 @@ const props = defineProps({
         <div class="w-full flex justify-between px-1 md:px-4">
           <Link
             :href="route('admin.album.index')"
-            class="text-primary inline-flex ml-2 py-1 rounded-lg mb-1"
+            class="text-primary inline-flex py-1 rounded-lg mb-1"
           >
             <i class="mdi mdi-arrow-left" /> Zurück zur Übersicht
           </Link>
