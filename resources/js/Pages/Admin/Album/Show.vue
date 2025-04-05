@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { PropType } from 'vue';
+import {PropType} from 'vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import TitleSeparator from '@/Components/TitleSeparator.vue';
 import { format } from 'date-fns';
-import { Link } from '@inertiajs/vue3';
+import {Link} from '@inertiajs/vue3';
 import { AdminAlbumInterface } from '@/types/album-interface';
+import Dropdown from "@/Components/Dropdown.vue";
 
-defineProps({
+const props = defineProps({
   album: {
     type: Object as PropType<AdminAlbumInterface>,
     required: true
@@ -18,12 +19,36 @@ defineProps({
   <AppLayout :title="album.title">
     <div class="md:container md:mx-auto my-12 px-8 md:px-0">
       <div class="max-w-5xl md:mx-auto">
-        <Link
-          :href="route('admin.album.index')"
-          class="text-primary inline-flex ml-2 py-1 rounded-lg mb-1"
-        >
-          <i class="mdi mdi-arrow-left" /> Zurück zur Übersicht
-        </Link>
+        <div class="w-full flex justify-between px-1 md:px-4">
+          <Link
+            :href="route('admin.album.index')"
+            class="text-primary inline-flex ml-2 py-1 rounded-lg mb-1"
+          >
+            <i class="mdi mdi-arrow-left" /> Zurück zur Übersicht
+          </Link>
+          <Dropdown content-classes="bg-footer" width="w-fit">
+            <template v-slot:trigger>
+              <i class="mdi mdi-dots-vertical text-2xl" />
+            </template>
+            <template v-slot:content>
+              <div class="flex flex-col">
+              <Link
+                :href="route('admin.album.edit', { album: album.id })"
+                class="px-8 py-1 md:py-2 text-primary bg-transparent hover:bg-highlight md:rounded-lg text-center"
+              >
+                Bearbeiten
+              </Link>
+              <Link
+                :href="route('admin.album.destroy', { album: album.id })"
+                method="delete"
+                class="px-8 py-1 md:py-2 text-red-500 bg-transparent hover:text-primary hover:bg-highlight md:rounded-lg text-center"
+              >
+                Löschen
+              </Link>
+              </div>
+            </template>
+          </Dropdown>
+        </div>
         <TitleSeparator title="Albuminfo" />
         <div class="hidden lg:flex gap-x-2 px-8 text-primary mb-2">
           <div

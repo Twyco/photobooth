@@ -86,7 +86,7 @@ class AdminAlbumController extends Controller
         }
         $validatedData = $request->validated();
         $album->update($validatedData);
-        return to_route('album.index')->with('success', 'Album updated successfully.');
+        return to_route('admin.album.index')->with('success', 'Album updated successfully.');
     }
 
     /**
@@ -98,6 +98,6 @@ class AdminAlbumController extends Controller
             abort(403);
         }
         $album->delete();
-        return to_route('album.index')->with('success', 'Album deleted successfully.');
+        return to_route('admin.album.index')->with('success', 'Album deleted successfully.');
     }
 }

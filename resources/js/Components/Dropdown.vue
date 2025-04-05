@@ -4,13 +4,13 @@ import { computed, onMounted, onUnmounted, ref } from 'vue';
 const props = withDefaults(
   defineProps<{
     align?: 'left' | 'right';
-    width?: '48';
+    width?: string;
     contentClasses?: string;
   }>(),
   {
     align: 'right',
     width: '48',
-    contentClasses: 'py-1 bg-white'
+    contentClasses: 'py-1 bg-footer'
   }
 );
 
