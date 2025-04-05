@@ -17,7 +17,6 @@ defineProps({
       <span class="font-bold">Event Datum</span>
     </div>
 
-
     <Link
       v-for="album in albums"
       :key="album.uuid"
@@ -35,6 +34,5 @@ defineProps({
         format(new Date(album.eventDate), 'dd.MM.yyyy')
       }}</span>
     </Link>
-
   </div>
 </template>

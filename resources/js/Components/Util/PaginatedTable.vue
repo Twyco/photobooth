@@ -113,10 +113,7 @@ const isoToFormattedDate = (isoString: string) => {
     <table class="w-full">
       <thead>
         <tr class="font-semibold border-footer border-b-2 mb-2 text-left">
-          <th
-            v-for="header in headers"
-            class="px-4"
-          >
+          <th v-for="header in headers" class="px-4">
             {{ header.title }}
           </th>
           <th class="px-4" />
@@ -160,10 +157,7 @@ const isoToFormattedDate = (isoString: string) => {
               {{ arrayItem[header.arrayKey][header.objectKey] }}
             </p>
           </td>
-          <td
-            v-if="editRouteName"
-            class="p-2 md:px-4 md:py-3 text-center"
-          >
+          <td v-if="editRouteName" class="p-2 md:px-4 md:py-3 text-center">
             <i
               class="mdi mdi-pencil cursor-pointer"
               @click="visitEditPage(item.id)"

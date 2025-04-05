@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import {PropType} from 'vue';
+import { PropType } from 'vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import TitleSeparator from '@/Components/TitleSeparator.vue';
 import { format } from 'date-fns';
-import {Link} from '@inertiajs/vue3';
+import { Link } from '@inertiajs/vue3';
 import { AdminAlbumInterface } from '@/types/album-interface';
-import Dropdown from "@/Components/Dropdown.vue";
+import Dropdown from '@/Components/Dropdown.vue';
 
 const props = defineProps({
   album: {
@@ -32,19 +32,19 @@ const props = defineProps({
             </template>
             <template v-slot:content>
               <div class="flex flex-col">
-              <Link
-                :href="route('admin.album.edit', { album: album.id })"
-                class="px-8 py-1 md:py-2 text-primary bg-transparent hover:bg-highlight md:rounded-lg text-center"
-              >
-                Bearbeiten
-              </Link>
-              <Link
-                :href="route('admin.album.destroy', { album: album.id })"
-                method="delete"
-                class="px-8 py-1 md:py-2 text-red-500 bg-transparent hover:text-primary hover:bg-highlight md:rounded-lg text-center"
-              >
-                Löschen
-              </Link>
+                <Link
+                  :href="route('admin.album.edit', { album: album.id })"
+                  class="px-8 py-1 md:py-2 text-primary bg-transparent hover:bg-highlight md:rounded-lg text-center"
+                >
+                  Bearbeiten
+                </Link>
+                <Link
+                  :href="route('admin.album.destroy', { album: album.id })"
+                  method="delete"
+                  class="px-8 py-1 md:py-2 text-red-500 bg-transparent hover:text-primary hover:bg-highlight md:rounded-lg text-center"
+                >
+                  Löschen
+                </Link>
               </div>
             </template>
           </Dropdown>
@@ -76,9 +76,9 @@ const props = defineProps({
               <span class="font-bold shrink-0">Link zum Album:</span>
               <Link
                 class="text-justify text-blue-500"
-                :href="route('album.show', {album: album.uuid})"
+                :href="route('album.show', { album: album.uuid })"
               >
-                {{ route('album.show', {album: album.uuid}) }}
+                {{ route('album.show', { album: album.uuid }) }}
               </Link>
             </div>
             <div class="flex gap-2">
@@ -132,9 +132,9 @@ const props = defineProps({
           <span class="font-bold md:col-span-2">Link zum Album:</span>
           <Link
             class="col-span-2 md:col-span-2 text-blue-500"
-            :href="route('album.show', {album: album.uuid})"
+            :href="route('album.show', { album: album.uuid })"
           >
-            {{ route('album.show', {album: album.uuid}) }}
+            {{ route('album.show', { album: album.uuid }) }}
           </Link>
 
           <span class="font-bold md:col-span-2">Direktzugang:</span>

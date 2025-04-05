@@ -6,7 +6,7 @@ defineProps({
   resize: { type: Boolean, default: false }
 });
 
-const model = defineModel<string|null>({ required: true });
+const model = defineModel<string | null>({ required: true });
 
 const input = ref<HTMLInputElement | null>(null);
 
