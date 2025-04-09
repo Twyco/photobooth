@@ -22,7 +22,7 @@ const onOriginalLoad = () => {
   showEffect.value = true;
   setTimeout(() => {
     showEffect.value = false;
-  }, 1000);
+  }, 2500);
 };
 
 const onCompressedLoad = () => {
@@ -58,9 +58,9 @@ defineExpose({ startLoadOriginalImg });
   left: -100%;
   width: 150%;
   height: 100%;
-  background: rgba(0, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.3);
   transform: skewX(-30deg);
-  animation: shine 1.5s forwards;
+  animation: shine 2.5s forwards;
 }
 
 @keyframes shine {
