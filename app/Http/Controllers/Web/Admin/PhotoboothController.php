@@ -41,9 +41,11 @@ class PhotoboothController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Photobooth $photobooth)
+    public function show(Request $request, Photobooth $photobooth)
     {
-        //
+        return Inertia::render('Admin/Photobooth/Show', [
+            'photobooth' => PhotoboothResource::make($photobooth)->toArray($request),
+        ]);
     }
 
     /**
