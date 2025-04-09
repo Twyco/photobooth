@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\AdminAlbumResource;
 use App\Http\Resources\GenericPaginationResource;
 use App\Http\Resources\PhotoboothResource;
+use App\Models\Album;
 use App\Models\Photobooth;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -25,9 +26,11 @@ class PhotoboothController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        return Inertia::render('Admin/Photobooth/Create', [
+            'albums' => AdminAlbumResource::collection(Album::all())->toArray($request)
+        ]);
     }
 
     /**
@@ -51,9 +54,12 @@ class PhotoboothController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Photobooth $photobooth)
+    public function edit(Request $request, Photobooth $photobooth)
     {
-        //
+        return Inertia::render('Admin/Photobooth/Edit', [
+            'photobooth' => PhotoboothResource::make($photobooth)->toArray($request),
+            'albums' => AdminAlbumResource::collection(Album::all())->toArray($request),
+        ]);
     }
 
     /**
