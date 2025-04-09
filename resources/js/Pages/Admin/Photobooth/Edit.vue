@@ -6,7 +6,6 @@ import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import TitleSeparator from '@/Components/TitleSeparator.vue';
-import TextareaInput from '@/Components/TextareaInput.vue';
 import {AdminAlbumInterface} from "@/types/album-interface";
 import {computed, PropType} from "vue";
 import SelectInput from "@/Components/SelectInput.vue";
@@ -38,7 +37,14 @@ const form = useForm({
 });
 
 const storePhotobooth = () => {
-  form.post(route('admin.photobooth.store'));
+  form.patch(
+    route('admin.photobooth.update', {
+      photobooth: props.photobooth.id
+    }),
+    {
+      errorBag: 'updatePhotobooth'
+    }
+  );
 };
 </script>
 

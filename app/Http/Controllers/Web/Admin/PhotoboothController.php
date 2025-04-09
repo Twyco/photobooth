@@ -9,6 +9,8 @@ use App\Http\Resources\PhotoboothResource;
 use App\Models\Album;
 use App\Models\Photobooth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
 class PhotoboothController extends Controller
@@ -38,7 +40,15 @@ class PhotoboothController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = Validator::make($request->all(), [
+            'name' => 'required|string|max:50|min:5|unique:photobooths',
+            'activeAlbum' => 'required|integer|exists:albums,id'
+        ])->validateWithBag('createPhotobooth');
+        $photobooth = Photobooth::create([
+            'name' => Arr::get($validatedData, 'name'),
+            'album_id' => Arr::get($validatedData, 'activeAlbum'),
+        ]);
+        return to_route('admin.photobooth.show', $photobooth)->with('success', 'Photobooth created successfully.');
     }
 
     /**
@@ -66,8 +76,15 @@ class PhotoboothController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, Photobooth $photobooth)
-    {
-        //
+    {        $validatedData = Validator::make($request->all(), [
+        'name' => 'required|string|max:50|min:5|unique:photobooths,name,' . $photobooth->id,
+        'activeAlbum' => 'required|integer|exists:albums,id'
+    ])->validateWithBag('updatePhotobooth');
+        $photobooth->update([
+            'name' => Arr::get($validatedData, 'name'),
+            'album_id' => Arr::get($validatedData, 'activeAlbum'),
+        ]);
+        return to_route('admin.photobooth.show', $photobooth)->with('success', 'Photobooth updated successfully.');
     }
 
     /**
