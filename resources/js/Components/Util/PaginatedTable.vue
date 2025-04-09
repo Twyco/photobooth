@@ -140,7 +140,11 @@ const isoToFormattedDate = (isoString: string) => {
               }}
             </span>
             <span v-else-if="header.type === 'object'" v-if="header.objectKey">
-              {{ item[header.key][header.objectKey] }}
+              {{
+                item[header.key] != null
+                  ? item[header.key][header.objectKey]
+                  : (header.default ?? '-')
+              }}
             </span>
             <p
               v-else-if="header.type === 'array'"
