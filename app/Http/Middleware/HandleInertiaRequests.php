@@ -6,9 +6,7 @@ use App\Helpers\NavMenuItem;
 use App\Http\Resources\NavMenuItemResource;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -49,6 +47,12 @@ class HandleInertiaRequests extends Middleware
                 route('admin.album.index'),
                 'Fotoalben',
                 $request->routeIs('admin.album.*')
+            );
+
+            $navMenuItems[] = new NavMenuItem(
+                route('admin.photobooth.index'),
+                'Fotoboxen',
+                $request->routeIs('admin.photobooth.*')
             );
 
             $menu['isAdminPage'] = true;

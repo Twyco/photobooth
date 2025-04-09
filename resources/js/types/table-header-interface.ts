@@ -5,6 +5,7 @@ export interface TableHeaderInterface {
   arrayKey?: string;
   isDate?: boolean;
   type?: TableHeaderType;
+  default?: string;
 }
 
 export type TableHeaderType = 'object' | 'array' | 'objectArray';
