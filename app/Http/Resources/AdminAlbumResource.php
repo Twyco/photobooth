@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @property Album $resource
+ * @mixin Album
  */
 class AdminAlbumResource extends JsonResource
 {
@@ -25,7 +25,8 @@ class AdminAlbumResource extends JsonResource
             'eventDate' => $this->event_date,
             'uuid' => $this->uuid,
             'accessCodes' => AlbumAccessCodeResource::collection($this->albumAccessCodes)->toArray($request),
-            'qrCode' => $this->getQrCodeUrl(),
+            'qrCode' => $this->qrCode,
+            'cover' => $this->cover,
         ];
     }
 }

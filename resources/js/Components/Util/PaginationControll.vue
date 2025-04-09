@@ -47,7 +47,7 @@ const fetchPage = (page: number) => {
     <button
       v-text="'<'"
       :disabled="currentPage <= 1"
-      class="bg-gray-200 px-4 disabled:opacity-35 rounded mr-2"
+      class="bg-footer text-primary font-bold px-4 disabled:opacity-35 rounded mr-2"
       @click="fetchPage(currentPage - 1)"
     />
     <div v-if="lastPage > 6">
@@ -64,7 +64,7 @@ const fetchPage = (page: number) => {
     <button
       v-for="page in pages"
       :key="page"
-      class="mx-1 text-black disabled:opacity-35"
+      class="mx-1 text-primary disabled:opacity-35"
       v-text="page"
       @click="fetchPage(page)"
       :disabled="page == currentPage"
@@ -82,7 +82,7 @@ const fetchPage = (page: number) => {
     <button
       v-text="'>'"
       :disabled="currentPage >= lastPage"
-      class="bg-gray-200 px-4 disabled:opacity-35 rounded ml-2"
+      class="bg-footer text-primary font-bold px-4 disabled:opacity-35 rounded ml-2"
       @click="fetchPage(currentPage + 1)"
     />
   </div>
