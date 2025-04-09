@@ -81,7 +81,7 @@ const startLoadOriginalImg = () => {
       <p class="md:px-4">
         Debug:
         {{ compressedLoadedCount }}/{{ progressiveImgRefs.length }} Bilder in
-        height Quality geladen Bilder in low Quality geladen
+        low Quality geladen
         {{
           compressedLoadedCount >= progressiveImgRefs.length
             ? '&#9989;'
