@@ -3,9 +3,9 @@ import { onMounted, ref } from 'vue';
 
 defineProps({
   options: {
-    type: Array<{value: any; label: string}>,
+    type: Array<{ value: any; label: string }>
   },
-  disabledNull: Boolean,
+  disabledNull: Boolean
 });
 
 const model = defineModel<any>({ required: true });
