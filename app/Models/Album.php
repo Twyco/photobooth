@@ -73,6 +73,10 @@ class Album extends Model
             foreach (User::all() as $user) {
                 Cache::forget($user->id . '_viewable_albums');
             }
+            Storage::disk('public')->delete("qrCodes/{$album->uuid}.png");
+            Storage::disk('public')->delete("cover/{$album->uuid}.jpg");
+            Storage::disk('public')->deleteDirectory('album/' . $album->uuid);
+            Storage::disk('public')->deleteDirectory('album/' . $album->uuid . '_compressed');
         });
     }
 
