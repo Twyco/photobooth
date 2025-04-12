@@ -2,6 +2,7 @@ export interface User {
   name: string;
   email: string;
   is_admin: boolean;
+  email_verified_at: boolean;
 }
 export interface NavMenuItem {
   route: string;
