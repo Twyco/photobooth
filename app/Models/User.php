@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Notifications\ResetPasswordCustom;
+use App\Notifications\VerifyEmailCustom;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -75,4 +77,14 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->savedAlbums()->where('album_id', $album->id)->exists();
     }
 
+
+    public function sendPasswordResetNotification(#[\SensitiveParameter] $token): void
+    {
+        $this->notify(new ResetPasswordCustom($token));
+    }
+
+    public function sendEmailVerificationNotification(): void
+    {
+        $this->notify(new VerifyEmailCustom());
+    }
 }
