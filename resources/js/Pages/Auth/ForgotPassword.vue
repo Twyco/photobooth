@@ -5,7 +5,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { useForm } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
-import TitleSeparator from "@/Components/TitleSeparator.vue";
+import TitleSeparator from '@/Components/TitleSeparator.vue';
 
 defineProps<{
   status?: string;
@@ -27,19 +27,17 @@ const submit = () => {
         <div class="max-w-lg mx-auto mt-12">
           <TitleSeparator title="Passwort vergessen?" />
 
-            <div class="mb-4 text-base text-primary">
-              <p>
-                Kein Problem!
-              </p>
-              <p>
-                Gib einfach deine E-Mail-Adresse an und wir schicken dir einen Link,
-                mit dem du ein neues Passwort festlegen kannst.
-              </p>
-            </div>
+          <div class="mb-4 text-base text-primary">
+            <p>Kein Problem!</p>
+            <p>
+              Gib einfach deine E-Mail-Adresse an und wir schicken dir einen
+              Link, mit dem du ein neues Passwort festlegen kannst.
+            </p>
+          </div>
 
-            <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
-              {{ status }}
-            </div>
+          <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
+            {{ status }}
+          </div>
 
           <form @submit.prevent="submit">
             <div>

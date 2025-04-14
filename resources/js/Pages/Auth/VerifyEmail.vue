@@ -3,7 +3,7 @@ import { computed } from 'vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { Link, useForm } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
-import TitleSeparator from "@/Components/TitleSeparator.vue";
+import TitleSeparator from '@/Components/TitleSeparator.vue';
 
 const props = defineProps<{
   status?: string;
@@ -25,19 +25,20 @@ const verificationLinkSent = computed(
     <div class="md:container md:mx-auto my-12 px-6 md:px-0">
       <div class="max-w-5xl md:mx-auto">
         <div class="max-w-lg mx-auto mt-12">
-        <TitleSeparator title="Danke fürs Registrieren" />
+          <TitleSeparator title="Danke fürs Registrieren" />
 
           <div class="mb-4 text-base text-primary">
-            Bevor du loslegen kannst, bestätige bitte deine E-Mail-Adresse über den Link,
-            den wir dir gerade geschickt haben.
+            Bevor du loslegen kannst, bestätige bitte deine E-Mail-Adresse über
+            den Link, den wir dir gerade geschickt haben.
           </div>
 
           <div
             class="mb-4 text-sm font-medium text-green-600"
             v-if="verificationLinkSent"
           >
-            Wir haben dir gerade einen neuen Bestätigungslink an deine E-Mail geschickt,
-            falls du keine E-Mail erhalten hast, überprüfe auch deinen Spam-Ordner.
+            Wir haben dir gerade einen neuen Bestätigungslink an deine E-Mail
+            geschickt, falls du keine E-Mail erhalten hast, überprüfe auch
+            deinen Spam-Ordner.
           </div>
 
           <form @submit.prevent="submit">
