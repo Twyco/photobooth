@@ -78,26 +78,6 @@ const startLoadOriginalImg = () => {
           </p>
         </div>
       </div>
-      <p class="md:px-4">
-        Debug:
-        {{ compressedLoadedCount }}/{{ progressiveImgRefs.length }} Bilder in
-        low Quality geladen
-        {{
-          compressedLoadedCount >= progressiveImgRefs.length
-            ? '&#9989;'
-            : '&#10060;'
-        }}
-      </p>
-      <p class="md:px-4">
-        Debug:
-        {{ originalLoadedCount }}/{{ progressiveImgRefs.length }} Bilder in
-        height Quality geladen
-        {{
-          originalLoadedCount >= progressiveImgRefs.length
-            ? '&#9989;'
-            : '&#10060;'
-        }}
-      </p>
       <div
         class="mt-4 md:mt-16 md:px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
       >
