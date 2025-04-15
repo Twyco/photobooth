@@ -1,0 +1,51 @@
+name: Deploy to Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        description: 'Do you want to deploy to production?'
+        required: true
+        default: 'no'
+
+jobs:
+  deploy:
+
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.confirmation == 'yes' && github.ref == 'refs/heads/main' }}  # Nur ausführen, wenn 'yes' und der Branch 'main' ist
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up SSH key for server connection
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Checkout and update main branch
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_PROD_USER }}@${{ secrets.SSH_PROD_HOST }} -p ${{ secrets.SSH_PROD_PORT }} << 'EOF'
+            cd ${{ secrets.SSH_PROD_REPRO_PATH }} || exit 1
+            git checkout main || exit 1
+            git fetch origin || exit 1
+            git reset --hard origin/main || exit 1
+          EOF
+
+      - name: Install Composer dependencies
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_PROD_USER }}@${{ secrets.SSH_PROD_HOST }} -p ${{ secrets.SSH_PROD_PORT }} << 'EOF'
+            cd ${{ secrets.SSH_PROD_REPRO_PATH }} || exit 1
+            composer update || exit 1
+            composer install --no-dev --optimize-autoloader || exit 1
+          EOF
+
+      - name: Install npm dependencies and build Vite frontend
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_PROD_USER }}@${{ secrets.SSH_PROD_HOST }} -p ${{ secrets.SSH_PROD_PORT }} << 'EOF'
+            cd ${{ secrets.SSH_PROD_REPRO_PATH }} || exit 1
+            export PATH=$HOME/.nvm/versions/node/v22.14.0/bin:$PATH
+            npm install --omit=dev || exit 1
+            npm run deploy || exit 1
+          EOF
+

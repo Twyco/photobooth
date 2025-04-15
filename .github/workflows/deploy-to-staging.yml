@@ -1,4 +1,4 @@
-name: Deploy to twyco-staging (Hetzner)
+name: Deploy to Staging
 
 on:
   push:
@@ -21,8 +21,8 @@ jobs:
 
       - name: Checkout and update staging branch
         run: |
-          ssh -o StrictHostKeyChecking=no twycot@www106.your-server.de -p 222 << 'EOF'
-            cd /usr/home/twycot/public_html/photobooth/ || exit 1
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_STAGING_USER }}@${{ secrets.SSH_STAGING_HOST }} -p ${{ secrets.SSH_STAGING_PORT }} << 'EOF'
+            cd ${{ secrets.SSH_STAGING_REPRO_PATH }} || exit 1
             git checkout staging || exit 1
             git fetch origin || exit 1
             git reset --hard origin/staging || exit 1
@@ -30,16 +30,16 @@ jobs:
 
       - name: Install Composer dependencies
         run: |
-          ssh -o StrictHostKeyChecking=no twycot@www106.your-server.de -p 222 << 'EOF'
-            cd /usr/home/twycot/public_html/photobooth/ || exit 1
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_STAGING_USER }}@${{ secrets.SSH_STAGING_HOST }} -p ${{ secrets.SSH_STAGING_PORT }} << 'EOF'
+            cd ${{ secrets.SSH_STAGING_REPRO_PATH }} || exit 1
             composer update || exit 1
             composer install --no-dev --optimize-autoloader || exit 1
           EOF
 
       - name: Install npm dependencies and build Vite frontend
         run: |
-          ssh -o StrictHostKeyChecking=no twycot@www106.your-server.de -p 222 << 'EOF'
-            cd /usr/home/twycot/public_html/photobooth/ || exit 1
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_STAGING_USER }}@${{ secrets.SSH_STAGING_HOST }} -p ${{ secrets.SSH_STAGING_PORT }} << 'EOF'
+            cd ${{ secrets.SSH_STAGING_REPRO_PATH }} || exit 1
             export PATH=$HOME/.nvm/versions/node/v22.14.0/bin:$PATH
             npm install --omit=dev || exit 1
             npm run deploy || exit 1
@@ -47,7 +47,7 @@ jobs:
 
       - name: Run migrations
         run: |
-          ssh -o StrictHostKeyChecking=no twycot@www106.your-server.de -p 222 << 'EOF'
-            cd /usr/home/twycot/public_html/photobooth/ || exit 1
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_STAGING_USER }}@${{ secrets.SSH_STAGING_HOST }} -p ${{ secrets.SSH_STAGING_PORT }} << 'EOF'
+            cd ${{ secrets.SSH_STAGING_REPRO_PATH }} || exit 1
             php artisan migrate || exit 1
           EOF

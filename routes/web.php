@@ -3,20 +3,21 @@
 use App\Http\Controllers\Web\Customer\AlbumAccessCodeController;
 use App\Http\Controllers\Web\Customer\AlbumController;
 use App\Http\Controllers\Web\Customer\ProfileController;
+use App\Http\Middleware\EnsureEmailIsVerifiedIfAuthenticated;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', fn () => Inertia::render('Customer/Home/Index'))->name('home');
-Route::get('/alben', [AlbumController::class, 'index'])->name('album.index');
-Route::post('/accessCode', [AlbumAccessCodeController::class, 'use'])->name('accessCode.use');
-Route::get('album/{album:uuid}', [AlbumController::class, 'show'])->name('album.show');
+Route::middleware([EnsureEmailIsVerifiedIfAuthenticated::class])->get('/', fn () => Inertia::render('Customer/Home/Index'))->name('home');
+Route::middleware([EnsureEmailIsVerifiedIfAuthenticated::class])->get('/alben', [AlbumController::class, 'index'])->name('album.index');
+Route::middleware([EnsureEmailIsVerifiedIfAuthenticated::class])->post('/accessCode', [AlbumAccessCodeController::class, 'use'])->name('accessCode.use');
+Route::middleware([EnsureEmailIsVerifiedIfAuthenticated::class])->get('album/{album:uuid}', [AlbumController::class, 'show'])->name('album.show');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth'])->group(function () {
   Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
   Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
   Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-  Route::post('album/{album:uuid}/save', [AlbumController::class, 'save'])->name('album.save');
+  Route::middleware([EnsureEmailIsVerifiedIfAuthenticated::class])->post('album/{album:uuid}/save', [AlbumController::class, 'save'])->name('album.save');
 });
 
 require __DIR__ . '/auth.php';

@@ -35,7 +35,7 @@ const navMenuItems = page.props.menu.items;
     </main>
 
     <footer class="bg-footer text-primary py text-center py-1">
-      <p>&copy; 2025 Nico Schröder. Alle Rechte vorbehalten.</p>
+      <p>&copy; 2025 Domes Fotobox. Alle Rechte vorbehalten.</p>
     </footer>
   </div>
 </template>
