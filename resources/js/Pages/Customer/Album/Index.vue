@@ -3,12 +3,12 @@ import { UserAlbum } from '@/types/album-interface';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import TitleSeparator from '@/Components/TitleSeparator.vue';
 import CodeInput from '@/Components/CodeInput.vue';
-import {router, usePage} from '@inertiajs/vue3';
-import {computed, onMounted, ref} from 'vue';
+import { router, usePage } from '@inertiajs/vue3';
+import { computed, onMounted, ref } from 'vue';
 import ListAlbumView from '@/Pages/Customer/Album/Components/ListAlbumView.vue';
 import GridAlbumView from '@/Pages/Customer/Album/Components/GridAlbumView.vue';
 import CompactAlbumView from '@/Pages/Customer/Album/Components/CompactAlbumView.vue';
-import TextInput from "@/Components/TextInput.vue";
+import TextInput from '@/Components/TextInput.vue';
 
 const viewModes = ['compact', 'list', 'grid'] as const;
 type ViewMode = (typeof viewModes)[number];
@@ -18,17 +18,19 @@ const props = defineProps({
   searchValue: String,
   sortDate: {
     type: String,
-    default: 'desc',
-  },
+    default: 'desc'
+  }
 });
 
-console.log('test:' + props.sortDate)
+console.log('test:' + props.sortDate);
 
 const pageProps = usePage().props;
 
 const albumListViewMode = ref<ViewMode>('grid');
 const search = ref<string>(props.searchValue ?? '');
-const dateSorting = ref<'asc' | 'desc'>(props.sortDate === 'desc' ? 'desc' : 'asc');
+const dateSorting = ref<'asc' | 'desc'>(
+  props.sortDate === 'desc' ? 'desc' : 'asc'
+);
 
 const fetchPage = () => {
   router.visit(route('album.index'), {
@@ -69,7 +71,7 @@ const switchViewMode = () => {
 const updateDateSort = (sort: 'asc' | 'desc') => {
   dateSorting.value = sort;
   fetchPage();
-}
+};
 
 const viewModeIcon = computed(() => {
   switch (albumListViewMode.value) {
@@ -97,7 +99,6 @@ const viewModeIcon = computed(() => {
           @click:icon="switchViewMode"
         />
         <TitleSeparator v-else title="Meine Alben" />
-
 
         <div
           v-if="pageProps.auth.user === null"

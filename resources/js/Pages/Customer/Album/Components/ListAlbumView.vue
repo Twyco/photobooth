@@ -2,14 +2,14 @@
 import { UserAlbum } from '@/types/album-interface';
 import { Link } from '@inertiajs/vue3';
 import { format } from 'date-fns';
-import {ref} from "vue";
+import { ref } from 'vue';
 
 const props = defineProps({
   albums: { type: Array<UserAlbum>, required: true },
   sortDate: {
     type: String,
-    default: 'desc',
-  },
+    default: 'desc'
+  }
 });
 
 const dateSortAsc = ref<boolean>(props.sortDate === 'asc');
@@ -19,7 +19,7 @@ const emits = defineEmits(['update:dateSort']);
 const changeDateSort = () => {
   dateSortAsc.value = !dateSortAsc.value;
   emits('update:dateSort', dateSortAsc.value ? 'asc' : 'desc');
-}
+};
 </script>
 
 <template>
