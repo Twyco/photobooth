@@ -22,14 +22,36 @@ class AlbumController extends Controller
         if (!Auth::check()) {
             session(['intended_route' => 'album.index']);
             return Inertia::render('Customer/Album/Index');
-        } else {
-            $albums = Cache::rememberForever(Auth::user()->id . '_viewable_albums', function () use ($request) {
-                return UserAlbumIndexResource::collection(Album::viewableAlbums()->get())->toArray($request);
-            });
-            return Inertia::render('Customer/Album/Index', [
-                'albums' => $albums,
-            ]);
         }
+
+        $searchFilter = $request->query('search');
+        $sorting = $request->query('albumSort') ?? 'desc';
+
+        Cache::forget(Auth::user()->id . '_viewable_albums');
+
+        $albums = Cache::rememberForever(Auth::user()->id . '_viewable_albums', function () {
+            return Album::viewableAlbums()->get();
+        });
+
+        if($searchFilter){
+            $albums = $albums->filter(function ($album) use ($searchFilter) {
+                return str_contains(strtolower($album->title), strtolower($searchFilter));
+            })->values();
+        }
+
+
+        if($sorting === 'desc') {
+            $albums = $albums->sortByDesc('event_date')->values();
+        }else {
+            $albums = $albums->sortBy('event_date')->values();
+        }
+
+        return Inertia::render('Customer/Album/Index', [
+            'albums' => UserAlbumIndexResource::collection($albums)->toArray($request),
+            'searchValue' => $searchFilter,
+            'sortDate' => $sorting ?? 'asc',
+        ]);
+
     }
 
     /**

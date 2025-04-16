@@ -3,22 +3,44 @@ import { UserAlbum } from '@/types/album-interface';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import TitleSeparator from '@/Components/TitleSeparator.vue';
 import CodeInput from '@/Components/CodeInput.vue';
-import { usePage } from '@inertiajs/vue3';
-import { computed, onMounted, ref } from 'vue';
+import {router, usePage} from '@inertiajs/vue3';
+import {computed, onMounted, ref} from 'vue';
 import ListAlbumView from '@/Pages/Customer/Album/Components/ListAlbumView.vue';
 import GridAlbumView from '@/Pages/Customer/Album/Components/GridAlbumView.vue';
 import CompactAlbumView from '@/Pages/Customer/Album/Components/CompactAlbumView.vue';
+import TextInput from "@/Components/TextInput.vue";
 
 const viewModes = ['compact', 'list', 'grid'] as const;
 type ViewMode = (typeof viewModes)[number];
 
-defineProps({
-  albums: { type: Array<UserAlbum>, default: [] }
+const props = defineProps({
+  albums: { type: Array<UserAlbum>, default: [] },
+  searchValue: String,
+  sortDate: {
+    type: String,
+    default: 'desc',
+  },
 });
+
+console.log('test:' + props.sortDate)
 
 const pageProps = usePage().props;
 
 const albumListViewMode = ref<ViewMode>('grid');
+const search = ref<string>(props.searchValue ?? '');
+const dateSorting = ref<'asc' | 'desc'>(props.sortDate === 'desc' ? 'desc' : 'asc');
+
+const fetchPage = () => {
+  router.visit(route('album.index'), {
+    method: 'get',
+    data: {
+      ...(search.value ? { search: search.value } : {}),
+      ...(dateSorting.value === 'asc' ? { albumSort: 'asc' } : {})
+    },
+    preserveState: true,
+    preserveScroll: true
+  });
+};
 
 onMounted(() => {
   if (pageProps.auth.user === null) {
@@ -43,6 +65,11 @@ const switchViewMode = () => {
 
   localStorage.setItem('albumViewMode', albumListViewMode.value);
 };
+
+const updateDateSort = (sort: 'asc' | 'desc') => {
+  dateSorting.value = sort;
+  fetchPage();
+}
 
 const viewModeIcon = computed(() => {
   switch (albumListViewMode.value) {
@@ -71,6 +98,7 @@ const viewModeIcon = computed(() => {
         />
         <TitleSeparator v-else title="Meine Alben" />
 
+
         <div
           v-if="pageProps.auth.user === null"
           class="w-full flex items-center justify-center mb-4"
@@ -81,14 +109,30 @@ const viewModeIcon = computed(() => {
           >
         </div>
         <div v-else class="w-full mb-6 mx-auto md:px-12">
-          <ListAlbumView v-if="albumListViewMode === 'list'" :albums="albums" />
+          <div class="md:max-w-lg mb-2">
+            <TextInput
+              placeholder="Suchen"
+              v-model="search"
+              @input="fetchPage"
+            />
+          </div>
+          <ListAlbumView
+            v-if="albumListViewMode === 'list'"
+            :albums="albums"
+            :sortDate="sortDate"
+            @update:date-sort="updateDateSort"
+          />
           <CompactAlbumView
             v-else-if="albumListViewMode === 'compact'"
             :albums="albums"
+            :sortDate="sortDate"
+            @update:date-sort="updateDateSort"
           />
           <GridAlbumView
             v-else-if="albumListViewMode === 'grid'"
             :albums="albums"
+            :sortDate="sortDate"
+            @update:date-sort="updateDateSort"
           />
         </div>
       </div>
