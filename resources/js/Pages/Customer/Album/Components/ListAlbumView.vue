@@ -2,10 +2,24 @@
 import { UserAlbum } from '@/types/album-interface';
 import { Link } from '@inertiajs/vue3';
 import { format } from 'date-fns';
+import { ref } from 'vue';
 
-defineProps({
-  albums: { type: Array<UserAlbum>, required: true }
+const props = defineProps({
+  albums: { type: Array<UserAlbum>, required: true },
+  sortDate: {
+    type: String,
+    default: 'desc'
+  }
 });
+
+const dateSortAsc = ref<boolean>(props.sortDate === 'asc');
+
+const emits = defineEmits(['update:dateSort']);
+
+const changeDateSort = () => {
+  dateSortAsc.value = !dateSortAsc.value;
+  emits('update:dateSort', dateSortAsc.value ? 'asc' : 'desc');
+};
 </script>
 
 <template>
@@ -14,7 +28,13 @@ defineProps({
       class="w-full flex justify-between px-0 md:px-4 py-1 font-semibold border-footer border-b-2 mb-2"
     >
       <span class="font-bold">Titel</span>
-      <span class="font-bold">Event Datum</span>
+      <div @click="changeDateSort" class="cursor-pointer">
+        <span class="font-bold">
+          Event Datum
+          <i v-if="dateSortAsc" class="mdi mdi-arrow-down" />
+          <i v-else class="mdi mdi-arrow-up" />
+        </span>
+      </div>
     </div>
 
     <template v-for="album in albums" :key="album.uuid">

@@ -22,14 +22,30 @@ class AlbumController extends Controller
         if (!Auth::check()) {
             session(['intended_route' => 'album.index']);
             return Inertia::render('Customer/Album/Index');
-        } else {
-            $albums = Cache::rememberForever(Auth::user()->id . '_viewable_albums', function () use ($request) {
-                return UserAlbumIndexResource::collection(Album::viewableAlbums()->get())->toArray($request);
-            });
-            return Inertia::render('Customer/Album/Index', [
-                'albums' => $albums,
-            ]);
         }
+
+        $searchFilter = $request->query('search');
+        $sorting = $request->query('albumSort');
+
+        $albums = Cache::rememberForever(Auth::user()->id . '_viewable_albums', function () {
+            return Album::viewableAlbums()->orderBy('event_date', 'desc')->get();
+        });
+
+        if($searchFilter){
+            $albums = $albums->filter(function ($album) use ($searchFilter) {
+                return str_contains(strtolower($album->title), strtolower($searchFilter));
+            })->values();
+        }
+        if($sorting === 'asc') {
+            $albums = $albums->sortBy('event_date')->values();
+        }
+
+        return Inertia::render('Customer/Album/Index', [
+            'albums' => UserAlbumIndexResource::collection($albums)->toArray($request),
+            'searchValue' => $searchFilter,
+            'sortDate' => $sorting ?? 'desc',
+        ]);
+
     }
 
     /**

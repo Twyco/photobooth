@@ -35,6 +35,7 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Photobooth whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Photobooth whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Photobooth whereUuid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Photobooth viewableAlbums()
  **/
 class Album extends Model
 {
