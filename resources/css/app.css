@@ -10,8 +10,6 @@ html, body, #app {
     margin: 0;
     padding: 0;
     overflow-x: hidden !important;
-    overscroll-behavior: auto;
-    scroll-behavior: smooth;
     color: theme('colors.primary');
 }
 
