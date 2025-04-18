@@ -74,7 +74,9 @@ return [
     */
 
     'links' => [
-        public_path('storage') => storage_path('app/public'),
+        public_path('album') => storage_path('app/public/album'),
+        public_path('cover') => storage_path('app/public/cover'),
+        public_path('qrCodes') => storage_path('app/public/qrCodes'),
     ],
 
 ];
