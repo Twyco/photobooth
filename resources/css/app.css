@@ -9,7 +9,6 @@ html, body, #app {
     width: 100%;
     margin: 0;
     padding: 0;
-    overflow-y: auto !important;
     overflow-x: hidden !important;
     color: theme('colors.primary');
 }
