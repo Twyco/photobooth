@@ -21,3 +21,9 @@ html, body, #app {
     padding-left: 1rem;
     padding-right: 1rem;
 }
+
+@media (width < 48rem) {
+    ::-webkit-scrollbar {
+        width: 0px !important;
+    }
+}
