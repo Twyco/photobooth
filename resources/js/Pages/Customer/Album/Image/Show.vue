@@ -40,7 +40,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div
-    class="relative flex items-center justify-center h-screen w-screen overflow-hidden"
+    class="relative flex items-center justify-center min-h-screen w-screen overflow-hidden"
   >
     <div
       class="relative w-full h-full lg:max-w-[75vw] lg:max-h-[75vh] lg:w-fit"
@@ -81,12 +81,5 @@ onBeforeUnmount(() => {
     >
       <i class="mdi mdi-close" />
     </Link>
-
-    <!--      <Link-->
-    <!--        class="absolute top-4 right-16 bg-white bg-opacity-50 hover:bg-opacity-70 rounded-full p-2"-->
-    <!--        @click="downloadImage"-->
-    <!--      >-->
-    <!--        <v-icon>mdi-download</v-icon>-->
-    <!--      </Link>-->
   </div>
 </template>
