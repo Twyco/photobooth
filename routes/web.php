@@ -7,10 +7,14 @@ use App\Http\Middleware\EnsureEmailIsVerifiedIfAuthenticated;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::middleware([EnsureEmailIsVerifiedIfAuthenticated::class])->get('/', fn () => Inertia::render('Customer/Home/Index'))->name('home');
-Route::middleware([EnsureEmailIsVerifiedIfAuthenticated::class])->get('/alben', [AlbumController::class, 'index'])->name('album.index');
-Route::middleware([EnsureEmailIsVerifiedIfAuthenticated::class])->post('/accessCode', [AlbumAccessCodeController::class, 'use'])->name('accessCode.use');
-Route::middleware([EnsureEmailIsVerifiedIfAuthenticated::class])->get('album/{album:uuid}', [AlbumController::class, 'show'])->name('album.show');
+
+Route::middleware([EnsureEmailIsVerifiedIfAuthenticated::class])->group(function () {
+    Route::get('/', fn () => Inertia::render('Customer/Home/Index'))->name('home');
+    Route::get('/alben', [AlbumController::class, 'index'])->name('album.index');
+    Route::post('/accessCode', [AlbumAccessCodeController::class, 'use'])->name('accessCode.use');
+    Route::get('album/{album:uuid}', [AlbumController::class, 'show'])->name('album.show');
+    Route::get('album/{album:uuid}/{imageNumber}', [AlbumController::class, 'showImage'])->name('album.image.show');
+});
 
 Route::middleware(['auth'])->group(function () {
   Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

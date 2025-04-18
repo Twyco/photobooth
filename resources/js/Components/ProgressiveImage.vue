@@ -28,19 +28,17 @@ defineExpose({ startLoadOriginalImg });
 </script>
 
 <template>
-  <div class="relative overflow-hidden">
-    <img
-      v-show="!showOriginal"
-      :src="compressedSrc"
-      :class="imgClass"
-      loading="lazy"
-      @load="onCompressedLoad"
-    />
-    <img
-      v-show="showOriginal"
-      :src="originalSrc"
-      :class="imgClass"
-      @load="onOriginalLoad"
-    />
-  </div>
+  <img
+    v-show="!showOriginal"
+    :src="compressedSrc"
+    :class="imgClass"
+    loading="lazy"
+    @load="onCompressedLoad"
+  />
+  <img
+    v-show="showOriginal"
+    :src="originalSrc"
+    :class="imgClass"
+    @load="onOriginalLoad"
+  />
 </template>

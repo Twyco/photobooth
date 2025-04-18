@@ -21,11 +21,9 @@ const formatedDate = computed(() =>
 );
 
 const compressedLoadedCount = ref(0);
-const originalLoadedCount = ref(0);
 
 onMounted(() => {
   compressedLoadedCount.value = 0;
-  originalLoadedCount.value = 0;
 });
 const progressiveImgRefs = ref<InstanceType<typeof ProgressiveImage>[]>([]);
 
@@ -81,16 +79,20 @@ const startLoadOriginalImg = () => {
       <div
         class="mt-4 md:mt-16 md:px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
       >
-        <ProgressiveImage
+        <Link
           v-for="(image, index) in album.images"
-          ref="progressiveImgRefs"
-          :compressed-src="image.compressed"
-          :original-src="image.original"
-          img-class="w-full h-full object-cover rounded-lg transition-opacity duration-500"
+          :href="route('album.image.show', {album: album.uuid, imageNumber: (index + 1)})"
           :key="index"
-          @loaded-compressed-img="startLoadOriginalImg"
-          @loaded-original-img="originalLoadedCount += 1"
-        />
+          replace
+        >
+          <ProgressiveImage
+            ref="progressiveImgRefs"
+            :compressed-src="image.compressed"
+            :original-src="image.original"
+            img-class="w-full h-full object-cover rounded-lg transition-opacity duration-500"
+            @loaded-compressed-img="startLoadOriginalImg"
+          />
+        </Link>
       </div>
     </div>
   </AppLayout>
