@@ -5,13 +5,20 @@
 @tailwind utilities;
 
 html, body, #app {
-    height: 100%;
     width: 100%;
     margin: 0;
     padding: 0;
     overflow-x: hidden !important;
-    overflow-y: auto !important;
     color: theme('colors.primary');
+}
+
+html, body {
+    height: 100%;
+}
+
+#app {
+    min-height: 100vh;
+    overflow-y: auto !important;
 }
 
 .container-small {
@@ -20,10 +27,4 @@ html, body, #app {
     margin-right: auto;
     padding-left: 1rem;
     padding-right: 1rem;
-}
-
-@media screen and (max-width: 768px){
-    ::-webkit-scrollbar {
-        -webkit-appearance: none;
-    }
 }
