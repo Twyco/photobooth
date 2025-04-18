@@ -15,7 +15,7 @@ const page = usePage();
 </script>
 
 <template>
-  <div class="fixed top-0 left-0 w-full bg-dark-background z-10 text-primary">
+  <div class="w-full bg-dark-background z-10 text-primary">
     <nav
       class="grid h-full w-full grid-cols-5 md:grid-cols-8 border-b-4 border-secondary"
     >

@@ -43,6 +43,7 @@ const changeDateSort = () => {
       <Link
         :href="route('album.show', { album: album.uuid })"
         class="flex flex-col items-center justify-between px w-full p-2 rounded-lg bg-footer hover:bg-highlight hover:bg-opacity-25"
+        :preserve-scroll="false"
       >
         <img
           :src="album.cover ?? '/images/no_cover_fallback.webp'"
