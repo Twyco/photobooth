@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Head, usePage } from '@inertiajs/vue3';
-import {computed, PropType, ref} from 'vue';
+import { computed, PropType, ref } from 'vue';
 import MenuBar from '@/Layouts/Components/MenuBar.vue';
 import MobileMenu from '@/Layouts/Components/MobileMenu.vue';
 
@@ -8,7 +8,7 @@ const props = defineProps({
   title: String,
   verticalMainContentAlign: {
     type: String as PropType<'start' | 'center' | 'end'>,
-    default: 'start',
+    default: 'start'
   }
 });
 
@@ -19,19 +19,18 @@ const showMenu = ref<boolean>(false);
 const navMenuItems = page.props.menu.items;
 
 const mainClass = computed(() => {
-  if(props.verticalMainContentAlign === 'start') {
+  if (props.verticalMainContentAlign === 'start') {
     return 'items-start';
   }
 
-  if(props.verticalMainContentAlign === 'center') {
+  if (props.verticalMainContentAlign === 'center') {
     return 'items-center';
   }
 
-  if(props.verticalMainContentAlign === 'end') {
+  if (props.verticalMainContentAlign === 'end') {
     return 'items-end';
   }
-
-})
+});
 </script>
 
 <template>
@@ -49,11 +48,7 @@ const mainClass = computed(() => {
       />
     </header>
 
-    <main
-      class="flex-1 mt-20 flex"
-      :class="mainClass"
-    >
-
+    <main class="flex-1 mt-20 flex" :class="mainClass">
       <slot />
     </main>
 

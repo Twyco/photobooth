@@ -81,7 +81,12 @@ const startLoadOriginalImg = () => {
       >
         <Link
           v-for="(image, index) in album.images"
-          :href="route('album.image.show', {album: album.uuid, imageNumber: (index + 1)})"
+          :href="
+            route('album.image.show', {
+              album: album.uuid,
+              imageNumber: index + 1
+            })
+          "
           :key="index"
           replace
         >
