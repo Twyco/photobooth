@@ -22,8 +22,6 @@ const props = defineProps({
   }
 });
 
-console.log('test:' + props.sortDate);
-
 const pageProps = usePage().props;
 
 const albumListViewMode = ref<ViewMode>('grid');

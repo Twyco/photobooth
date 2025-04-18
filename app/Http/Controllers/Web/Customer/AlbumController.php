@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AlbumController extends Controller
 {
@@ -65,6 +66,25 @@ class AlbumController extends Controller
         return Inertia::render('Customer/Album/Show', [
             'album' => $userAlbum,
             'hasAlbumSaved' => optional(Auth::user())->hasAlbumSaved($album) ?? true,
+        ]);
+    }
+
+    /**
+     * @throws \Throwable
+     */
+    public function showImage(Request $request, Album $album, string $imageNumber)
+    {
+        $i = intval($imageNumber) - 1;
+        $imageCount = count($album->images);
+        throw_if($i < 0 || $i >= $imageCount, NotFoundHttpException::class);
+        $prevImg = $imageNumber > 1 ? route('album.image.show', ['album' => $album->uuid, 'imageNumber' => intval($imageNumber) - 1], false) : null;
+        $nextImg = $imageNumber < $imageCount ? route('album.image.show', ['album' => $album->uuid, 'imageNumber' => intval($imageNumber) + 1], false) : null;
+
+        return Inertia::render('Customer/Album/Image/Show', [
+            'album' => UserAlbumIndexResource::make($album)->toArray($request),
+            'image' => $album->images[$i],
+            'prevImg' => $prevImg,
+            'nextImg' => $nextImg,
         ]);
     }
 
