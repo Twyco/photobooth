@@ -3,7 +3,7 @@ import { UserAlbum } from '@/types/album-interface';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import TitleSeparator from '@/Components/TitleSeparator.vue';
 import CodeInput from '@/Components/CodeInput.vue';
-import { router, usePage } from '@inertiajs/vue3';
+import { router, usePage, Link } from '@inertiajs/vue3';
 import { computed, onMounted, ref } from 'vue';
 import ListAlbumView from '@/Pages/Customer/Album/Components/ListAlbumView.vue';
 import GridAlbumView from '@/Pages/Customer/Album/Components/GridAlbumView.vue';
@@ -103,8 +103,11 @@ const viewModeIcon = computed(() => {
           class="w-full flex items-center justify-center mb-4"
         >
           <span class="text-primary text-md"
-            >Du musst angemeldet sein, um deine Gespeicherten Alben hier zu
-            sehen zu können!</span
+            >Du musst
+            <Link :href="route('login')" class="text-secondary cursor-pointer"
+              >angemeldet</Link
+            >
+            sein, um deine Gespeicherten Alben hier zu sehen zu können!</span
           >
         </div>
         <div v-else class="w-full mb-6 mx-auto md:px-12">
