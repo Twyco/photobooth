@@ -12,25 +12,39 @@ defineProps({
 const page = usePage();
 
 const showMenu = ref<boolean>(false);
+const scrollY = ref<number>();
+
+const toggleMenu = () => {
+  showMenu.value = !showMenu.value;
+  if (showMenu.value) {
+    scrollY.value = window.scrollY;
+
+    document.body.classList.add('overflow-hidden');
+    document.documentElement.classList.add('overflow-hidden');
+  } else {
+    document.body.classList.remove('overflow-hidden');
+    document.documentElement.classList.remove('overflow-hidden');
+    if(scrollY.value) {
+      window.scrollTo(0, scrollY.value);
+    }
+  }
+}
 
 const navMenuItems = page.props.menu.items;
 </script>
 
 <template>
   <Head :title="title"></Head>
-  <div
-    class="min-h-dvh flex flex-col"
-    :class="showMenu ? '!overflow-hidden' : ''"
-  >
+  <div class="min-h-dvh flex flex-col">
     <header>
       <menu-bar
         :menu-items="navMenuItems"
-        @update:show-menu="showMenu = !showMenu"
+        @update:show-menu="toggleMenu"
       />
       <mobile-menu
         v-show="showMenu"
         :menu-items="navMenuItems"
-        @update:show-menu="showMenu = !showMenu"
+        @update:show-menu="toggleMenu"
       />
     </header>
 

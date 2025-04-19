@@ -13,6 +13,11 @@ html, body, #app {
     color: theme('colors.primary');
 }
 
+html.overflow-hidden, body.overflow-hidden {
+    height: 100%;
+    overflow-y: hidden !important;
+}
+
 .container-small {
     max-width: 768px;
     margin-left: auto;
