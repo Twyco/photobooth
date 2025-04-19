@@ -5,16 +5,12 @@
 @tailwind utilities;
 
 html, body, #app {
-    height: 100%;
+    min-height: 100dvh;
     width: 100%;
     margin: 0;
     padding: 0;
     overflow-x: hidden !important;
     color: theme('colors.primary');
-}
-
-hmtl, body {
-    min-height: 100dvh;
 }
 
 .container-small {

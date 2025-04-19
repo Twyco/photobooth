@@ -18,7 +18,10 @@ const navMenuItems = page.props.menu.items;
 
 <template>
   <Head :title="title"></Head>
-  <div class="min-h-dvh flex flex-col">
+  <div
+    class="min-h-dvh flex flex-col"
+    :class="showMenu ? '!overflow-hidden' : ''"
+  >
     <header>
       <menu-bar
         :menu-items="navMenuItems"
