@@ -43,7 +43,7 @@ onBeforeUnmount(() => {
     class="relative flex items-center justify-center min-h-screen w-screen overflow-hidden"
   >
     <div
-      class="relative w-full h-full lg:max-w-[75vw] lg:max-h-[75vh] lg:w-fit"
+      class="relative w-full h-full lg:max-w-[100vh] lg:max-h-[100vh] lg:w-fit"
     >
       <Link
         v-if="prevImg"

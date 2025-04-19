@@ -88,7 +88,6 @@ const startLoadOriginalImg = () => {
             })
           "
           :key="index"
-          replace
         >
           <ProgressiveImage
             ref="progressiveImgRefs"
