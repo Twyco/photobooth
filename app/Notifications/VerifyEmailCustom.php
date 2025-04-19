@@ -26,7 +26,8 @@ class VerifyEmailCustom extends VerifyEmail
             ->line('Sie haben Ihre E-Mail-Adresse zur Registrierung eines Domes Fotobox-Accounts verwendet.')
             ->line('Bitte klicken sie auf den unten stehenden Aktivierungslink, um ihr Konto zu aktivieren.')
             ->action('Bestätigen Sie Ihre Email Adresse', $verificationUrl)
-            ->line('Falls Sie die Registrierung nicht selbst durchgeführt haben, ignorieren Sie bitte diese E-Mail. Der Aktivierungslink verfällt automatisch.');
+            ->line('Falls Sie die Registrierung nicht selbst durchgeführt haben, ignorieren Sie bitte diese E-Mail.
+             Der Aktivierungslink verfällt automatisch nach ' . config('auth.account_verify_expire') .' Tagen.');
     }
 
 }
