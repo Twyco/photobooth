@@ -118,7 +118,7 @@ class Album extends Model
 
     public function getQrCodeAttribute(): string
     {
-        return Storage::url("public/qrCodes/{$this->uuid}.png");
+        return Storage::disk('public')->url("qrCodes/{$this->uuid}.png");
     }
 
     public function getImagesAttribute(): array

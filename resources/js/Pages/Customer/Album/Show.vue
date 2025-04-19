@@ -35,6 +35,10 @@ const startLoadOriginalImg = () => {
     });
   }
 };
+
+window.addEventListener('load', function() {
+  window.scrollTo(0, 1);
+});
 </script>
 
 <template>
