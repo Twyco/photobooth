@@ -112,4 +112,15 @@ return [
 
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Account Verify Expire
+    |--------------------------------------------------------------------------
+    |
+    | The number of days, after the unverified account will be deleted
+    |
+    */
+
+    'account_verify_expire' => 14,
+
 ];
