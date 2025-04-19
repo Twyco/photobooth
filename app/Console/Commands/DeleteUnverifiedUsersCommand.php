@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class DeleteUnverifiedUsersCommand extends Command
 {
@@ -40,5 +41,6 @@ class DeleteUnverifiedUsersCommand extends Command
         }
 
         $this->info("{$count} unverified users deleted.");
+        Log::info("{$count} unverified users deleted.");
     }
 }
