@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { NavMenuItem } from '@/types';
 import { Link, usePage } from '@inertiajs/vue3';
+import { ref } from 'vue';
 
 defineProps({
   menuItems: {
@@ -12,11 +13,30 @@ defineProps({
 const emits = defineEmits(['update:showMenu']);
 
 const page = usePage();
+
+const scrollArea = ref();
+
+const handleTouchMove = (e: any) => {
+  const el = scrollArea.value;
+  if (!el) return;
+
+  const canScroll = el.scrollHeight > el.clientHeight;
+
+  if (!canScroll) e.preventDefault();
+
+  if (!el.contains(e.target)) {
+    e.preventDefault();
+  }
+};
 </script>
 
 <template>
   <div
-    class="md:hidden flex flex-col h-dvh absolute top-0 left-0 bg-footer w-full z-50"
+    class="fixed md:hidden flex flex-col h-dvh top-0 left-0 bg-footer w-full"
+    @touchmove="handleTouchMove"
+    @scroll="handleTouchMove"
+    @wheel="handleTouchMove"
+    style="touch-action: none"
   >
     <div class="grid grid-cols-5 w-full text-primary">
       <div class="col-span-3 flex items-center px-6 py-4 text-center">
@@ -35,7 +55,10 @@ const page = usePage();
       </div>
     </div>
 
-    <div class="grid grid-cols-1 w-full divide-primary gap-y-3 divide-y-2 px-3">
+    <div
+      ref="scrollArea"
+      class="grid grid-cols-1 w-full divide-primary gap-y-3 divide-y-2 px-3 !overflow-y-scroll overscroll-contain"
+    >
       <Link
         v-for="(item, index) in menuItems"
         :key="index"

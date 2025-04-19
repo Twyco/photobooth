@@ -40,7 +40,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div
-    class="relative flex items-center justify-center min-h-screen w-screen overflow-hidden"
+    class="relative flex items-center justify-center min-h-dvh w-screen overflow-hidden"
   >
     <div
       class="relative w-full h-full lg:max-w-[100vh] lg:max-h-[100vh] lg:w-fit"
