@@ -20,7 +20,7 @@ const navMenuItems = page.props.menu.items;
 <template>
   <Head :title="title"></Head>
   <div class="min-h-dvh flex flex-col">
-    <header>
+    <header class="fixed z-20">
       <menu-bar
         :menu-items="navMenuItems"
         @update:show-menu="showMenu = !showMenu"
@@ -28,19 +28,20 @@ const navMenuItems = page.props.menu.items;
       <mobile-menu
         v-show="showMenu"
         :menu-items="navMenuItems"
+        class="z-40"
         @update:show-menu="showMenu = !showMenu"
       />
     </header>
 
     <main
-      class="flex-1 mt-20"
+      class="flex-1 mt-20 z-10"
       :class="centerMainContentVertikal ? 'flex items-center' : ''"
     >
       <slot />
     </main>
 
-    <footer class="bg-footer text-primary py text-center py-1">
-      <p>&copy; 2025 Domes Fotobox. Alle Rechte vorbehalten.</p>
+    <footer class="bg-footer text-primary text-center py-1 z-10">
+      <p class="px-1">&copy; 2025 Domes Fotobox. Alle Rechte vorbehalten.</p>
     </footer>
   </div>
 </template>
