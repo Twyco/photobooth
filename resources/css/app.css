@@ -13,6 +13,10 @@ html, body, #app {
     color: theme('colors.primary');
 }
 
+hmtl, body {
+    min-height: 100dvh;
+}
+
 .container-small {
     max-width: 768px;
     margin-left: auto;
