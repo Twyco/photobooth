@@ -16,7 +16,7 @@ const page = usePage();
 
 <template>
   <div
-    class="md:hidden flex flex-col h-vh absolute top-0 left-0 bg-footer w-full z-50"
+    class="md:hidden flex flex-col h-dvh absolute top-0 left-0 bg-footer w-full z-50"
   >
     <div class="grid grid-cols-5 w-full text-primary">
       <div class="col-span-3 flex items-center px-6 py-4 text-center">
