@@ -33,7 +33,7 @@ const navMenuItems = page.props.menu.items;
     </header>
 
     <main
-      class="flex-1 mt-20 flex"
+      class="flex-1 mt-20"
       :class="centerMainContentVertikal ? 'flex items-center' : ''"
     >
       <slot />
