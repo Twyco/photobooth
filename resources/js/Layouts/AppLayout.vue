@@ -19,7 +19,7 @@ const navMenuItems = page.props.menu.items;
 
 <template>
   <Head :title="title"></Head>
-  <div class="min-dvh-screen flex flex-col">
+  <div class="min-h-dvh flex flex-col">
     <header>
       <menu-bar
         :menu-items="navMenuItems"
