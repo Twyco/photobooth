@@ -103,9 +103,9 @@ const viewModeIcon = computed(() => {
           class="w-full flex items-center justify-center mb-4"
         >
           <span class="text-primary text-md"
-          >Du musst
+            >Du musst
             <Link :href="route('login')" class="text-secondary cursor-pointer"
-            >angemeldet</Link
+              >angemeldet</Link
             >
             sein, um deine Gespeicherten Alben hier zu sehen zu können!</span
           >

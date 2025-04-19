@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { NavMenuItem } from '@/types';
 import { Link, usePage } from '@inertiajs/vue3';
-import {ref} from "vue";
+import { ref } from 'vue';
 
 defineProps({
   menuItems: {
@@ -17,18 +17,17 @@ const page = usePage();
 const scrollArea = ref();
 
 const handleTouchMove = (e: any) => {
-  const el = scrollArea.value
-  if(!el) return;
+  const el = scrollArea.value;
+  if (!el) return;
 
   const canScroll = el.scrollHeight > el.clientHeight;
 
-  if(!canScroll) e.preventDefault();
+  if (!canScroll) e.preventDefault();
 
   if (!el.contains(e.target)) {
     e.preventDefault();
   }
-}
-
+};
 </script>
 
 <template>
@@ -37,7 +36,7 @@ const handleTouchMove = (e: any) => {
     @touchmove="handleTouchMove"
     @scroll="handleTouchMove"
     @wheel="handleTouchMove"
-    style="touch-action: none;"
+    style="touch-action: none"
   >
     <div class="grid grid-cols-5 w-full text-primary">
       <div class="col-span-3 flex items-center px-6 py-4 text-center">
@@ -56,7 +55,10 @@ const handleTouchMove = (e: any) => {
       </div>
     </div>
 
-    <div ref="scrollArea" class="grid grid-cols-1 w-full divide-primary gap-y-3 divide-y-2 px-3 !overflow-y-scroll overscroll-contain">
+    <div
+      ref="scrollArea"
+      class="grid grid-cols-1 w-full divide-primary gap-y-3 divide-y-2 px-3 !overflow-y-scroll overscroll-contain"
+    >
       <Link
         v-for="(item, index) in menuItems"
         :key="index"
@@ -69,51 +71,51 @@ const handleTouchMove = (e: any) => {
     </div>
 
     <div class="flex flex-col items-center px-6 pb-6 mt-auto">
-    <template v-if="!page.props.auth?.user">
-      <Link
-        :href="route('login')"
-        class="inline-flex items-center justify-center w-full whitespace-nowrap rounded-lg bg-dark-background px-4 py-2 text-primary"
-      >
-        Anmelden
-      </Link>
-      <Link
-        :href="route('register')"
-        class="inline-flex mt-3 items-center justify-center w-full whitespace-nowrap rounded-lg bg-secondary px-4 py-2 text-primary"
-      >
-        Registrieren
-      </Link>
-    </template>
-    <template v-else>
-      <template v-if="page.props.auth.user.is_admin">
+      <template v-if="!page.props.auth?.user">
         <Link
-          v-if="page.props.menu.isAdminPage"
-          :href="route('home')"
-          class="inline-flex mb-3 items-center justify-center w-full whitespace-nowrap rounded-lg bg-gray-700 px-4 py-2 text-primary"
+          :href="route('login')"
+          class="inline-flex items-center justify-center w-full whitespace-nowrap rounded-lg bg-dark-background px-4 py-2 text-primary"
         >
-          User
+          Anmelden
         </Link>
         <Link
-          v-else
-          :href="route('admin.dashboard')"
-          class="inline-flex mb-3 items-center justify-center w-full whitespace-nowrap rounded-lg bg-red-700 px-4 py-2 text-primary"
+          :href="route('register')"
+          class="inline-flex mt-3 items-center justify-center w-full whitespace-nowrap rounded-lg bg-secondary px-4 py-2 text-primary"
         >
-          Admin
+          Registrieren
         </Link>
       </template>
-      <Link
-        :href="route('logout')"
-        method="post"
-        class="inline-flex items-center justify-center w-full whitespace-nowrap rounded-lg bg-dark-background px-4 py-2 text-primary"
-      >
-        Ausloggen
-      </Link>
-      <Link
-        :href="route('profile.edit')"
-        class="inline-flex mt-3 items-center justify-center w-full whitespace-nowrap rounded-lg bg-secondary px-4 py-2 text-primary"
-      >
-        Mein Account
-      </Link>
-    </template>
-  </div>
+      <template v-else>
+        <template v-if="page.props.auth.user.is_admin">
+          <Link
+            v-if="page.props.menu.isAdminPage"
+            :href="route('home')"
+            class="inline-flex mb-3 items-center justify-center w-full whitespace-nowrap rounded-lg bg-gray-700 px-4 py-2 text-primary"
+          >
+            User
+          </Link>
+          <Link
+            v-else
+            :href="route('admin.dashboard')"
+            class="inline-flex mb-3 items-center justify-center w-full whitespace-nowrap rounded-lg bg-red-700 px-4 py-2 text-primary"
+          >
+            Admin
+          </Link>
+        </template>
+        <Link
+          :href="route('logout')"
+          method="post"
+          class="inline-flex items-center justify-center w-full whitespace-nowrap rounded-lg bg-dark-background px-4 py-2 text-primary"
+        >
+          Ausloggen
+        </Link>
+        <Link
+          :href="route('profile.edit')"
+          class="inline-flex mt-3 items-center justify-center w-full whitespace-nowrap rounded-lg bg-secondary px-4 py-2 text-primary"
+        >
+          Mein Account
+        </Link>
+      </template>
+    </div>
   </div>
 </template>

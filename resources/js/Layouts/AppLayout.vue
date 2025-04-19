@@ -14,7 +14,6 @@ const page = usePage();
 const showMenu = ref<boolean>(false);
 
 const navMenuItems = page.props.menu.items;
-
 </script>
 
 <template>
