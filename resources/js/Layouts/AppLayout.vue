@@ -20,7 +20,7 @@ const navMenuItems = page.props.menu.items;
 <template>
   <Head :title="title"></Head>
   <div class="min-h-dvh flex flex-col">
-    <header class="fixed z-20">
+    <header class="z-20">
       <menu-bar
         :menu-items="navMenuItems"
         @update:show-menu="showMenu = !showMenu"
