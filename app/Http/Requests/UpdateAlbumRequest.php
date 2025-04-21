@@ -6,7 +6,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateAlbumRequest extends FormRequest
 {
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -29,8 +28,7 @@ class UpdateAlbumRequest extends FormRequest
             'title.max' => 'Der Titel darf maximal 30 Zeichen lang sein!',
             'description.string' => 'Die Beschreibung muss eine String sein',
             'description.max' => 'Die Beschreibung darf maximal 1000 Zeichen lang sein!',
-            'event_date.date' => 'Das Veranstaltungsdatum muss ein Datum sein!'
+            'event_date.date' => 'Das Veranstaltungsdatum muss ein Datum sein!',
         ];
     }
-
 }

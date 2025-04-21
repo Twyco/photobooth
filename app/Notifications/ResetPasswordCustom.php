@@ -25,8 +25,7 @@ class ResetPasswordCustom extends ResetPassword
             ->subject('Passwort zurücksetzen')
             ->line('Es wurde eine Änderung der Anmeldeinformationen für Ihren Account angefordert. Wenn Sie diese Änderung beantragt haben, klicken Sie auf den unten stehenden Link.')
             ->action('Passwort zurücksetzen', $this->resetUrl($notifiable))
-            ->line('Die Gültigkeit des Links wird in ' . config('auth.passwords.' . config('auth.defaults.passwords') . '.expire') . ' Minuten verfallen.')
+            ->line('Die Gültigkeit des Links wird in '.config('auth.passwords.'.config('auth.defaults.passwords').'.expire').' Minuten verfallen.')
             ->line('Sollten Sie keine Änderung vollziehen wollen können Sie diese Nachricht ignorieren und an Ihrem Account wird nichts geändert.');
     }
-
 }

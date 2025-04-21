@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\Album;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class AlbumPolicy
 {
@@ -47,5 +46,4 @@ class AlbumPolicy
     {
         return $user->is_admin;
     }
-
 }

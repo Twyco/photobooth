@@ -23,14 +23,16 @@ class GenerateApiKeyCommand extends Command
 
     /**
      * Execute the console command.
+     *
      * @throws RandomException
      */
     public function handle()
     {
         $envPath = base_path('.env');
 
-        if (!file_exists($envPath)) {
+        if (! file_exists($envPath)) {
             $this->error('.env file not found!');
+
             return 1;
         }
 
@@ -42,8 +44,9 @@ class GenerateApiKeyCommand extends Command
         if (preg_match($keyPattern, $env)) {
             $this->warn("{$keyName} already exists.");
 
-            if (!$this->confirm('Do you want to replace it?')) {
+            if (! $this->confirm('Do you want to replace it?')) {
                 $this->info('No changes were made.');
+
                 return 0;
             }
 

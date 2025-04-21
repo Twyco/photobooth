@@ -27,7 +27,6 @@ class VerifyEmailCustom extends VerifyEmail
             ->line('Bitte klicken sie auf den unten stehenden Aktivierungslink, um ihr Konto zu aktivieren.')
             ->action('Bestätigen Sie Ihre Email Adresse', $verificationUrl)
             ->line('Falls Sie die Registrierung nicht selbst durchgeführt haben, ignorieren Sie bitte diese E-Mail.
-             Der Aktivierungslink verfällt automatisch nach ' . config('auth.account_verify_expire') .' Tagen.');
+             Der Aktivierungslink verfällt automatisch nach '.config('auth.account_verify_expire').' Tagen.');
     }
-
 }

@@ -6,7 +6,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreAlbumRequest extends FormRequest
 {
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -31,8 +30,7 @@ class StoreAlbumRequest extends FormRequest
             'description.string' => 'Die Beschreibung muss eine String sein',
             'description.max' => 'Die Beschreibung darf maximal 1000 Zeichen lang sein!',
             'event_date.required' => 'Das Veranstaltungsdatum ist erforderlich!',
-            'event_date.date' => 'Das Veranstaltungsdatum muss ein Datum sein!'
+            'event_date.date' => 'Das Veranstaltungsdatum muss ein Datum sein!',
         ];
     }
-
 }

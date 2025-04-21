@@ -33,19 +33,18 @@ class AlbumFactory extends Factory
 
             $imageUrl = 'https://picsum.photos/3088/2056';
 
-            Storage::disk('public')->makeDirectory('album/' . $uuid);
+            Storage::disk('public')->makeDirectory('album/'.$uuid);
             for ($i = 0; $i < 16; $i++) {
                 $response = Http::get($imageUrl);
                 if ($response->successful()) {
-                    Storage::disk('public')->put('album/' . $uuid . '/' . $this->faker->slug(4) . '.jpg', $response->body());
+                    Storage::disk('public')->put('album/'.$uuid.'/'.$this->faker->slug(4).'.jpg', $response->body());
                 }
             }
-
 
             $coverUrl = 'https://picsum.photos/1024/1024';
             Storage::disk('public')->makeDirectory('cover/');
             $response = Http::get($coverUrl);
-            Storage::disk('public')->put('cover/' . $uuid . '.jpg', $response->body());
+            Storage::disk('public')->put('cover/'.$uuid.'.jpg', $response->body());
         });
     }
 }

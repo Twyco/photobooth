@@ -13,6 +13,7 @@ use Illuminate\Support\Carbon;
  * @property Album $album
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Photobooth newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Photobooth newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Photobooth query()

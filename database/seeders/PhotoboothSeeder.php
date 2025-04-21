@@ -12,9 +12,9 @@ class PhotoboothSeeder extends Seeder
      */
     public function run(): void
     {
-        //Seed default Photobooth
+        // Seed default Photobooth
         Photobooth::create([
-           'name' => 'Default Photobooth',
+            'name' => 'Default Photobooth',
             'album_id' => 1,
         ]);
     }
