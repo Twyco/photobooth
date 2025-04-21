@@ -17,6 +17,7 @@ class UpdateAlbumRequest extends FormRequest
             'title' => 'string|min:3|max:30',
             'description' => 'nullable|string|max:1000',
             'event_date' => 'date',
+            'cover' => 'nullable|file|image|mimes:jpg|dimensions:ratio=1',
         ];
     }
 

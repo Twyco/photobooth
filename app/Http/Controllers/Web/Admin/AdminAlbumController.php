@@ -89,6 +89,12 @@ class AdminAlbumController extends Controller
             abort(403);
         }
         $validatedData = $request->validated();
+
+        if ($request->hasFile('cover')) {
+            Storage::disk('public')->putFileAs(path: 'cover/', file: $request->file('cover'), name: $album->uuid.'.jpg');
+        } else {
+            Storage::disk('public')->delete('cover/'.$album->uuid.'.jpg');
+        }
         $album->update($validatedData);
 
         return to_route('admin.album.index')->with('success', 'Album updated successfully.');

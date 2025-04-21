@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link, router, useForm } from '@inertiajs/vue3';
-import { PropType } from 'vue';
+import { PropType, ref } from 'vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import InputError from '@/Components/InputError.vue';
@@ -10,6 +10,10 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import TitleSeparator from '@/Components/TitleSeparator.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import TextareaInput from '@/Components/TextareaInput.vue';
+import { Cropper, type Coordinates } from 'vue-advanced-cropper';
+import 'vue-advanced-cropper/dist/style.css';
+import Modal from '@/Components/Modal.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
 
 const props = defineProps({
   album: {
@@ -18,25 +22,69 @@ const props = defineProps({
   }
 });
 
+const image = ref<string | null>(null);
+const cropper = ref();
+const coordinates = ref<Coordinates | null>(null);
+const canvas = ref<HTMLCanvasElement | null>(null);
+
+const showCropper = ref<boolean>(false);
+
 const form = useForm({
-  _method: 'post',
+  _method: 'put',
   title: props.album.title,
   description: props.album.description,
-  event_date: props.album.eventDate.split('T')[0]
+  event_date: props.album.eventDate.split('T')[0],
+  cover: null as File | null
 });
 
-const storeAlbum = () => {
-  form
-    .transform((data) => ({
-      ...(data.title != props.album.title ? { title: data.title } : {}),
-      ...(data.description != props.album.description
-        ? { description: data.description }
-        : {}),
-      ...(data.event_date != props.album.eventDate.split('T')[0]
-        ? { event_date: data.event_date }
-        : {})
-    }))
-    .patch(route('admin.album.update', { album: props.album.id }));
+const onFileChange = (e: Event) => {
+  const file = (e.target as HTMLInputElement).files?.[0];
+  if (file) {
+    image.value = URL.createObjectURL(file);
+    showCropper.value = true;
+  } else {
+    image.value = null;
+    form.cover = null;
+    showCropper.value = false;
+  }
+};
+
+const onCropChange = ({
+  coordinates: coords,
+  canvas: canv
+}: {
+  coordinates: Coordinates;
+  canvas: any;
+}) => {
+  canvas.value = canv;
+  coordinates.value = coords;
+};
+
+const canvasToBlob = (canvas: HTMLCanvasElement): Promise<Blob> => {
+  return new Promise((resolve, reject) => {
+    canvas.toBlob((blob) => {
+      if (blob) {
+        resolve(blob);
+      } else {
+        reject(new Error('Blob creation failed'));
+      }
+    }, 'image/jpeg');
+  });
+};
+
+const storeAlbum = async () => {
+  if (image.value && coordinates.value && canvas.value) {
+    try {
+      const blob: Blob = await canvasToBlob(canvas.value);
+
+      form.cover = new File([blob], props.album?.uuid + 'jpeg', {
+        type: 'image/jpeg'
+      });
+    } catch (e) {
+      console.error('Error while creating Cover', e);
+    }
+  }
+  form.post(route('admin.album.update', { album: props.album.id }));
 };
 
 const deleteAlbum = () => {
@@ -53,6 +101,28 @@ const createAccessCode = () => {
 </script>
 
 <template>
+  <Modal
+    class="bg-footer"
+    :show="showCropper"
+    max-width="2xl"
+    closeable
+    @close="showCropper = false"
+  >
+    <div class="bg-footer w-full h-full">
+      <div class="w-full px-8 py-4">
+        <Cropper
+          v-if="image"
+          ref="cropper"
+          :src="image"
+          :stencil-props="{ aspectRatio: 1 }"
+          @change="onCropChange"
+        />
+      </div>
+      <div class="w-full flex justify-end items-center px-8 pt-2 pb-4">
+        <PrimaryButton @click="showCropper = false"> Ok </PrimaryButton>
+      </div>
+    </div>
+  </Modal>
   <AppLayout title="Album bearbeiten">
     <div class="md:container md:mx-auto my-12 px-6 md:px-0">
       <div class="max-w-5xl md:mx-auto">
@@ -84,6 +154,11 @@ const createAccessCode = () => {
         <div
           class="container-small mb-6 !pr-0 !pl-0 md:pr-[unset] md:pl-[unset]"
         >
+          <div class="pb-2">
+            <p>
+              <span class="select-none font-bold">UUID: </span>{{ album.uuid }}
+            </p>
+          </div>
           <form
             @submit.prevent="storeAlbum()"
             class="flex flex-col gap-x-2 gap-y-4 md:gap-8 w-full mb-4"
@@ -102,6 +177,19 @@ const createAccessCode = () => {
                   type="date"
                 />
                 <InputError class="mt-2" :message="form.errors.event_date" />
+              </div>
+            </div>
+            <div class="col-span-6">
+              <div class="flex flex-col gap-y-4">
+                <input type="file" accept="image/*" @change="onFileChange" />
+                <InputError class="mt-2" :message="form.errors.cover" />
+
+                <SecondaryButton
+                  class="w-fit"
+                  @click="image && (showCropper = true)"
+                >
+                  Zuschneiden
+                </SecondaryButton>
               </div>
             </div>
             <div class="col-span-6">
