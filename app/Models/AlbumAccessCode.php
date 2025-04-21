@@ -9,13 +9,13 @@ use Illuminate\Support\Str;
 class AlbumAccessCode extends Model
 {
     protected $fillable = [
-        'album_id'
+        'album_id',
     ];
 
     protected $guarded = [
         'access_code',
         'usages',
-        'saves'
+        'saves',
     ];
 
     protected static function boot()
@@ -33,5 +33,4 @@ class AlbumAccessCode extends Model
     {
         return $this->belongsTo(Album::class);
     }
-
 }

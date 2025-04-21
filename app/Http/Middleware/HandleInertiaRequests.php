@@ -36,7 +36,7 @@ class HandleInertiaRequests extends Middleware
         $menu = [];
         $navMenuItems = [];
 
-        if(Auth::check() && Auth::user()->is_admin && $request->routeIs('admin.*')) {
+        if (Auth::check() && Auth::user()->is_admin && $request->routeIs('admin.*')) {
             $navMenuItems[] = new NavMenuItem(
                 route('admin.dashboard'),
                 'Dashboard',
@@ -56,7 +56,7 @@ class HandleInertiaRequests extends Middleware
             );
 
             $menu['isAdminPage'] = true;
-        }else {
+        } else {
             $navMenuItems[] = new NavMenuItem(
                 route('home'),
                 'Home',
@@ -69,7 +69,7 @@ class HandleInertiaRequests extends Middleware
                 $request->routeIs('album.*')
             );
 
-            if(Auth::check() && Auth::user()->is_admin) {
+            if (Auth::check() && Auth::user()->is_admin) {
                 $menu['isAdminPage'] = false;
             }
         }

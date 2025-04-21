@@ -12,16 +12,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class AdminAlbumController extends Controller
 {
     public function index(Request $request)
     {
-        if (!Gate::allows('viewAny', Album::class)) {
+        if (! Gate::allows('viewAny', Album::class)) {
             abort(403);
         }
         $albums = Album::paginate(10);
+
         return Inertia::render('Admin/Album/Index', [
             'albums' => GenericPaginationResource::make($albums, AdminAlbumResource::class),
         ]);
@@ -29,12 +29,13 @@ class AdminAlbumController extends Controller
 
     public function show(Request $request, Album $album)
     {
-        if (!Gate::allows('viewAny', Album::class)) {
+        if (! Gate::allows('viewAny', Album::class)) {
             abort(403);
         }
         $album->load('albumAccessCodes');
+
         return Inertia::render('Admin/Album/Show', [
-            'album' => AdminAlbumResource::make($album)->toArray($request)
+            'album' => AdminAlbumResource::make($album)->toArray($request),
         ]);
     }
 
@@ -43,10 +44,11 @@ class AdminAlbumController extends Controller
      */
     public function edit(Request $request, Album $album)
     {
-        if (!Gate::allows('update', $album)) {
+        if (! Gate::allows('update', $album)) {
             abort(403);
         }
         $album->load('albumAccessCodes');
+
         return Inertia::render('Admin/Album/Edit', [
             'album' => AdminAlbumResource::make($album)->toArray($request),
         ]);
@@ -57,9 +59,10 @@ class AdminAlbumController extends Controller
      */
     public function create()
     {
-        if (!Gate::allows('create', Album::class)) {
+        if (! Gate::allows('create', Album::class)) {
             abort(403);
         }
+
         return Inertia::render('Admin/Album/Create');
     }
 
@@ -68,11 +71,12 @@ class AdminAlbumController extends Controller
      */
     public function store(StoreAlbumRequest $request)
     {
-        if (!Gate::allows('create', Album::class)) {
+        if (! Gate::allows('create', Album::class)) {
             abort(403);
         }
         $validatedData = $request->validated();
         Album::create($validatedData);
+
         return to_route('admin.album.index')->with('success', 'Album created successfully.');
     }
 
@@ -81,11 +85,12 @@ class AdminAlbumController extends Controller
      */
     public function update(UpdateAlbumRequest $request, Album $album)
     {
-        if (!Gate::allows('update', $album)) {
+        if (! Gate::allows('update', $album)) {
             abort(403);
         }
         $validatedData = $request->validated();
         $album->update($validatedData);
+
         return to_route('admin.album.index')->with('success', 'Album updated successfully.');
     }
 
@@ -94,10 +99,11 @@ class AdminAlbumController extends Controller
      */
     public function destroy(Album $album)
     {
-        if (!Gate::allows('delete', $album)) {
+        if (! Gate::allows('delete', $album)) {
             abort(403);
         }
         $album->delete();
+
         return to_route('admin.album.index')->with('success', 'Album deleted successfully.');
     }
 }

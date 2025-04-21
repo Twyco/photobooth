@@ -21,7 +21,7 @@ class PhotoboothController extends Controller
     public function index()
     {
         return Inertia::render('Admin/Photobooth/Index', [
-            'photobooths' => GenericPaginationResource::make(Photobooth::paginate(10), PhotoboothResource::class)
+            'photobooths' => GenericPaginationResource::make(Photobooth::paginate(10), PhotoboothResource::class),
         ]);
     }
 
@@ -31,7 +31,7 @@ class PhotoboothController extends Controller
     public function create(Request $request)
     {
         return Inertia::render('Admin/Photobooth/Create', [
-            'albums' => AdminAlbumResource::collection(Album::all())->toArray($request)
+            'albums' => AdminAlbumResource::collection(Album::all())->toArray($request),
         ]);
     }
 
@@ -42,12 +42,13 @@ class PhotoboothController extends Controller
     {
         $validatedData = Validator::make($request->all(), [
             'name' => 'required|string|max:50|min:5|unique:photobooths',
-            'activeAlbum' => 'required|integer|exists:albums,id'
+            'activeAlbum' => 'required|integer|exists:albums,id',
         ])->validateWithBag('createPhotobooth');
         $photobooth = Photobooth::create([
             'name' => Arr::get($validatedData, 'name'),
             'album_id' => Arr::get($validatedData, 'activeAlbum'),
         ]);
+
         return to_route('admin.photobooth.show', $photobooth)->with('success', 'Photobooth created successfully.');
     }
 
@@ -76,14 +77,16 @@ class PhotoboothController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, Photobooth $photobooth)
-    {        $validatedData = Validator::make($request->all(), [
-        'name' => 'required|string|max:50|min:5|unique:photobooths,name,' . $photobooth->id,
-        'activeAlbum' => 'required|integer|exists:albums,id'
-    ])->validateWithBag('updatePhotobooth');
+    {
+        $validatedData = Validator::make($request->all(), [
+            'name' => 'required|string|max:50|min:5|unique:photobooths,name,'.$photobooth->id,
+            'activeAlbum' => 'required|integer|exists:albums,id',
+        ])->validateWithBag('updatePhotobooth');
         $photobooth->update([
             'name' => Arr::get($validatedData, 'name'),
             'album_id' => Arr::get($validatedData, 'activeAlbum'),
         ]);
+
         return to_route('admin.photobooth.show', $photobooth)->with('success', 'Photobooth updated successfully.');
     }
 

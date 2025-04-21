@@ -4,10 +4,10 @@ namespace App\Models;
 
 use App\Helpers\ConvertToWebP;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Cache;
@@ -28,6 +28,7 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
  * @property string $qrCode
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Photobooth newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Photobooth newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Photobooth query()
@@ -47,21 +48,21 @@ class Album extends Model
         'description',
         'event_date',
     ];
+
     protected $guarded = ['uuid'];
 
     protected $casts = [
         'event_date' => 'date',
     ];
 
-
     protected static function boot()
     {
         parent::boot();
 
         static::creating(function ($album) {
-            $album->uuid = (string)Str::uuid();
-            Storage::disk('public')->makeDirectory('album/' . $album->uuid);
-            Storage::disk('public')->makeDirectory('album/' . $album->uuid . '_compressed');
+            $album->uuid = (string) Str::uuid();
+            Storage::disk('public')->makeDirectory('album/'.$album->uuid);
+            Storage::disk('public')->makeDirectory('album/'.$album->uuid.'_compressed');
         });
 
         static::created(function ($album) {
@@ -70,14 +71,14 @@ class Album extends Model
         });
 
         static::deleting(function ($album) {
-            Cache::forget('user_album_details_' . $album->uuid);
+            Cache::forget('user_album_details_'.$album->uuid);
             foreach (User::all() as $user) {
-                Cache::forget($user->id . '_viewable_albums');
+                Cache::forget($user->id.'_viewable_albums');
             }
             Storage::disk('public')->delete("qrCodes/{$album->uuid}.png");
             Storage::disk('public')->delete("cover/{$album->uuid}.jpg");
-            Storage::disk('public')->deleteDirectory('album/' . $album->uuid);
-            Storage::disk('public')->deleteDirectory('album/' . $album->uuid . '_compressed');
+            Storage::disk('public')->deleteDirectory('album/'.$album->uuid);
+            Storage::disk('public')->deleteDirectory('album/'.$album->uuid.'_compressed');
         });
     }
 
@@ -123,20 +124,20 @@ class Album extends Model
 
     public function getImagesAttribute(): array
     {
-        $originalPath = 'album/' . $this->uuid;
-        $compressedPath = 'album/' . $this->uuid . '_compressed';
+        $originalPath = 'album/'.$this->uuid;
+        $compressedPath = 'album/'.$this->uuid.'_compressed';
 
-        if (!Storage::disk('public')->exists($compressedPath)) {
+        if (! Storage::disk('public')->exists($compressedPath)) {
             Storage::disk('public')->makeDirectory($compressedPath);
         }
 
         $originalFiles = Storage::disk('public')->files($originalPath);
-        $imageFiles = array_filter($originalFiles, fn($file) => preg_match('/\.(png|jpe?g)$/i', $file));
+        $imageFiles = array_filter($originalFiles, fn ($file) => preg_match('/\.(png|jpe?g)$/i', $file));
 
         return array_values(array_map(function ($file) use ($originalPath, $compressedPath) {
             $compressedFile = preg_replace('/\.(png|jpe?g)$/i', '.webp', str_replace($originalPath, $compressedPath, $file));
 
-            if (!Storage::disk('public')->exists($compressedFile)) {
+            if (! Storage::disk('public')->exists($compressedFile)) {
                 ConvertToWebP::convertAndSave(Storage::disk('public')->path($file), Storage::disk('public')->path($compressedFile));
             }
 
@@ -147,10 +148,10 @@ class Album extends Model
         }, $imageFiles));
     }
 
-    public function getCoverAttribute(): string|null
+    public function getCoverAttribute(): ?string
     {
-        $coverExists = Storage::disk('public')->exists('cover/' . $this->uuid . '.jpg');
-        return $coverExists ? Storage::url('cover/' . $this->uuid . '.jpg') : null;
-    }
+        $coverExists = Storage::disk('public')->exists('cover/'.$this->uuid.'.jpg');
 
+        return $coverExists ? Storage::url('cover/'.$this->uuid.'.jpg') : null;
+    }
 }

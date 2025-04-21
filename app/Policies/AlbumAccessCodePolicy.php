@@ -2,9 +2,7 @@
 
 namespace App\Policies;
 
-use App\Models\AlbumAccessCode;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class AlbumAccessCodePolicy
 {
@@ -23,5 +21,4 @@ class AlbumAccessCodePolicy
     {
         return $user->is_admin;
     }
-
 }

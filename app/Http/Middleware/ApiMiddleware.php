@@ -9,12 +9,11 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class ApiMiddleware
 {
-
     public function handle(Request $request, Closure $next): Response
     {
         $apiKey = $request->header('x-api-key');
 
-        if($apiKey !== env('API_KEY')) {
+        if ($apiKey !== env('API_KEY')) {
             return response()->json(['error' => 'Unauthorized'], ResponseAlias::HTTP_UNAUTHORIZED);
         }
 

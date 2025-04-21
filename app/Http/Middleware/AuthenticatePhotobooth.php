@@ -19,16 +19,17 @@ class AuthenticatePhotobooth
     {
         $authKey = $request->header('x-photobooth-auth-key');
 
-        if (!$authKey) {
+        if (! $authKey) {
             return response()->json(['error' => 'Unauthorized'], ResponseAlias::HTTP_UNAUTHORIZED);
         }
 
         $photobooth = Photobooth::whereAuthKey($authKey)->first();
-        if(!$photobooth) {
+        if (! $photobooth) {
             return response()->json(['error' => 'Unauthorized'], ResponseAlias::HTTP_UNAUTHORIZED);
         }
 
         $request->attributes->add(['photobooth' => $photobooth]);
+
         return $next($request);
     }
 }

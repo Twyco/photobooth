@@ -6,7 +6,7 @@
         "deploy": "vite build",
         "check": "prettier --check \"resources/js/**/*.{ts,vue,php}\" && vue-tsc",
         "dev": "vite",
-        "format": "prettier --write \"resources/js/**/*.{ts,vue,php}\""
+        "format": "prettier --write \"resources/js/**/*.{ts,vue,php}\" && ./vendor/bin/pint"
     },
     "devDependencies": {
         "axios": "1.8.2",

@@ -9,9 +9,5 @@ namespace App\Helpers;
  */
 final readonly class NavMenuItem
 {
-
-    public function __construct(public string $route, public string $label, public bool $isActive = false)
-    {
-    }
-
+    public function __construct(public string $route, public string $label, public bool $isActive = false) {}
 }

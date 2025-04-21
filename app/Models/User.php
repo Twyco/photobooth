@@ -31,7 +31,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
-        'is_admin'
+        'is_admin',
     ];
 
     /**
@@ -63,7 +63,7 @@ class User extends Authenticatable implements MustVerifyEmail
         parent::boot();
 
         static::deleting(function (User $user) {
-            Cache::forget($user->id . '_viewable_albums');
+            Cache::forget($user->id.'_viewable_albums');
         });
     }
 
@@ -77,7 +77,6 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->savedAlbums()->where('album_id', $album->id)->exists();
     }
 
-
     public function sendPasswordResetNotification(#[\SensitiveParameter] $token): void
     {
         $this->notify(new ResetPasswordCustom($token));
@@ -85,6 +84,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function sendEmailVerificationNotification(): void
     {
-        $this->notify(new VerifyEmailCustom());
+        $this->notify(new VerifyEmailCustom);
     }
 }

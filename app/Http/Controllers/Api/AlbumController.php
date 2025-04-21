@@ -24,19 +24,18 @@ class AlbumController extends Controller
         $image = $request->file('image');
 
         $originalName = $image->getClientOriginalName();
-        $destPath = 'album/' . $album->uuid . '/';
+        $destPath = 'album/'.$album->uuid.'/';
 
         $time = time();
 
-        $filename = pathinfo($originalName, PATHINFO_FILENAME) . '_' . $time . '.' . $image->getClientOriginalExtension();
-        $compressedFilename = pathinfo($originalName, PATHINFO_FILENAME) . '_' . $time . '.webp';
+        $filename = pathinfo($originalName, PATHINFO_FILENAME).'_'.$time.'.'.$image->getClientOriginalExtension();
+        $compressedFilename = pathinfo($originalName, PATHINFO_FILENAME).'_'.$time.'.webp';
 
+        Storage::disk('public')->put($destPath.$filename, file_get_contents($image));
 
-        Storage::disk('public')->put($destPath . $filename, file_get_contents($image));
-
-        ConvertToWebP::convertAndSave(Storage::disk('public')->path($destPath . $filename),
-            Storage::disk('public')->path('album/' . $album->uuid . '_compressed/' . $compressedFilename));
-        Cache::forget('user_album_details_' . $album->uuid);
+        ConvertToWebP::convertAndSave(Storage::disk('public')->path($destPath.$filename),
+            Storage::disk('public')->path('album/'.$album->uuid.'_compressed/'.$compressedFilename));
+        Cache::forget('user_album_details_'.$album->uuid);
 
         return response()->json(['message' => 'Image uploaded successfully.'], ResponseAlias::HTTP_OK);
     }

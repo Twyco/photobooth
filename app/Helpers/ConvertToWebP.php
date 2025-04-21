@@ -10,13 +10,12 @@ use Imagick;
 
 class ConvertToWebP
 {
-
     public static function convertAndSave(string $sourcePath, string $destinationPath): void
     {
         $relativeDestPath = Str::replaceFirst(Storage::disk('public')->path(''), '', $destinationPath);
 
         try {
-            $image = new Imagick();
+            $image = new Imagick;
             $image->readImage($sourcePath);
             $image->setImageFormat('webp');
             $image->setImageCompressionQuality(10);
@@ -27,7 +26,7 @@ class ConvertToWebP
             $image->clear();
             $image->destroy();
         } catch (Exception $e) {
-            Log::error("Fehler beim Konvertieren zu WebP: " . $e->getMessage());
+            Log::error('Fehler beim Konvertieren zu WebP: '.$e->getMessage());
         }
     }
 }

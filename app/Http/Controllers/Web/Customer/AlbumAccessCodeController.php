@@ -13,9 +13,9 @@ use Illuminate\Validation\ValidationException;
 
 class AlbumAccessCodeController extends Controller
 {
-
     /**
      * Store a newly created resource in storage.
+     *
      * @throws ValidationException
      */
     public function store(Request $request)
@@ -31,7 +31,7 @@ class AlbumAccessCodeController extends Controller
      */
     public function destroy(AlbumAccessCode $albumAccessCode)
     {
-        if (!Gate::allows('delete', $albumAccessCode)) {
+        if (! Gate::allows('delete', $albumAccessCode)) {
             abort(403);
         }
         $albumAccessCode->delete();
@@ -60,12 +60,11 @@ class AlbumAccessCodeController extends Controller
         $album = $albumAccessCode->album;
         if (auth()->check()) {
             $user = $request->user();
-            Cache::forget($user->id . '_viewable_albums');
+            Cache::forget($user->id.'_viewable_albums');
             $user->savedAlbums()->syncWithoutDetaching([$album->id]);
             $albumAccessCode->increment('saves');
         }
 
         return to_route('album.show', ['album' => $album]);
     }
-
 }
