@@ -10,6 +10,7 @@ use App\Http\Resources\GenericPaginationResource;
 use App\Models\Album;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
@@ -20,7 +21,7 @@ class AdminAlbumController extends Controller
 {
     public function index(Request $request)
     {
-        if (! Gate::allows('viewAny', Album::class)) {
+        if (!Gate::allows('viewAny', Album::class)) {
             abort(403);
         }
         $albums = Album::paginate(10);
@@ -32,7 +33,7 @@ class AdminAlbumController extends Controller
 
     public function show(Request $request, Album $album)
     {
-        if (! Gate::allows('viewAny', Album::class)) {
+        if (!Gate::allows('viewAny', Album::class)) {
             abort(403);
         }
         $album->load('albumAccessCodes');
@@ -47,7 +48,7 @@ class AdminAlbumController extends Controller
      */
     public function edit(Request $request, Album $album)
     {
-        if (! Gate::allows('update', $album)) {
+        if (!Gate::allows('update', $album)) {
             abort(403);
         }
         $album->load('albumAccessCodes');
@@ -62,7 +63,7 @@ class AdminAlbumController extends Controller
      */
     public function create()
     {
-        if (! Gate::allows('create', Album::class)) {
+        if (!Gate::allows('create', Album::class)) {
             abort(403);
         }
 
@@ -74,7 +75,7 @@ class AdminAlbumController extends Controller
      */
     public function store(StoreAlbumRequest $request)
     {
-        if (! Gate::allows('create', Album::class)) {
+        if (!Gate::allows('create', Album::class)) {
             abort(403);
         }
         $validatedData = $request->validated();
@@ -88,22 +89,25 @@ class AdminAlbumController extends Controller
      */
     public function update(UpdateAlbumRequest $request, Album $album, ImageService $imageService)
     {
-        if (! Gate::allows('update', $album)) {
+        if (!Gate::allows('update', $album)) {
             abort(403);
         }
         $validatedData = $request->validated();
 
-        if ($request->hasFile('cover')) {
-            $album->cover()->associate($imageService->store(file: $request->file('cover'), owner: Auth::user(), imageName: 'cover'));
-        } else {
+        if (Arr::get($validatedData, 'deleteCover')) {
             $album->cover()->disassociate()->save();
         }
+
+        if ($request->hasFile('cover')) {
+            $album->cover()->associate($imageService->store(file: $request->file('cover'), owner: Auth::user(), imageName: 'cover'));
+        }
+
         $album->update($validatedData);
 
         foreach (User::all() as $user) {
-            Cache::forget($user->id.'_viewable_albums');
+            Cache::forget($user->id . '_viewable_albums');
         }
-        Cache::forget('user_album_details_'.$album->uuid);
+        Cache::forget('user_album_details_' . $album->uuid);
 
         return to_route('admin.album.index')->with('success', 'Album updated successfully.');
     }
@@ -113,7 +117,7 @@ class AdminAlbumController extends Controller
      */
     public function destroy(Album $album)
     {
-        if (! Gate::allows('delete', $album)) {
+        if (!Gate::allows('delete', $album)) {
             abort(403);
         }
         $album->delete();
