@@ -9,7 +9,6 @@ withDefaults(
 );
 </script>
 
-
 <template>
   <button
     :type="type"

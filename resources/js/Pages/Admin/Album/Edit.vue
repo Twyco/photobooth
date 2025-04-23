@@ -14,7 +14,7 @@ import { Cropper, type Coordinates } from 'vue-advanced-cropper';
 import 'vue-advanced-cropper/dist/style.css';
 import Modal from '@/Components/Modal.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
-import DangerButton from "@/Components/DangerButton.vue";
+import DangerButton from '@/Components/DangerButton.vue';
 
 const props = defineProps({
   album: {
@@ -30,7 +30,6 @@ const coordinates = ref<Coordinates | null>(null);
 const canvas = ref<HTMLCanvasElement | null>(null);
 const cropperPreviewUrl = ref<string | null>(props.album?.cover);
 
-
 const showCropper = ref<boolean>(false);
 
 const form = useForm({
@@ -39,7 +38,7 @@ const form = useForm({
   description: props.album.description,
   event_date: props.album.eventDate.split('T')[0],
   cover: null as File | null,
-  deleteCover: false as boolean,
+  deleteCover: false as boolean
 });
 
 const onFileChange = (e: Event) => {
@@ -67,7 +66,7 @@ const onCropChange = ({
 }) => {
   canvas.value = canv;
   coordinates.value = coords;
-  if(canvas.value) {
+  if (canvas.value) {
     cropperPreviewUrl.value = canvas.value.toDataURL('image/jpeg');
   }
 };
@@ -112,7 +111,7 @@ const createAccessCode = () => {
 };
 
 const removeCover = () => {
-  if(imageUpload.value) {
+  if (imageUpload.value) {
     imageUpload.value.value = '';
   }
   image.value = null;
@@ -120,7 +119,7 @@ const removeCover = () => {
   coordinates.value = null;
   canvas.value = null;
   form.deleteCover = true;
-}
+};
 </script>
 
 <template>
@@ -204,7 +203,12 @@ const removeCover = () => {
             </div>
             <div class="col-span-3 flex">
               <div class="flex flex-col gap-y-4">
-                <input ref="imageUpload" type="file" accept="image/*" @change="onFileChange" />
+                <input
+                  ref="imageUpload"
+                  type="file"
+                  accept="image/*"
+                  @change="onFileChange"
+                />
                 <InputError class="mt-2" :message="form.errors.cover" />
 
                 <SecondaryButton
@@ -224,7 +228,7 @@ const removeCover = () => {
                   Cover Löschen
                 </DangerButton>
               </div>
-              <img :src="cropperPreviewUrl" class="h-64 object-contain" />
+              <img :src="cropperPreviewUrl" class="h-64 object-contain" alt="cover" />
             </div>
             <div class="col-span-6">
               <InputLabel for="description" value="Beschreibung" />
