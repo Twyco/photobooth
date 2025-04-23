@@ -18,6 +18,7 @@ class AdminAlbumResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+
         return [
             'id' => $this->id,
             'title' => $this->title,
@@ -26,7 +27,7 @@ class AdminAlbumResource extends JsonResource
             'uuid' => $this->uuid,
             'accessCodes' => AlbumAccessCodeResource::collection($this->albumAccessCodes)->toArray($request),
             'qrCode' => $this->qrCode,
-            'cover' => $this->cover,
+            'cover' => $this->cover?->url,
         ];
     }
 }

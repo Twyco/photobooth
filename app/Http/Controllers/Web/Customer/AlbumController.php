@@ -29,7 +29,7 @@ class AlbumController extends Controller
         $searchFilter = $request->query('search');
         $sorting = $request->query('albumSort');
 
-        $albums = Cache::rememberForever(Auth::user()->id.'_viewable_albums', function () {
+        $albums = Cache::remember(Auth::user()->id.'_viewable_albums', now()->addDay(), function () {
             return Album::viewableAlbums()->orderBy('event_date', 'desc')->get();
         });
 
@@ -61,7 +61,7 @@ class AlbumController extends Controller
                 'intended_route_data' => $album->uuid,
             ]);
         }
-        $userAlbum = Cache::rememberForever('user_album_details_'.$album->uuid, function () use ($request, $album) {
+        $userAlbum = Cache::remember('user_album_details_'.$album->uuid, now()->addWeek(), function () use ($request, $album) {
             return UserAlbumResource::make($album)->toArray($request);
         });
 

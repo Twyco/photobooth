@@ -14,6 +14,7 @@ import { Cropper, type Coordinates } from 'vue-advanced-cropper';
 import 'vue-advanced-cropper/dist/style.css';
 import Modal from '@/Components/Modal.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
+import DangerButton from '@/Components/DangerButton.vue';
 
 const props = defineProps({
   album: {
@@ -22,10 +23,12 @@ const props = defineProps({
   }
 });
 
-const image = ref<string | null>(null);
+const image = ref<string | null>(props.album?.cover);
+const imageUpload = ref<HTMLInputElement | null>(null);
 const cropper = ref();
 const coordinates = ref<Coordinates | null>(null);
 const canvas = ref<HTMLCanvasElement | null>(null);
+const cropperPreviewUrl = ref<string | null>(props.album?.cover);
 
 const showCropper = ref<boolean>(false);
 
@@ -34,18 +37,23 @@ const form = useForm({
   title: props.album.title,
   description: props.album.description,
   event_date: props.album.eventDate.split('T')[0],
-  cover: null as File | null
+  cover: null as File | null,
+  deleteCover: false as boolean
 });
 
 const onFileChange = (e: Event) => {
   const file = (e.target as HTMLInputElement).files?.[0];
   if (file) {
     image.value = URL.createObjectURL(file);
+    cropperPreviewUrl.value = URL.createObjectURL(file);
     showCropper.value = true;
+    form.deleteCover = false;
   } else {
     image.value = null;
     form.cover = null;
+    form.deleteCover = true;
     showCropper.value = false;
+    cropperPreviewUrl.value = null;
   }
 };
 
@@ -58,6 +66,9 @@ const onCropChange = ({
 }) => {
   canvas.value = canv;
   coordinates.value = coords;
+  if (canvas.value) {
+    cropperPreviewUrl.value = canvas.value.toDataURL('image/jpeg');
+  }
 };
 
 const canvasToBlob = (canvas: HTMLCanvasElement): Promise<Blob> => {
@@ -97,6 +108,17 @@ const deleteAccessCode = (id: number) => {
 
 const createAccessCode = () => {
   router.post(route('admin.accessCode.store'), { albumId: props.album.id });
+};
+
+const removeCover = () => {
+  if (imageUpload.value) {
+    imageUpload.value.value = '';
+  }
+  image.value = null;
+  cropperPreviewUrl.value = null;
+  coordinates.value = null;
+  canvas.value = null;
+  form.deleteCover = true;
 };
 </script>
 
@@ -179,18 +201,39 @@ const createAccessCode = () => {
                 <InputError class="mt-2" :message="form.errors.event_date" />
               </div>
             </div>
-            <div class="col-span-6">
+            <div class="col-span-3 flex">
               <div class="flex flex-col gap-y-4">
-                <input type="file" accept="image/*" @change="onFileChange" />
+                <input
+                  ref="imageUpload"
+                  type="file"
+                  accept="image/*"
+                  @change="onFileChange"
+                />
                 <InputError class="mt-2" :message="form.errors.cover" />
 
                 <SecondaryButton
+                  v-if="image"
                   class="w-fit"
                   @click="image && (showCropper = true)"
                 >
                   Zuschneiden
                 </SecondaryButton>
+
+                <DangerButton
+                  v-if="!form.deleteCover && image"
+                  class="w-fit"
+                  type="button"
+                  @click="removeCover()"
+                >
+                  Cover Löschen
+                </DangerButton>
               </div>
+              <img
+                v-if="cropperPreviewUrl"
+                :src="cropperPreviewUrl"
+                class="h-64 object-contain"
+                alt="cover"
+              />
             </div>
             <div class="col-span-6">
               <InputLabel for="description" value="Beschreibung" />

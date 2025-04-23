@@ -8,10 +8,14 @@ use App\Http\Requests\UpdateAlbumRequest;
 use App\Http\Resources\AdminAlbumResource;
 use App\Http\Resources\GenericPaginationResource;
 use App\Models\Album;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
+use Twyco\ImageSystem\Services\ImageService;
 
 class AdminAlbumController extends Controller
 {
@@ -83,19 +87,27 @@ class AdminAlbumController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateAlbumRequest $request, Album $album)
+    public function update(UpdateAlbumRequest $request, Album $album, ImageService $imageService)
     {
         if (! Gate::allows('update', $album)) {
             abort(403);
         }
         $validatedData = $request->validated();
 
-        if ($request->hasFile('cover')) {
-            Storage::disk('public')->putFileAs(path: 'cover/', file: $request->file('cover'), name: $album->uuid.'.jpg');
-        } else {
-            Storage::disk('public')->delete('cover/'.$album->uuid.'.jpg');
+        if (Arr::get($validatedData, 'deleteCover')) {
+            $album->cover()->disassociate()->save();
         }
+
+        if ($request->hasFile('cover')) {
+            $album->cover()->associate($imageService->store(file: $request->file('cover'), owner: Auth::user(), imageName: 'cover'));
+        }
+
         $album->update($validatedData);
+
+        foreach (User::all() as $user) {
+            Cache::forget($user->id.'_viewable_albums');
+        }
+        Cache::forget('user_album_details_'.$album->uuid);
 
         return to_route('admin.album.index')->with('success', 'Album updated successfully.');
     }
