@@ -228,7 +228,12 @@ const removeCover = () => {
                   Cover Löschen
                 </DangerButton>
               </div>
-              <img :src="cropperPreviewUrl" class="h-64 object-contain" alt="cover" />
+              <img
+                v-if="cropperPreviewUrl"
+                :src="cropperPreviewUrl"
+                class="h-64 object-contain"
+                alt="cover"
+              />
             </div>
             <div class="col-span-6">
               <InputLabel for="description" value="Beschreibung" />
