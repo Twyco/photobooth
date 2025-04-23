@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
+use Twyco\ImageSystem\Models\Image;
 
 /**
  * @property int $id
@@ -85,5 +86,10 @@ class User extends Authenticatable implements MustVerifyEmail
     public function sendEmailVerificationNotification(): void
     {
         $this->notify(new VerifyEmailCustom);
+    }
+
+    public function images()
+    {
+        return $this->morphMany(Image::class, 'owner');
     }
 }
