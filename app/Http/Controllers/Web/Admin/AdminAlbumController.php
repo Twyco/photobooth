@@ -93,9 +93,9 @@ class AdminAlbumController extends Controller
         }
         $validatedData = $request->validated();
 
-        if($request->hasFile('cover')) {
+        if ($request->hasFile('cover')) {
             $album->cover()->associate($imageService->store(file: $request->file('cover'), owner: Auth::user(), imageName: 'cover'));
-        }else {
+        } else {
             $album->cover()->disassociate()->save();
         }
         $album->update($validatedData);
