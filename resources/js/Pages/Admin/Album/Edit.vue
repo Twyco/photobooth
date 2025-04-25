@@ -15,6 +15,7 @@ import 'vue-advanced-cropper/dist/style.css';
 import Modal from '@/Components/Modal.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import DangerButton from '@/Components/DangerButton.vue';
+import { ImageSystemImage } from '@twyco/vue-image-system';
 
 const props = defineProps({
   album: {
@@ -23,12 +24,12 @@ const props = defineProps({
   }
 });
 
-const image = ref<string | null>(props.album?.cover);
+const image = ref<string | null>(props.album?.cover?.url ?? null);
 const imageUpload = ref<HTMLInputElement | null>(null);
 const cropper = ref();
 const coordinates = ref<Coordinates | null>(null);
 const canvas = ref<HTMLCanvasElement | null>(null);
-const cropperPreviewUrl = ref<string | null>(props.album?.cover);
+const cropperPreviewUrl = ref<string | null>(props.album?.cover?.url ?? null);
 
 const showCropper = ref<boolean>(false);
 
@@ -38,6 +39,7 @@ const form = useForm({
   description: props.album.description,
   event_date: props.album.eventDate.split('T')[0],
   cover: null as File | null,
+  existing_cover_id: props.album?.cover?.id ?? null,
   deleteCover: false as boolean
 });
 
@@ -48,12 +50,14 @@ const onFileChange = (e: Event) => {
     cropperPreviewUrl.value = URL.createObjectURL(file);
     showCropper.value = true;
     form.deleteCover = false;
+    form.existing_cover_id = null;
   } else {
     image.value = null;
     form.cover = null;
     form.deleteCover = true;
     showCropper.value = false;
     cropperPreviewUrl.value = null;
+    form.existing_cover_id = null;
   }
 };
 
@@ -66,6 +70,8 @@ const onCropChange = ({
 }) => {
   canvas.value = canv;
   coordinates.value = coords;
+  form.deleteCover = false;
+  form.existing_cover_id = null;
   if (canvas.value) {
     cropperPreviewUrl.value = canvas.value.toDataURL('image/jpeg');
   }
@@ -97,6 +103,17 @@ const storeAlbum = async () => {
   }
   form.post(route('admin.album.update', { album: props.album.id }));
 };
+
+const selectExistingImg = (img: ImageSystemImage) => {
+  form.existing_cover_id = img.id;
+  cropperPreviewUrl.value = img.url;
+  if (imageUpload.value) {
+    imageUpload.value.value = '';
+  }
+  image.value = null;
+  coordinates.value = null;
+  canvas.value = null;
+}
 
 const deleteAlbum = () => {
   router.delete(route('admin.album.destroy', { album: props.album.id }));
@@ -210,6 +227,14 @@ const removeCover = () => {
                   @change="onFileChange"
                 />
                 <InputError class="mt-2" :message="form.errors.cover" />
+
+                <PrimaryButton
+                  type="button"
+                  class="w-fit"
+                  @click="selectExistingImg({id: 12, url: 'https://photobooth.test/images/6808a5e2be0cd_1745397218.jpg'})"
+                >
+                  Vorhandenes Cover auswählen
+                </PrimaryButton>
 
                 <SecondaryButton
                   v-if="image"
