@@ -5945,16 +5945,16 @@
         },
         {
             "name": "twyco/image-system",
-            "version": "v1.1.4",
+            "version": "v1.1.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Twyco/image-system.git",
-                "reference": "c5307010160ec00aa1cc194b2004823d83ce8f12"
+                "reference": "b7ba79003393540eec27150d39ecb9041144af09"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Twyco/image-system/zipball/c5307010160ec00aa1cc194b2004823d83ce8f12",
-                "reference": "c5307010160ec00aa1cc194b2004823d83ce8f12",
+                "url": "https://api.github.com/repos/Twyco/image-system/zipball/b7ba79003393540eec27150d39ecb9041144af09",
+                "reference": "b7ba79003393540eec27150d39ecb9041144af09",
                 "shasum": ""
             },
             "type": "library",
@@ -5983,9 +5983,9 @@
             "description": "Laravel Image System",
             "support": {
                 "issues": "https://github.com/Twyco/image-system/issues",
-                "source": "https://github.com/Twyco/image-system/tree/v1.1.4"
+                "source": "https://github.com/Twyco/image-system/tree/v1.1.5.2"
             },
-            "time": "2025-04-23T08:55:11+00:00"
+            "time": "2025-04-25T18:39:06+00:00"
         },
         {
             "name": "vlucas/phpdotenv",

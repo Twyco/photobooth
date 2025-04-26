@@ -32,6 +32,9 @@ const canvas = ref<HTMLCanvasElement | null>(null);
 const cropperPreviewUrl = ref<string | null>(props.album?.cover?.url ?? null);
 
 const showCropper = ref<boolean>(false);
+const showImagePicker = ref<boolean>(false);
+
+const selectedCover = ref<ImageSystemImage | null>(null);
 
 const form = useForm({
   _method: 'put',
@@ -136,30 +139,42 @@ const removeCover = () => {
   coordinates.value = null;
   canvas.value = null;
   form.deleteCover = true;
+  form.existing_cover_id = null;
 };
 </script>
 
 <template>
   <Modal
-    class="bg-footer"
+    slotClass="bg-footer p-4"
     :show="showCropper"
     max-width="2xl"
     closeable
     @close="showCropper = false"
   >
-    <div class="bg-footer w-full h-full">
-      <div class="w-full px-8 py-4">
-        <Cropper
-          v-if="image"
-          ref="cropper"
-          :src="image"
-          :stencil-props="{ aspectRatio: 1 }"
-          @change="onCropChange"
-        />
-      </div>
-      <div class="w-full flex justify-end items-center px-8 pt-2 pb-4">
-        <PrimaryButton @click="showCropper = false"> Ok </PrimaryButton>
-      </div>
+    <div class="w-full">
+      <Cropper
+        v-if="image"
+        ref="cropper"
+        :src="image"
+        :stencil-props="{ aspectRatio: 1 }"
+        @change="onCropChange"
+      />
+    </div>
+    <div class="w-full flex justify-end items-center mt-4">
+      <PrimaryButton @click="showCropper = false"> Ok </PrimaryButton>
+    </div>
+  </Modal>
+
+  <Modal
+    slotClass="bg-footer p-4"
+    :show="showImagePicker"
+    max-width="2xl"
+    closeable
+    @close="showImagePicker = false"
+  >
+    <ImagePicker v-model="selectedCover" @update:modelValue="selectExistingImg" />
+    <div class="w-full flex justify-end items-center pt-4">
+      <PrimaryButton @click="showCropper = false"> Ok </PrimaryButton>
     </div>
   </Modal>
   <AppLayout title="Album bearbeiten">
@@ -231,7 +246,7 @@ const removeCover = () => {
                 <PrimaryButton
                   type="button"
                   class="w-fit"
-                  @click="selectExistingImg({id: 12, url: 'https://photobooth.test/images/6808a5e2be0cd_1745397218.jpg'})"
+                  @click="showImagePicker = true"
                 >
                   Vorhandenes Cover auswählen
                 </PrimaryButton>

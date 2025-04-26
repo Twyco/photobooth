@@ -19,7 +19,7 @@ class UpdateAlbumRequest extends FormRequest
             'event_date' => 'date',
             'cover' => 'nullable|file|image|mimes:jpg|dimensions:ratio=1',
             'deleteCover' => 'boolean',
-            'existing_cover_id' => 'numeric|exists:images,id'
+            'existing_cover_id' => 'nullable|numeric|exists:images,id'
         ];
     }
 
