@@ -86,7 +86,6 @@ defineExpose({
 </script>
 
 <template>
-  Test
   <Modal
     slotClass="bg-footer p-4"
     :show="show"
