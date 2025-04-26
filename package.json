@@ -23,7 +23,7 @@
         "@mdi/font": "^7.4.47",
         "@mdi/js": "^7.4.47",
         "@tailwindcss/forms": "^0.5.3",
-        "@twyco/vue-image-system": "^0.0.1",
+        "@twyco/vue-image-system": "^0.0.3",
         "@vitejs/plugin-vue": "^5.0.0",
         "autoprefixer": "^10.4.12",
         "date-fns": "^4.1.0",

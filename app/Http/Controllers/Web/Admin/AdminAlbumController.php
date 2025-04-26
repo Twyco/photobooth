@@ -14,6 +14,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Twyco\ImageSystem\Models\Image;
 use Twyco\ImageSystem\Services\ImageService;
@@ -74,13 +75,22 @@ class AdminAlbumController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreAlbumRequest $request)
+    public function store(StoreAlbumRequest $request, ImageService $imageService)
     {
         if (! Gate::allows('create', Album::class)) {
             abort(403);
         }
         $validatedData = $request->validated();
-        Album::create($validatedData);
+        $album = Album::create($validatedData);
+
+        if (Arr::get($validatedData, 'deleteCover')) {
+            $album->cover()->disassociate()->save();
+        } elseif ($request->hasFile('cover')) {
+            $album->cover()->associate($imageService->store(file: $request->file('cover'), owner: Auth::user(), imageName: 'cover'))->save();
+        } elseif (Arr::get($validatedData, 'existing_cover_id')) {
+            Log::debug(Arr::get($validatedData, 'existing_cover_id'));
+            $album->cover()->associate(Image::findOrFail(Arr::get($validatedData, 'existing_cover_id')))->save();
+        }
 
         return to_route('admin.album.index')->with('success', 'Album created successfully.');
     }
@@ -98,9 +108,9 @@ class AdminAlbumController extends Controller
         if (Arr::get($validatedData, 'deleteCover')) {
             $album->cover()->disassociate()->save();
         } elseif ($request->hasFile('cover')) {
-            $album->cover()->associate($imageService->store(file: $request->file('cover'), owner: Auth::user(), imageName: 'cover'));
+            $album->cover()->associate($imageService->store(file: $request->file('cover'), owner: Auth::user(), imageName: 'cover'))->save();
         } elseif (Arr::get($validatedData, 'existing_cover_id')) {
-            $album->cover()->associate(Image::findOrFail(Arr::get($validatedData, 'existing_cover_id')));
+            $album->cover()->associate(Image::findOrFail(Arr::get($validatedData, 'existing_cover_id')))->save();
         }
 
         $album->update($validatedData);

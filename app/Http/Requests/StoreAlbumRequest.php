@@ -17,6 +17,9 @@ class StoreAlbumRequest extends FormRequest
             'title' => 'required|string|min:3|max:30',
             'description' => 'nullable|string|max:1000',
             'event_date' => 'required|date',
+            'cover' => 'nullable|file|image|mimes:jpg|dimensions:ratio=1',
+            'deleteCover' => 'boolean',
+            'existing_cover_id' => 'nullable|numeric|exists:images,id',
         ];
     }
 
