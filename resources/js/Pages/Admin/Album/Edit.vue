@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link, router, useForm } from '@inertiajs/vue3';
-import { PropType, ref } from 'vue';
+import { PropType } from 'vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import InputError from '@/Components/InputError.vue';
@@ -11,11 +11,7 @@ import TitleSeparator from '@/Components/TitleSeparator.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import TextareaInput from '@/Components/TextareaInput.vue';
 import 'vue-advanced-cropper/dist/style.css';
-import SecondaryButton from '@/Components/SecondaryButton.vue';
-import DangerButton from '@/Components/DangerButton.vue';
-import { ImageSystemImage } from '@twyco/vue-image-system';
-import CropperModal from '@/Pages/Admin/Album/Components/CropperModal.vue';
-import ImagePickerModal from '@/Pages/Admin/Album/Components/ImagePickerModal.vue';
+import CoverEditor from '@/Pages/Admin/Album/Components/CoverEditor.vue';
 
 const props = defineProps({
   album: {
@@ -23,14 +19,6 @@ const props = defineProps({
     required: true
   }
 });
-const cropper = ref();
-const showCropper = ref<boolean>(false);
-const showImagePicker = ref<boolean>(false);
-
-const imageUpload = ref<HTMLInputElement | null>(null);
-const image = ref<string | null>(props.album?.cover?.url ?? null);
-const coverPreviewUrl = ref<string | null>(props.album?.cover?.url ?? null);
-const selectedCover = ref<ImageSystemImage | null>(props.album?.cover ?? null);
 
 const form = useForm({
   _method: 'put',
@@ -41,49 +29,6 @@ const form = useForm({
   existing_cover_id: props.album?.cover?.id ?? null,
   deleteCover: false as boolean
 });
-
-const onFileChange = (e: Event) => {
-  const file = (e.target as HTMLInputElement).files?.[0];
-  image.value = !!file ? URL.createObjectURL(file) : null;
-  coverPreviewUrl.value = null;
-  form.cover = null;
-  form.existing_cover_id = null;
-  form.deleteCover = !file;
-  selectedCover.value = null;
-  cropper.value?.resetCanvas();
-  showCropper.value = !!file;
-};
-
-const onCropped = (newCover: File | null) => {
-  if (!newCover) return;
-  form.deleteCover = false;
-  form.existing_cover_id = null;
-  selectedCover.value = null;
-}
-
-const onSelectedCoverChange = (newCover: ImageSystemImage | null) => {
-  if (!newCover) {
-    deleteCover();
-    return;
-  }
-  if(imageUpload.value?.value) imageUpload.value.value = '';
-  form.deleteCover = false;
-  form.cover = null;
-  form.existing_cover_id = newCover.id;
-  image.value = newCover.url;
-  coverPreviewUrl.value = newCover.url;
-  cropper.value?.resetCanvas();
-}
-
-const deleteCover = () => {
-  form.deleteCover = true;
-  form.cover = null;
-  form.existing_cover_id = null;
-  image.value = null;
-  coverPreviewUrl.value = null;
-  selectedCover.value = null;
-  cropper.value?.resetCanvas();
-};
 
 const deleteAccessCode = (id: number) => {
   router.delete(route('admin.accessCode.destroy', { albumAccessCode: id }));
@@ -99,19 +44,6 @@ const storeAlbum = async () => {
 </script>
 
 <template>
-  <CropperModal
-    ref="cropper"
-    :image="image"
-    v-model:show="showCropper"
-    v-model:cropped-img-url="coverPreviewUrl"
-    v-model:cropped-img-file="form.cover"
-    @update:cropped-img-file="onCropped"
-  />
-  <ImagePickerModal
-    v-model:show="showImagePicker"
-    v-model:selected-image="selectedCover"
-    @update:selected-image="onSelectedCoverChange"
-  />
   <AppLayout title="Album bearbeiten">
     <div class="md:container md:mx-auto my-12 px-6 md:px-0">
       <div class="max-w-5xl md:mx-auto">
@@ -170,49 +102,13 @@ const storeAlbum = async () => {
             </div>
             <div class="col-span-3">
               <InputLabel for="imageUpload" value="Cover" class="mb-1" />
-              <div class="flex flex-col-reverse md:flex-row gap-y-4">
-                <div class="flex flex-col gap-y-2 md:gap-y-4">
-                  <input
-                    ref="imageUpload"
-                    id="imageUpload"
-                    type="file"
-                    accept="image/*"
-                    @change="onFileChange"
-                  />
-                  <InputError class="mt-2" :message="form.errors.cover" />
-
-                  <SecondaryButton
-                    v-if="image"
-                    class="w-fit"
-                    @click="image && (showCropper = true)"
-                  >
-                    Zuschneiden
-                  </SecondaryButton>
-
-                  <DangerButton
-                    v-if="!form.deleteCover && coverPreviewUrl"
-                    class="w-fit"
-                    type="button"
-                    @click="deleteCover()"
-                  >
-                    Cover Löschen
-                  </DangerButton>
-
-                  <PrimaryButton
-                    type="button"
-                    class="w-fit"
-                    @click="showImagePicker = true"
-                  >
-                    Vorhandenes Cover auswählen
-                  </PrimaryButton>
-                </div>
-                <img
-                  v-if="coverPreviewUrl"
-                  :src="coverPreviewUrl"
-                  class="w-64 object-contain"
-                  alt="cover"
-                />
-              </div>
+              <CoverEditor
+                :pre-selected-cover="album.cover"
+                v-model:cover="form.cover"
+                v-model:existing-cover-id="form.existing_cover_id"
+                v-model:delete-cover="form.deleteCover"
+                :error="form.errors.cover"
+              />
             </div>
             <div class="col-span-6">
               <InputLabel for="description" value="Beschreibung" />

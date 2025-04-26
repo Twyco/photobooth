@@ -31,7 +31,7 @@ const selectedImage = useVModel(props, 'selectedImage', emit);
       v-model="selectedImage"
     />
     <div class="w-full flex justify-end items-center pt-4">
-      <PrimaryButton @click="show = false"> Ok</PrimaryButton>
+      <PrimaryButton type="button" @click="show = false"> Ok</PrimaryButton>
     </div>
   </Modal>
 </template>

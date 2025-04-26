@@ -103,7 +103,7 @@ defineExpose({
       />
     </div>
     <div class="w-full flex justify-end items-center mt-4">
-      <PrimaryButton @click="show = false"> Ok</PrimaryButton>
+      <PrimaryButton type="button" @click="show = false"> Ok</PrimaryButton>
     </div>
   </Modal>
 </template>
