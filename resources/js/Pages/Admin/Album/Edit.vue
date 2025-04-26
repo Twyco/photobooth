@@ -113,6 +113,7 @@ const selectExistingImg = (img: ImageSystemImage) => {
   if (imageUpload.value) {
     imageUpload.value.value = '';
   }
+  form.deleteCover = false;
   image.value = null;
   coordinates.value = null;
   canvas.value = null;
@@ -174,7 +175,7 @@ const removeCover = () => {
   >
     <ImagePicker v-model="selectedCover" @update:modelValue="selectExistingImg" />
     <div class="w-full flex justify-end items-center pt-4">
-      <PrimaryButton @click="showCropper = false"> Ok </PrimaryButton>
+      <PrimaryButton @click="showImagePicker = false"> Ok </PrimaryButton>
     </div>
   </Modal>
   <AppLayout title="Album bearbeiten">
@@ -243,14 +244,6 @@ const removeCover = () => {
                 />
                 <InputError class="mt-2" :message="form.errors.cover" />
 
-                <PrimaryButton
-                  type="button"
-                  class="w-fit"
-                  @click="showImagePicker = true"
-                >
-                  Vorhandenes Cover auswählen
-                </PrimaryButton>
-
                 <SecondaryButton
                   v-if="image"
                   class="w-fit"
@@ -260,13 +253,21 @@ const removeCover = () => {
                 </SecondaryButton>
 
                 <DangerButton
-                  v-if="!form.deleteCover && image"
+                  v-if="!form.deleteCover && cropperPreviewUrl"
                   class="w-fit"
                   type="button"
                   @click="removeCover()"
                 >
                   Cover Löschen
                 </DangerButton>
+
+                <PrimaryButton
+                  type="button"
+                  class="w-fit"
+                  @click="showImagePicker = true"
+                >
+                  Vorhandenes Cover auswählen
+                </PrimaryButton>
               </div>
               <img
                 v-if="cropperPreviewUrl"
