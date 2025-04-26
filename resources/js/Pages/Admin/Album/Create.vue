@@ -7,12 +7,16 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import TitleSeparator from '@/Components/TitleSeparator.vue';
 import TextareaInput from '@/Components/TextareaInput.vue';
+import CoverEditor from '@/Pages/Admin/Album/Components/CoverEditor.vue';
 
 const form = useForm({
   _method: 'post',
   title: '',
   description: '',
-  event_date: new Date().toISOString().split('T')[0]
+  event_date: new Date().toISOString().split('T')[0],
+  cover: null as File | null,
+  existing_cover_id: null as number | null,
+  deleteCover: false as boolean
 });
 
 const storeAlbum = () => {
@@ -53,6 +57,16 @@ const storeAlbum = () => {
                 />
                 <InputError class="mt-2" :message="form.errors.event_date" />
               </div>
+            </div>
+            <div class="col-span-3">
+              <InputLabel for="imageUpload" value="Cover" class="mb-1" />
+              <CoverEditor
+                :pre-selected-cover="null"
+                v-model:cover="form.cover"
+                v-model:existing-cover-id="form.existing_cover_id"
+                v-model:delete-cover="form.deleteCover"
+                :error="form.errors.cover"
+              />
             </div>
             <div class="col-span-6">
               <InputLabel for="description" value="Beschreibung" />
