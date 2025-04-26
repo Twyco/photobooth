@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 import { nextTick, ref, watch } from 'vue';
 import { Cropper, type Coordinates } from 'vue-advanced-cropper';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
@@ -7,10 +6,10 @@ import Modal from '@/Components/Modal.vue';
 import { useVModel } from '@/Helpers/useVModel';
 
 const props = defineProps<{
-  show: Boolean,
-  image: String | null,
-  croppedImgFile: File | null,
-  croppedImgUrl: String | null,
+  show: Boolean;
+  image: String | null;
+  croppedImgFile: File | null;
+  croppedImgUrl: String | null;
 }>();
 
 const emit = defineEmits([
@@ -40,16 +39,16 @@ const onCropChange = ({
 };
 
 const updateCroppedImg = async () => {
-  if(coordinates.value && canvas.value) {
-    croppedImgUrl.value = canvas.value.toDataURL('image/jpeg')
+  if (coordinates.value && canvas.value) {
+    croppedImgUrl.value = canvas.value.toDataURL('image/jpeg');
     try {
       const timestamp = Date.now();
       const fileName = `cropped_${timestamp}.jpeg`;
       const blob: Blob = await canvasToBlob(canvas.value);
       croppedImgFile.value = new File([blob], fileName, {
-        type: 'image/jpeg',
+        type: 'image/jpeg'
       });
-    }catch(e) {
+    } catch (e) {
       console.error('Error while creating Cover', e);
     }
   }
@@ -67,9 +66,8 @@ const canvasToBlob = (canvas: HTMLCanvasElement): Promise<Blob> => {
   });
 };
 
-
 watch(show, async (newValue) => {
-  if(newValue && coordinates.value) {
+  if (newValue && coordinates.value) {
     await nextTick();
     cropper.value.setCoordinates(coordinates.value);
   }
@@ -81,7 +79,7 @@ const resetCanvas = () => {
 };
 
 defineExpose({
-  resetCanvas,
+  resetCanvas
 });
 </script>
 

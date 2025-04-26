@@ -122,7 +122,7 @@ const storeAlbum = async () => {
             <div class="col-span-6">
               <div class="h-full place-content-end text-right">
                 <PrimaryButton :disabled="form.processing"
-                >Speichern
+                  >Speichern
                 </PrimaryButton>
               </div>
             </div>
@@ -133,52 +133,52 @@ const storeAlbum = async () => {
             <InputLabel value="Zugangscodes:" />
             <table class="w-full">
               <thead>
-              <tr
-                class="font-semibold border-footer border-b-2 mb-2 text-left"
-              >
-                <th class="px-4">ID</th>
-                <th class="px-4">Code</th>
-                <th class="px-4">Usages</th>
-                <th class="px-4">Saves</th>
-                <th class="px-4 text-center">
-                  <i
-                    class="mdi mdi-plus hover:cursor-pointer"
-                    @click="createAccessCode()"
-                  />
-                </th>
-              </tr>
+                <tr
+                  class="font-semibold border-footer border-b-2 mb-2 text-left"
+                >
+                  <th class="px-4">ID</th>
+                  <th class="px-4">Code</th>
+                  <th class="px-4">Usages</th>
+                  <th class="px-4">Saves</th>
+                  <th class="px-4 text-center">
+                    <i
+                      class="mdi mdi-plus hover:cursor-pointer"
+                      @click="createAccessCode()"
+                    />
+                  </th>
+                </tr>
               </thead>
 
               <tbody>
-              <tr
-                v-if="album.accessCodes"
-                v-for="accessCode in album.accessCodes"
-                class="text-left hover:bg-highlight hover:bg-opacity-25"
-              >
-                <td class="px-4">
-                  {{ accessCode.id }}
-                </td>
-                <td class="px-4">
-                  {{ accessCode.accessCode }}
-                </td>
-                <td class="px-4">
-                  {{ accessCode.usages }}
-                </td>
-                <td class="px-4">
-                  {{ accessCode.saves }}
-                </td>
-                <td
-                  class="px-4 text-center text-red-500 hover:cursor-pointer"
-                  @click="deleteAccessCode(accessCode.id)"
+                <tr
+                  v-if="album.accessCodes"
+                  v-for="accessCode in album.accessCodes"
+                  class="text-left hover:bg-highlight hover:bg-opacity-25"
                 >
-                  <i class="mdi mdi-trash-can" />
-                </td>
-              </tr>
-              <tr v-else>
-                <td :colspan="4" class="px-4 text-center">
-                  Es existiert noch kein Zugangscode zu diesem Album!
-                </td>
-              </tr>
+                  <td class="px-4">
+                    {{ accessCode.id }}
+                  </td>
+                  <td class="px-4">
+                    {{ accessCode.accessCode }}
+                  </td>
+                  <td class="px-4">
+                    {{ accessCode.usages }}
+                  </td>
+                  <td class="px-4">
+                    {{ accessCode.saves }}
+                  </td>
+                  <td
+                    class="px-4 text-center text-red-500 hover:cursor-pointer"
+                    @click="deleteAccessCode(accessCode.id)"
+                  >
+                    <i class="mdi mdi-trash-can" />
+                  </td>
+                </tr>
+                <tr v-else>
+                  <td :colspan="4" class="px-4 text-center">
+                    Es existiert noch kein Zugangscode zu diesem Album!
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>

@@ -92,7 +92,6 @@ class AdminAlbumController extends Controller
             $album->cover()->associate(Image::findOrFail(Arr::get($validatedData, 'existing_cover_id')))->save();
         }
 
-
         return to_route('admin.album.index')->with('success', 'Album created successfully.');
     }
 

@@ -11,16 +11,16 @@ import { useVModel } from '@/Helpers/useVModel';
 
 const props = defineProps<{
   preSelectedCover: ImageSystemImage | null;
-  cover: File | null,
-  existingCoverId: number | null,
-  deleteCover: boolean,
-  error: string | undefined,
+  cover: File | null;
+  existingCoverId: number | null;
+  deleteCover: boolean;
+  error: string | undefined;
 }>();
 
 const emit = defineEmits([
   'update:cover',
   'update:existingCoverId',
-  'update:deleteCover',
+  'update:deleteCover'
 ]);
 
 const coverVModel = useVModel(props, 'cover', emit);
@@ -34,7 +34,9 @@ const showImagePicker = ref<boolean>(false);
 const imageUpload = ref<HTMLInputElement | null>(null);
 const image = ref<string | null>(props.preSelectedCover?.url ?? null);
 const coverPreviewUrl = ref<string | null>(props.preSelectedCover?.url ?? null);
-const selectedCover = ref<ImageSystemImage | null>(props.preSelectedCover ?? null);
+const selectedCover = ref<ImageSystemImage | null>(
+  props.preSelectedCover ?? null
+);
 
 const onFileChange = (e: Event) => {
   const file = (e.target as HTMLInputElement).files?.[0];
@@ -53,21 +55,21 @@ const onCropped = (newCover: File | null) => {
   deleteCoverVModel.value = false;
   existingCoverIdVModel.value = null;
   selectedCover.value = null;
-}
+};
 
 const onSelectedCoverChange = (newCover: ImageSystemImage | null) => {
   if (!newCover) {
     delCover();
     return;
   }
-  if(imageUpload.value?.value) imageUpload.value.value = '';
+  if (imageUpload.value?.value) imageUpload.value.value = '';
   deleteCoverVModel.value = false;
   coverVModel.value = null;
   existingCoverIdVModel.value = newCover.id;
   image.value = newCover.url;
   coverPreviewUrl.value = newCover.url;
   cropper.value?.resetCanvas();
-}
+};
 
 const delCover = () => {
   deleteCoverVModel.value = true;
