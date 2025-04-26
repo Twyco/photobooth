@@ -6,11 +6,13 @@ const props = withDefaults(
     show?: boolean;
     maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl';
     closeable?: boolean;
+    slotClass?: string;
   }>(),
   {
     show: false,
     maxWidth: '2xl',
-    closeable: true
+    closeable: true,
+    slotClass: 'w-full h-full bg-footer'
   }
 );
 
@@ -111,7 +113,9 @@ const maxWidthClass = computed(() => {
           class="mb-6 transform overflow-hidden rounded-lg bg-white shadow-xl transition-all sm:mx-auto sm:w-full"
           :class="maxWidthClass"
         >
-          <slot v-if="showSlot" />
+          <div :class="slotClass">
+            <slot v-if="showSlot" />
+          </div>
         </div>
       </Transition>
     </div>

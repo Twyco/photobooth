@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use App\Models\Album;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Twyco\ImageSystem\Http\Resources\ImageResource;
 
 /**
  * @mixin Album
@@ -23,7 +24,7 @@ class UserAlbumResource extends JsonResource
             'description' => $this->description,
             'eventDate' => $this->event_date,
             'uuid' => $this->uuid,
-            'cover' => $this->cover,
+            'cover' => $this->cover ? ImageResource::make($this->cover)->toArray($request) : null,
             'images' => $this->images,
         ];
     }

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link, router, useForm } from '@inertiajs/vue3';
-import { PropType } from 'vue';
+import { PropType, ref } from 'vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import InputError from '@/Components/InputError.vue';
@@ -10,6 +10,12 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import TitleSeparator from '@/Components/TitleSeparator.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import TextareaInput from '@/Components/TextareaInput.vue';
+import { Cropper, type Coordinates } from 'vue-advanced-cropper';
+import 'vue-advanced-cropper/dist/style.css';
+import Modal from '@/Components/Modal.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
+import DangerButton from '@/Components/DangerButton.vue';
+import { ImageSystemImage } from '@twyco/vue-image-system';
 
 const props = defineProps({
   album: {
@@ -18,25 +24,103 @@ const props = defineProps({
   }
 });
 
+const image = ref<string | null>(props.album?.cover?.url ?? null);
+const imageUpload = ref<HTMLInputElement | null>(null);
+const cropper = ref();
+const coordinates = ref<Coordinates | null>(null);
+const canvas = ref<HTMLCanvasElement | null>(null);
+const cropperPreviewUrl = ref<string | null>(props.album?.cover?.url ?? null);
+
+const showCropper = ref<boolean>(false);
+const showImagePicker = ref<boolean>(false);
+
+const selectedCover = ref<ImageSystemImage | null>(props.album?.cover ?? null);
+
 const form = useForm({
-  _method: 'post',
+  _method: 'put',
   title: props.album.title,
   description: props.album.description,
-  event_date: props.album.eventDate.split('T')[0]
+  event_date: props.album.eventDate.split('T')[0],
+  cover: null as File | null,
+  existing_cover_id: props.album?.cover?.id ?? null,
+  deleteCover: false as boolean
 });
 
-const storeAlbum = () => {
-  form
-    .transform((data) => ({
-      ...(data.title != props.album.title ? { title: data.title } : {}),
-      ...(data.description != props.album.description
-        ? { description: data.description }
-        : {}),
-      ...(data.event_date != props.album.eventDate.split('T')[0]
-        ? { event_date: data.event_date }
-        : {})
-    }))
-    .patch(route('admin.album.update', { album: props.album.id }));
+const onFileChange = (e: Event) => {
+  const file = (e.target as HTMLInputElement).files?.[0];
+  if (file) {
+    image.value = URL.createObjectURL(file);
+    cropperPreviewUrl.value = URL.createObjectURL(file);
+    showCropper.value = true;
+    form.deleteCover = false;
+    form.existing_cover_id = null;
+  } else {
+    image.value = null;
+    form.cover = null;
+    form.deleteCover = true;
+    showCropper.value = false;
+    cropperPreviewUrl.value = null;
+    form.existing_cover_id = null;
+  }
+};
+
+const onCropChange = ({
+  coordinates: coords,
+  canvas: canv
+}: {
+  coordinates: Coordinates;
+  canvas: any;
+}) => {
+  canvas.value = canv;
+  coordinates.value = coords;
+  form.deleteCover = false;
+  form.existing_cover_id = null;
+  if (canvas.value) {
+    cropperPreviewUrl.value = canvas.value.toDataURL('image/jpeg');
+  }
+};
+
+const canvasToBlob = (canvas: HTMLCanvasElement): Promise<Blob> => {
+  return new Promise((resolve, reject) => {
+    canvas.toBlob((blob) => {
+      if (blob) {
+        resolve(blob);
+      } else {
+        reject(new Error('Blob creation failed'));
+      }
+    }, 'image/jpeg');
+  });
+};
+
+const storeAlbum = async () => {
+  if (image.value && coordinates.value && canvas.value) {
+    try {
+      const blob: Blob = await canvasToBlob(canvas.value);
+
+      form.cover = new File([blob], props.album?.uuid + 'jpeg', {
+        type: 'image/jpeg'
+      });
+    } catch (e) {
+      console.error('Error while creating Cover', e);
+    }
+  }
+  form.post(route('admin.album.update', { album: props.album.id }));
+};
+
+const selectExistingImg = (img: ImageSystemImage | null) => {
+  if(!img) {
+    removeCover();
+    return;
+  }
+  form.existing_cover_id = img.id;
+  cropperPreviewUrl.value = img.url;
+  if (imageUpload.value) {
+    imageUpload.value.value = '';
+  }
+  form.deleteCover = false;
+  image.value = null;
+  coordinates.value = null;
+  canvas.value = null;
 };
 
 const deleteAlbum = () => {
@@ -50,9 +134,57 @@ const deleteAccessCode = (id: number) => {
 const createAccessCode = () => {
   router.post(route('admin.accessCode.store'), { albumId: props.album.id });
 };
+
+const removeCover = () => {
+  if (imageUpload.value) {
+    imageUpload.value.value = '';
+  }
+  image.value = null;
+  cropperPreviewUrl.value = null;
+  coordinates.value = null;
+  canvas.value = null;
+  form.deleteCover = true;
+  form.existing_cover_id = null;
+};
 </script>
 
 <template>
+  <Modal
+    slotClass="bg-footer p-4"
+    :show="showCropper"
+    max-width="2xl"
+    closeable
+    @close="showCropper = false"
+  >
+    <div class="w-full">
+      <Cropper
+        v-if="image"
+        ref="cropper"
+        :src="image"
+        :stencil-props="{ aspectRatio: 1 }"
+        @change="onCropChange"
+      />
+    </div>
+    <div class="w-full flex justify-end items-center mt-4">
+      <PrimaryButton @click="showCropper = false"> Ok</PrimaryButton>
+    </div>
+  </Modal>
+
+  <Modal
+    slotClass="bg-footer p-4"
+    :show="showImagePicker"
+    max-width="2xl"
+    closeable
+    @close="showImagePicker = false"
+  >
+    <ImagePicker
+      v-model="selectedCover"
+      @update:modelValue="selectExistingImg"
+    />
+    <div class="w-full flex justify-end items-center pt-4">
+      <PrimaryButton @click="showImagePicker = false"> Ok</PrimaryButton>
+    </div>
+  </Modal>
   <AppLayout title="Album bearbeiten">
     <div class="md:container md:mx-auto my-12 px-6 md:px-0">
       <div class="max-w-5xl md:mx-auto">
@@ -84,6 +216,11 @@ const createAccessCode = () => {
         <div
           class="container-small mb-6 !pr-0 !pl-0 md:pr-[unset] md:pl-[unset]"
         >
+          <div class="pb-2">
+            <p>
+              <span class="select-none font-bold">UUID: </span>{{ album.uuid }}
+            </p>
+          </div>
           <form
             @submit.prevent="storeAlbum()"
             class="flex flex-col gap-x-2 gap-y-4 md:gap-8 w-full mb-4"
@@ -102,6 +239,52 @@ const createAccessCode = () => {
                   type="date"
                 />
                 <InputError class="mt-2" :message="form.errors.event_date" />
+              </div>
+            </div>
+            <div class="col-span-3">
+              <InputLabel for="imageUpload" value="Cover" class="mb-1" />
+              <div class="flex flex-col-reverse md:flex-row gap-y-4">
+                <div class="flex flex-col gap-y-2 md:gap-y-4">
+                  <input
+                    ref="imageUpload"
+                    id="imageUpload"
+                    type="file"
+                    accept="image/*"
+                    @change="onFileChange"
+                  />
+                  <InputError class="mt-2" :message="form.errors.cover" />
+
+                  <SecondaryButton
+                    v-if="image"
+                    class="w-fit"
+                    @click="image && (showCropper = true)"
+                  >
+                    Zuschneiden
+                  </SecondaryButton>
+
+                  <DangerButton
+                    v-if="!form.deleteCover && cropperPreviewUrl"
+                    class="w-fit"
+                    type="button"
+                    @click="removeCover()"
+                  >
+                    Cover Löschen
+                  </DangerButton>
+
+                  <PrimaryButton
+                    type="button"
+                    class="w-fit"
+                    @click="showImagePicker = true"
+                  >
+                    Vorhandenes Cover auswählen
+                  </PrimaryButton>
+                </div>
+                <img
+                  v-if="cropperPreviewUrl"
+                  :src="cropperPreviewUrl"
+                  class="max-w-64 object-contain"
+                  alt="cover"
+                />
               </div>
             </div>
             <div class="col-span-6">

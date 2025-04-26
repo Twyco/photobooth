@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Cache;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Twyco\ImageSystem\Models\Image;
 
 /**
  * @property int $id
@@ -24,7 +26,7 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
  * @property Carbon $event_date
  * @property string $albumAccessCodes
  * @property array $images
- * @property string $cover
+ * @property Image $cover
  * @property string $qrCode
  * @property Carbon $created_at
  * @property Carbon $updated_at
@@ -87,6 +89,11 @@ class Album extends Model
         return $this->hasMany(Photobooth::class);
     }
 
+    public function cover(): BelongsTo
+    {
+        return $this->belongsTo(Image::class, 'cover_image_id');
+    }
+
     public function scopeViewableAlbums(Builder $query): Builder
     {
         return $query->whereIn('id', Album::getViewableAlbums()->pluck('id'));
@@ -146,12 +153,5 @@ class Album extends Model
                 'compressed' => Storage::disk('public')->exists($compressedFile) ? Storage::url($compressedFile) : null,
             ];
         }, $imageFiles));
-    }
-
-    public function getCoverAttribute(): ?string
-    {
-        $coverExists = Storage::disk('public')->exists('cover/'.$this->uuid.'.jpg');
-
-        return $coverExists ? Storage::url('cover/'.$this->uuid.'.jpg') : null;
     }
 }

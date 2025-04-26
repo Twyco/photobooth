@@ -13,7 +13,8 @@
         "laravel/tinker": "^2.9",
         "simplesoftwareio/simple-qrcode": "^4.2",
         "tightenco/ziggy": "^2.0",
-        "ext-imagick": "*"
+        "ext-imagick": "*",
+        "twyco/image-system": "^0.0.1"
     },
     "require-dev": {
         "fakerphp/faker": "^1.24",
