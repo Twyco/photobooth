@@ -85,7 +85,9 @@ const props = defineProps({
               <span class="font-bold shrink-0">Cover:</span>
               <img
                 class="aspect-square w-1/2"
-                :src="album.cover?.url ?? '/fallback/images/no_cover_fallback.webp'"
+                :src="
+                  album.cover?.url ?? '/fallback/images/no_cover_fallback.webp'
+                "
                 alt="Albumcover"
               />
             </div>
