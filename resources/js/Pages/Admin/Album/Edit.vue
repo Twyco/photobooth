@@ -10,13 +10,12 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import TitleSeparator from '@/Components/TitleSeparator.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import TextareaInput from '@/Components/TextareaInput.vue';
-import { type Coordinates } from 'vue-advanced-cropper';
 import 'vue-advanced-cropper/dist/style.css';
-import Modal from '@/Components/Modal.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import DangerButton from '@/Components/DangerButton.vue';
 import { ImageSystemImage } from '@twyco/vue-image-system';
 import CropperModal from '@/Pages/Admin/Album/Components/CropperModal.vue';
+import ImagePickerModal from '@/Pages/Admin/Album/Components/ImagePickerModal.vue';
 
 const props = defineProps({
   album: {
@@ -24,18 +23,13 @@ const props = defineProps({
     required: true
   }
 });
-
-const image = ref<string | null>(props.album?.cover?.url ?? null);
-
-const imageUpload = ref<HTMLInputElement | null>(null);
 const cropper = ref();
-const coordinates = ref<Coordinates | null>(null);
-const canvas = ref<HTMLCanvasElement | null>(null);
-const cropperPreviewUrl = ref<string | null>(props.album?.cover?.url ?? null);
-
 const showCropper = ref<boolean>(false);
 const showImagePicker = ref<boolean>(false);
 
+const imageUpload = ref<HTMLInputElement | null>(null);
+const image = ref<string | null>(props.album?.cover?.url ?? null);
+const coverPreviewUrl = ref<string | null>(props.album?.cover?.url ?? null);
 const selectedCover = ref<ImageSystemImage | null>(props.album?.cover ?? null);
 
 const form = useForm({
@@ -50,40 +44,44 @@ const form = useForm({
 
 const onFileChange = (e: Event) => {
   const file = (e.target as HTMLInputElement).files?.[0];
-  if (file) {
-    image.value = URL.createObjectURL(file);
-    cropperPreviewUrl.value = URL.createObjectURL(file);
-    showCropper.value = true;
-    form.deleteCover = false;
-  } else {
-    image.value = null;
-    form.deleteCover = true;
-    showCropper.value = false;
-    cropperPreviewUrl.value = null;
-  }
+  image.value = !!file ? URL.createObjectURL(file) : null;
+  coverPreviewUrl.value = null;
   form.cover = null;
   form.existing_cover_id = null;
+  form.deleteCover = !file;
+  selectedCover.value = null;
   cropper.value?.resetCanvas();
+  showCropper.value = !!file;
 };
 
-const storeAlbum = async () => {
-  form.post(route('admin.album.update', { album: props.album.id }));
-};
+const onCropped = (newCover: File | null) => {
+  if (!newCover) return;
+  form.deleteCover = false;
+  form.existing_cover_id = null;
+  selectedCover.value = null;
+}
 
-const selectExistingImg = (img: ImageSystemImage | null) => {
-  if(!img) {
-    removeCover();
+const onSelectedCoverChange = (newCover: ImageSystemImage | null) => {
+  if (!newCover) {
+    deleteCover();
     return;
   }
-  form.existing_cover_id = img.id;
-  cropperPreviewUrl.value = img.url;
-  image.value = img.url;
-  if (imageUpload.value) {
-    imageUpload.value.value = '';
-  }
+  if(imageUpload.value?.value) imageUpload.value.value = '';
   form.deleteCover = false;
-  coordinates.value = null;
-  canvas.value = null;
+  form.cover = null;
+  form.existing_cover_id = newCover.id;
+  image.value = newCover.url;
+  coverPreviewUrl.value = newCover.url;
+  cropper.value?.resetCanvas();
+}
+
+const deleteCover = () => {
+  form.deleteCover = true;
+  form.cover = null;
+  form.existing_cover_id = null;
+  image.value = null;
+  coverPreviewUrl.value = null;
+  selectedCover.value = null;
   cropper.value?.resetCanvas();
 };
 
@@ -95,19 +93,9 @@ const createAccessCode = () => {
   router.post(route('admin.accessCode.store'), { albumId: props.album.id });
 };
 
-const removeCover = () => {
-  if (imageUpload.value) {
-    imageUpload.value.value = '';
-  }
-  image.value = null;
-  cropperPreviewUrl.value = null;
-  coordinates.value = null;
-  canvas.value = null;
-  form.deleteCover = true;
-  form.existing_cover_id = null;
-  cropper.value?.resetCanvas();
+const storeAlbum = async () => {
+  form.post(route('admin.album.update', { album: props.album.id }));
 };
-
 </script>
 
 <template>
@@ -115,26 +103,16 @@ const removeCover = () => {
     ref="cropper"
     :image="image"
     v-model:show="showCropper"
+    v-model:cropped-img-url="coverPreviewUrl"
     v-model:cropped-img-file="form.cover"
-    v-model:cropped-img-url="cropperPreviewUrl"
+    @update:cropped-img-file="onCropped"
   />
-  <Modal
-    slotClass="bg-footer p-4"
-    :show="showImagePicker"
-    max-width="2xl"
-    closeable
-    @close="showImagePicker = false"
-  >
-    <ImagePicker
-      v-model="selectedCover"
-      @update:modelValue="selectExistingImg"
-    />
-    <div class="w-full flex justify-end items-center pt-4">
-      <PrimaryButton @click="showImagePicker = false"> Ok</PrimaryButton>
-    </div>
-  </Modal>
+  <ImagePickerModal
+    v-model:show="showImagePicker"
+    v-model:selected-image="selectedCover"
+    @update:selected-image="onSelectedCoverChange"
+  />
   <AppLayout title="Album bearbeiten">
-    {{showCropper}}
     <div class="md:container md:mx-auto my-12 px-6 md:px-0">
       <div class="max-w-5xl md:mx-auto">
         <div class="w-full flex justify-between px-1 md:px-4">
@@ -212,10 +190,10 @@ const removeCover = () => {
                   </SecondaryButton>
 
                   <DangerButton
-                    v-if="!form.deleteCover && cropperPreviewUrl"
+                    v-if="!form.deleteCover && coverPreviewUrl"
                     class="w-fit"
                     type="button"
-                    @click="removeCover()"
+                    @click="deleteCover()"
                   >
                     Cover Löschen
                   </DangerButton>
@@ -229,8 +207,8 @@ const removeCover = () => {
                   </PrimaryButton>
                 </div>
                 <img
-                  v-if="cropperPreviewUrl"
-                  :src="cropperPreviewUrl"
+                  v-if="coverPreviewUrl"
+                  :src="coverPreviewUrl"
                   class="w-64 object-contain"
                   alt="cover"
                 />
@@ -248,7 +226,7 @@ const removeCover = () => {
             <div class="col-span-6">
               <div class="h-full place-content-end text-right">
                 <PrimaryButton :disabled="form.processing"
-                  >Speichern
+                >Speichern
                 </PrimaryButton>
               </div>
             </div>
@@ -259,52 +237,52 @@ const removeCover = () => {
             <InputLabel value="Zugangscodes:" />
             <table class="w-full">
               <thead>
-                <tr
-                  class="font-semibold border-footer border-b-2 mb-2 text-left"
-                >
-                  <th class="px-4">ID</th>
-                  <th class="px-4">Code</th>
-                  <th class="px-4">Usages</th>
-                  <th class="px-4">Saves</th>
-                  <th class="px-4 text-center">
-                    <i
-                      class="mdi mdi-plus hover:cursor-pointer"
-                      @click="createAccessCode()"
-                    />
-                  </th>
-                </tr>
+              <tr
+                class="font-semibold border-footer border-b-2 mb-2 text-left"
+              >
+                <th class="px-4">ID</th>
+                <th class="px-4">Code</th>
+                <th class="px-4">Usages</th>
+                <th class="px-4">Saves</th>
+                <th class="px-4 text-center">
+                  <i
+                    class="mdi mdi-plus hover:cursor-pointer"
+                    @click="createAccessCode()"
+                  />
+                </th>
+              </tr>
               </thead>
 
               <tbody>
-                <tr
-                  v-if="album.accessCodes"
-                  v-for="accessCode in album.accessCodes"
-                  class="text-left hover:bg-highlight hover:bg-opacity-25"
+              <tr
+                v-if="album.accessCodes"
+                v-for="accessCode in album.accessCodes"
+                class="text-left hover:bg-highlight hover:bg-opacity-25"
+              >
+                <td class="px-4">
+                  {{ accessCode.id }}
+                </td>
+                <td class="px-4">
+                  {{ accessCode.accessCode }}
+                </td>
+                <td class="px-4">
+                  {{ accessCode.usages }}
+                </td>
+                <td class="px-4">
+                  {{ accessCode.saves }}
+                </td>
+                <td
+                  class="px-4 text-center text-red-500 hover:cursor-pointer"
+                  @click="deleteAccessCode(accessCode.id)"
                 >
-                  <td class="px-4">
-                    {{ accessCode.id }}
-                  </td>
-                  <td class="px-4">
-                    {{ accessCode.accessCode }}
-                  </td>
-                  <td class="px-4">
-                    {{ accessCode.usages }}
-                  </td>
-                  <td class="px-4">
-                    {{ accessCode.saves }}
-                  </td>
-                  <td
-                    class="px-4 text-center text-red-500 hover:cursor-pointer"
-                    @click="deleteAccessCode(accessCode.id)"
-                  >
-                    <i class="mdi mdi-trash-can" />
-                  </td>
-                </tr>
-                <tr v-else>
-                  <td :colspan="4" class="px-4 text-center">
-                    Es existiert noch kein Zugangscode zu diesem Album!
-                  </td>
-                </tr>
+                  <i class="mdi mdi-trash-can" />
+                </td>
+              </tr>
+              <tr v-else>
+                <td :colspan="4" class="px-4 text-center">
+                  Es existiert noch kein Zugangscode zu diesem Album!
+                </td>
+              </tr>
               </tbody>
             </table>
           </div>
