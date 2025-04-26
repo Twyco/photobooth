@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c17edca9539f2f07399ccf3e36563da4",
+    "content-hash": "6b87d1f1ad9ec2aa348098201b828e6c",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -5945,16 +5945,16 @@
         },
         {
             "name": "twyco/image-system",
-            "version": "v1.1.5.2",
+            "version": "v0.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Twyco/image-system.git",
-                "reference": "b7ba79003393540eec27150d39ecb9041144af09"
+                "reference": "61ed5f27bf09cab131affc53204c01356b672558"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Twyco/image-system/zipball/b7ba79003393540eec27150d39ecb9041144af09",
-                "reference": "b7ba79003393540eec27150d39ecb9041144af09",
+                "url": "https://api.github.com/repos/Twyco/image-system/zipball/61ed5f27bf09cab131affc53204c01356b672558",
+                "reference": "61ed5f27bf09cab131affc53204c01356b672558",
                 "shasum": ""
             },
             "type": "library",
@@ -5983,9 +5983,9 @@
             "description": "Laravel Image System",
             "support": {
                 "issues": "https://github.com/Twyco/image-system/issues",
-                "source": "https://github.com/Twyco/image-system/tree/v1.1.5.2"
+                "source": "https://github.com/Twyco/image-system/tree/v0.0.1"
             },
-            "time": "2025-04-25T18:39:06+00:00"
+            "time": "2025-04-26T10:09:42+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
