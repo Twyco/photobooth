@@ -107,7 +107,11 @@ const storeAlbum = async () => {
   form.post(route('admin.album.update', { album: props.album.id }));
 };
 
-const selectExistingImg = (img: ImageSystemImage) => {
+const selectExistingImg = (img: ImageSystemImage | null) => {
+  if(!img) {
+    removeCover();
+    return;
+  }
   form.existing_cover_id = img.id;
   cropperPreviewUrl.value = img.url;
   if (imageUpload.value) {
