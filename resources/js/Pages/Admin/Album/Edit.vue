@@ -34,7 +34,7 @@ const cropperPreviewUrl = ref<string | null>(props.album?.cover?.url ?? null);
 const showCropper = ref<boolean>(false);
 const showImagePicker = ref<boolean>(false);
 
-const selectedCover = ref<ImageSystemImage | null>(null);
+const selectedCover = ref<ImageSystemImage | null>(props.album?.cover ?? null);
 
 const form = useForm({
   _method: 'put',
@@ -117,7 +117,7 @@ const selectExistingImg = (img: ImageSystemImage) => {
   image.value = null;
   coordinates.value = null;
   canvas.value = null;
-}
+};
 
 const deleteAlbum = () => {
   router.delete(route('admin.album.destroy', { album: props.album.id }));
@@ -162,7 +162,7 @@ const removeCover = () => {
       />
     </div>
     <div class="w-full flex justify-end items-center mt-4">
-      <PrimaryButton @click="showCropper = false"> Ok </PrimaryButton>
+      <PrimaryButton @click="showCropper = false"> Ok</PrimaryButton>
     </div>
   </Modal>
 
@@ -173,9 +173,12 @@ const removeCover = () => {
     closeable
     @close="showImagePicker = false"
   >
-    <ImagePicker v-model="selectedCover" @update:modelValue="selectExistingImg" />
+    <ImagePicker
+      v-model="selectedCover"
+      @update:modelValue="selectExistingImg"
+    />
     <div class="w-full flex justify-end items-center pt-4">
-      <PrimaryButton @click="showImagePicker = false"> Ok </PrimaryButton>
+      <PrimaryButton @click="showImagePicker = false"> Ok</PrimaryButton>
     </div>
   </Modal>
   <AppLayout title="Album bearbeiten">
@@ -234,47 +237,51 @@ const removeCover = () => {
                 <InputError class="mt-2" :message="form.errors.event_date" />
               </div>
             </div>
-            <div class="col-span-3 flex">
-              <div class="flex flex-col gap-y-4">
-                <input
-                  ref="imageUpload"
-                  type="file"
-                  accept="image/*"
-                  @change="onFileChange"
+            <div class="col-span-3">
+              <InputLabel for="imageUpload" value="Cover" class="mb-1" />
+              <div class="flex flex-col-reverse md:flex-row gap-y-4">
+                <div class="flex flex-col gap-y-2 md:gap-y-4">
+                  <input
+                    ref="imageUpload"
+                    id="imageUpload"
+                    type="file"
+                    accept="image/*"
+                    @change="onFileChange"
+                  />
+                  <InputError class="mt-2" :message="form.errors.cover" />
+
+                  <SecondaryButton
+                    v-if="image"
+                    class="w-fit"
+                    @click="image && (showCropper = true)"
+                  >
+                    Zuschneiden
+                  </SecondaryButton>
+
+                  <DangerButton
+                    v-if="!form.deleteCover && cropperPreviewUrl"
+                    class="w-fit"
+                    type="button"
+                    @click="removeCover()"
+                  >
+                    Cover Löschen
+                  </DangerButton>
+
+                  <PrimaryButton
+                    type="button"
+                    class="w-fit"
+                    @click="showImagePicker = true"
+                  >
+                    Vorhandenes Cover auswählen
+                  </PrimaryButton>
+                </div>
+                <img
+                  v-if="cropperPreviewUrl"
+                  :src="cropperPreviewUrl"
+                  class="max-w-64 object-contain"
+                  alt="cover"
                 />
-                <InputError class="mt-2" :message="form.errors.cover" />
-
-                <SecondaryButton
-                  v-if="image"
-                  class="w-fit"
-                  @click="image && (showCropper = true)"
-                >
-                  Zuschneiden
-                </SecondaryButton>
-
-                <DangerButton
-                  v-if="!form.deleteCover && cropperPreviewUrl"
-                  class="w-fit"
-                  type="button"
-                  @click="removeCover()"
-                >
-                  Cover Löschen
-                </DangerButton>
-
-                <PrimaryButton
-                  type="button"
-                  class="w-fit"
-                  @click="showImagePicker = true"
-                >
-                  Vorhandenes Cover auswählen
-                </PrimaryButton>
               </div>
-              <img
-                v-if="cropperPreviewUrl"
-                :src="cropperPreviewUrl"
-                class="h-64 object-contain"
-                alt="cover"
-              />
             </div>
             <div class="col-span-6">
               <InputLabel for="description" value="Beschreibung" />

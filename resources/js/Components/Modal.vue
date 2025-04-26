@@ -12,7 +12,7 @@ const props = withDefaults(
     show: false,
     maxWidth: '2xl',
     closeable: true,
-    slotClass: 'w-full h-full bg-footer',
+    slotClass: 'w-full h-full bg-footer'
   }
 );
 
