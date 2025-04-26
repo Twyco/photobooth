@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use App\Models\Album;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Twyco\ImageSystem\Http\Resources\ImageResource;
 
 /**
  * @mixin Album
