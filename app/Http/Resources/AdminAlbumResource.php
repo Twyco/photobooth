@@ -27,7 +27,7 @@ class AdminAlbumResource extends JsonResource
             'uuid' => $this->uuid,
             'accessCodes' => AlbumAccessCodeResource::collection($this->albumAccessCodes)->toArray($request),
             'qrCode' => $this->qrCode,
-            'cover' => $this->cover?->url,
+            'cover' => $this->cover ? ImageResource::make($this->cover)->toArray($request) : null,
         ];
     }
 }

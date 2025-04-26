@@ -15,6 +15,7 @@ import 'vue-advanced-cropper/dist/style.css';
 import Modal from '@/Components/Modal.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import DangerButton from '@/Components/DangerButton.vue';
+import { ImageSystemImage } from '@twyco/vue-image-system';
 
 const props = defineProps({
   album: {
@@ -23,14 +24,17 @@ const props = defineProps({
   }
 });
 
-const image = ref<string | null>(props.album?.cover);
+const image = ref<string | null>(props.album?.cover?.url ?? null);
 const imageUpload = ref<HTMLInputElement | null>(null);
 const cropper = ref();
 const coordinates = ref<Coordinates | null>(null);
 const canvas = ref<HTMLCanvasElement | null>(null);
-const cropperPreviewUrl = ref<string | null>(props.album?.cover);
+const cropperPreviewUrl = ref<string | null>(props.album?.cover?.url ?? null);
 
 const showCropper = ref<boolean>(false);
+const showImagePicker = ref<boolean>(false);
+
+const selectedCover = ref<ImageSystemImage | null>(null);
 
 const form = useForm({
   _method: 'put',
@@ -38,6 +42,7 @@ const form = useForm({
   description: props.album.description,
   event_date: props.album.eventDate.split('T')[0],
   cover: null as File | null,
+  existing_cover_id: props.album?.cover?.id ?? null,
   deleteCover: false as boolean
 });
 
@@ -48,12 +53,14 @@ const onFileChange = (e: Event) => {
     cropperPreviewUrl.value = URL.createObjectURL(file);
     showCropper.value = true;
     form.deleteCover = false;
+    form.existing_cover_id = null;
   } else {
     image.value = null;
     form.cover = null;
     form.deleteCover = true;
     showCropper.value = false;
     cropperPreviewUrl.value = null;
+    form.existing_cover_id = null;
   }
 };
 
@@ -66,6 +73,8 @@ const onCropChange = ({
 }) => {
   canvas.value = canv;
   coordinates.value = coords;
+  form.deleteCover = false;
+  form.existing_cover_id = null;
   if (canvas.value) {
     cropperPreviewUrl.value = canvas.value.toDataURL('image/jpeg');
   }
@@ -98,6 +107,18 @@ const storeAlbum = async () => {
   form.post(route('admin.album.update', { album: props.album.id }));
 };
 
+const selectExistingImg = (img: ImageSystemImage) => {
+  form.existing_cover_id = img.id;
+  cropperPreviewUrl.value = img.url;
+  if (imageUpload.value) {
+    imageUpload.value.value = '';
+  }
+  form.deleteCover = false;
+  image.value = null;
+  coordinates.value = null;
+  canvas.value = null;
+}
+
 const deleteAlbum = () => {
   router.delete(route('admin.album.destroy', { album: props.album.id }));
 };
@@ -119,30 +140,42 @@ const removeCover = () => {
   coordinates.value = null;
   canvas.value = null;
   form.deleteCover = true;
+  form.existing_cover_id = null;
 };
 </script>
 
 <template>
   <Modal
-    class="bg-footer"
+    slotClass="bg-footer p-4"
     :show="showCropper"
     max-width="2xl"
     closeable
     @close="showCropper = false"
   >
-    <div class="bg-footer w-full h-full">
-      <div class="w-full px-8 py-4">
-        <Cropper
-          v-if="image"
-          ref="cropper"
-          :src="image"
-          :stencil-props="{ aspectRatio: 1 }"
-          @change="onCropChange"
-        />
-      </div>
-      <div class="w-full flex justify-end items-center px-8 pt-2 pb-4">
-        <PrimaryButton @click="showCropper = false"> Ok </PrimaryButton>
-      </div>
+    <div class="w-full">
+      <Cropper
+        v-if="image"
+        ref="cropper"
+        :src="image"
+        :stencil-props="{ aspectRatio: 1 }"
+        @change="onCropChange"
+      />
+    </div>
+    <div class="w-full flex justify-end items-center mt-4">
+      <PrimaryButton @click="showCropper = false"> Ok </PrimaryButton>
+    </div>
+  </Modal>
+
+  <Modal
+    slotClass="bg-footer p-4"
+    :show="showImagePicker"
+    max-width="2xl"
+    closeable
+    @close="showImagePicker = false"
+  >
+    <ImagePicker v-model="selectedCover" @update:modelValue="selectExistingImg" />
+    <div class="w-full flex justify-end items-center pt-4">
+      <PrimaryButton @click="showImagePicker = false"> Ok </PrimaryButton>
     </div>
   </Modal>
   <AppLayout title="Album bearbeiten">
@@ -220,13 +253,21 @@ const removeCover = () => {
                 </SecondaryButton>
 
                 <DangerButton
-                  v-if="!form.deleteCover && image"
+                  v-if="!form.deleteCover && cropperPreviewUrl"
                   class="w-fit"
                   type="button"
                   @click="removeCover()"
                 >
                   Cover Löschen
                 </DangerButton>
+
+                <PrimaryButton
+                  type="button"
+                  class="w-fit"
+                  @click="showImagePicker = true"
+                >
+                  Vorhandenes Cover auswählen
+                </PrimaryButton>
               </div>
               <img
                 v-if="cropperPreviewUrl"

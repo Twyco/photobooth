@@ -1,11 +1,12 @@
 import { AlbumAccessCodeInterface } from '@/types/album-access-code-interface';
+import { ImageSystemImage } from '@twyco/vue-image-system';
 
 export interface UserAlbum {
   title: string;
   description: string;
   eventDate: string;
   uuid: string;
-  cover: string | null;
+  cover: ImageSystemImage | null;
 }
 export interface UserAlbumWithImages extends UserAlbum {
   images: { original: string; compressed: string }[];

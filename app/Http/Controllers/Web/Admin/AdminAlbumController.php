@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
+use Twyco\ImageSystem\Models\Image;
 use Twyco\ImageSystem\Services\ImageService;
 
 class AdminAlbumController extends Controller
@@ -96,10 +97,10 @@ class AdminAlbumController extends Controller
 
         if (Arr::get($validatedData, 'deleteCover')) {
             $album->cover()->disassociate()->save();
-        }
-
-        if ($request->hasFile('cover')) {
+        } elseif ($request->hasFile('cover')) {
             $album->cover()->associate($imageService->store(file: $request->file('cover'), owner: Auth::user(), imageName: 'cover'));
+        } elseif (Arr::get($validatedData, 'existing_cover_id')) {
+            $album->cover()->associate(Image::findOrFail(Arr::get($validatedData, 'existing_cover_id')));
         }
 
         $album->update($validatedData);
