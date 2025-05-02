@@ -72,6 +72,7 @@ const onSelectedCoverChange = (newCover: ImageSystemImage | null) => {
 };
 
 const delCover = () => {
+  if (imageUpload.value?.value) imageUpload.value.value = '';
   deleteCoverVModel.value = true;
   coverVModel.value = null;
   existingCoverIdVModel.value = null;
